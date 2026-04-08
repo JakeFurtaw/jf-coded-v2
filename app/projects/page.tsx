@@ -57,7 +57,7 @@ const projects: Project[] = [
     technologies: ["Python", "Stable Diffusion", "React", "FastAPI"],
     github: "https://github.com/JakeFurtaw/ImageAlter",
   },
-  // Add more projects from your old site here
+
   {
     id: 5,
     title: "JFCoded: My Developer Portfolio",
@@ -78,6 +78,7 @@ const projects: Project[] = [
     github: "https://github.com/JakeFurtaw",
     live: "https://www.fspx.ai",
   },
+    // Add more projects from your old site here
 ];
 
 const categories = ["All", "AI/ML", "Web", "Full Stack"] as const;
