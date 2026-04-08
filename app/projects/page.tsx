@@ -52,7 +52,7 @@ const projects: Project[] = [
     id: 4,
     title: "Image Alter",
     description: "AI-powered image editing and generation tool.",
-    longDescription: "Web application that lets users modify images using natural language instructions powered by state-of-the-art vision-language models.",
+    longDescription: "Gradio application that lets users modify images using natural language instructions powered by state-of-the-art vision-language models.",
     category: "AI/ML",
     technologies: ["Python", "Stable Diffusion", "Gradio", "Diffusers"],
     github: "https://github.com/JakeFurtaw/ImageAlter",
@@ -116,7 +116,7 @@ export default function ProjectsPage() {
         <div className="text-center mb-16">
           <h1 className="text-6xl font-bold tracking-tighter mb-4">Projects</h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            A collection of some of the Machine Learning and Web Development projects I&apos;ve built
+            A collection of some of my Machine Learning and Web Development projects
           </p>
         </div>
 
