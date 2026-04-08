@@ -47,7 +47,7 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button size="lg" className="group bg-cyan-400 hover:bg-cyan-300 text-black text-lg px-10 py-7 rounded-xl">
-            Explore My Work
+            <a href="/projects">View My Projects</a>
             <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
           </Button>
 
@@ -57,7 +57,7 @@ export default function Home() {
             className="text-lg px-10 py-7 border-cyan-400/50 hover:bg-white/5"
             asChild
           >
-            <a href="/projects">View Projects</a>
+            <a href="/contact">Connect With Me</a>
           </Button>
         </div>
 
