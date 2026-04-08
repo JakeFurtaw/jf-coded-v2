@@ -55,7 +55,7 @@ const projects: Project[] = [
     longDescription: "Web application that lets users modify images using natural language instructions powered by state-of-the-art vision-language models.",
     category: "AI/ML",
     technologies: ["Python", "Stable Diffusion", "React", "FastAPI"],
-    github: "#",
+    github: "https://github.com/JakeFurtaw/ImageAlter",
   },
   // Add more projects from your old site here
   {
