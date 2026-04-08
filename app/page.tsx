@@ -42,8 +42,7 @@ export default function Home() {
           transition={{ duration: 0.9, delay: 0.3 }}
           className="max-w-2xl text-2xl md:text-3xl text-white/80 mb-12"
         >
-          Crafting intelligent AI systems that push the boundaries of what&apos;s possible — 
-          where AI meets the cosmos.
+          Crafting intelligent AI systems that push the boundaries of what&apos;s possible.
         </motion.p>
 
         <div className="flex flex-col sm:flex-row gap-4">
