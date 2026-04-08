@@ -2,17 +2,20 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Mail } from "lucide-react";
-import { FaGithub, FaLinkedin} from 'react-icons/fa';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";   // ← Add this import
 
 export default function Home() {
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-space-bg">
+
       {/* Subtle Nebula Background */}
       <div className="absolute inset-0 bg-[radial-gradient(at_30%_20%,rgba(157,78,221,0.12)_0%,transparent_50%),radial-gradient(at_70%_60%,rgba(0,245,255,0.12)_0%,transparent_50%)]" />
 
-      {/* Hero Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24 flex flex-col items-center text-center">
+      {/* HERO SECTION */}
+      <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-20 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -73,16 +76,86 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0.3, 1, 0.3] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 text-cyan-400/50 text-sm tracking-widest flex flex-col items-center"
-      >
-        SCROLL TO EXPLORE
-        <div className="w-px h-12 bg-gradient-to-b from-transparent via-cyan-400/50 to-transparent mt-3" />
-      </motion.div>
+      {/* FEATURED PROJECTS - Now properly separated */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-12 pb-28 border-t border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <h2 className="text-5xl font-bold tracking-tighter mb-3">Featured Projects</h2>
+            <p className="text-xl text-white/70">Some of my recent work in AI and full-stack development</p>
+          </div>
+          <Button 
+            asChild 
+            variant="outline" 
+            className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black whitespace-nowrap"
+          >
+            <a href="/projects">View All Projects →</a>
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {[
+            {
+              title: "Cloak AI",
+              desc: "Advanced multi tool AI agent built with Nemotron Nano 3.",
+              tech: ["Ollama", "Nemotron", "FastAPI", "Tool Use"],
+              link: "/projects"
+            },
+            {
+              title: "Agent Qwen",
+              desc: "Advanced Multi-Modal AI agent built with Qwen 2.5-Omni.",
+              tech: ["Qwen", "LangChain", "Agents", "Python"],
+              link: "/projects"
+            },
+            {
+              title: "Chat RAG",
+              desc: "Gradio powered advanced AI coding assistant.",
+              tech: ["RAG", "Gradio", "ChromaDB", "Python"],
+              link: "/projects"
+            }
+          ].map((project, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="group"
+            >
+              <Card className="glass h-full overflow-hidden border border-white/10 hover:border-cyan-400/30 transition-all rounded-3xl">
+                <div className="h-52 bg-gradient-to-br from-cyan-900/50 to-purple-900/40 flex items-center justify-center border-b border-white/10">
+                  <span className="text-6xl opacity-40 group-hover:scale-110 transition-transform duration-300">🧠</span>
+                </div>
+                <div className="p-8">
+                  <h3 className="text-2xl font-semibold mb-3 group-hover:text-cyan-400 transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-white/70 mb-6 line-clamp-3 min-h-[4.25rem]">
+                    {project.desc}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {project.tech.map((t) => (
+                      <Badge 
+                        key={t} 
+                        className="bg-white/10 hover:bg-cyan-400/20 text-cyan-300 text-xs border border-cyan-400/30 px-3 py-1"
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full border-white/20 hover:border-cyan-400 hover:text-cyan-400" 
+                    asChild
+                  >
+                    <a href={project.link}>View Project</a>
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

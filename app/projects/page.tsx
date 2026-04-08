@@ -16,7 +16,7 @@ interface Project {
   image?: string; // We'll add real images later
   github?: string;
   live?: string;
-  category: "AI/ML" | "Web" | "Full Stack";
+  category: "AI/ML" | "Web";
   technologies: string[];
 }
 
@@ -24,8 +24,8 @@ const projects: Project[] = [
     {
     id: 1,
     title: "Cloak AI",
-    description: "Advanced AI agent built with Qwen models and custom tools.",
-    longDescription: "A powerful autonomous agent capable of complex reasoning and tool usage. Features multi-step planning and integration with external APIs.",
+    description: "Advanced AI agent built with Nemotron Nano 3.",
+    longDescription: "A powerful AI agent capable of complex reasoning and tool usage. This agent can search the web, gather weather information, provide stock information, currency exchange rates, and more.",
     category: "AI/ML",
     technologies: ["Python", "Nemotron", "FastAPI", "Tool Use"],
     github: "https://github.com/JakeFurtaw", // update if needed
@@ -33,8 +33,8 @@ const projects: Project[] = [
     {
     id: 2,
     title: "Agent Qwen",
-    description: "A powerful Multi-Modal AI agent designed to emulate a Geek Squad Agent.",
-    longDescription: "A powerful Multi-Modal AI agent designed to emulate a Geek Squad Agent.",
+    description: "A powerful multi-modal AI agent designed to emulate a Geek Squad Agent.",
+    longDescription: "A powerful Multi-Modal AI agent designed to emulate a Geek Squad Agent. Built with Qwen 2.5-Omni, this agent can understand and respond to voice, text, video and images, making it ideal for a wide range of applications from customer support to interactive assistants.",
     category: "AI/ML",
     technologies: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal"],
     github: "https://github.com/JakeFurtaw/Agent-Qwen", // update if needed
@@ -42,11 +42,11 @@ const projects: Project[] = [
   {
     id: 3,
     title: "Chat RAG",
-    description: "Retrieval-Augmented Generation chat system with custom knowledge base.",
-    longDescription: "Full-featured RAG pipeline that allows users to chat with their own documents. Includes document upload, vector embeddings, and real-time retrieval.",
+    description: "Retrieval-Augmented Generation powered coding AI assistant.",
+    longDescription: "Full-featured RAG pipeline that allows users to chat with their own documents. Includes document upload, exisiting vector datastores, and github repository integration.",
     category: "AI/ML",
-    technologies: ["Python", "RAG", "LangChain", "Pinecone"],
-    github: "https://github.com/JakeFurtaw/Chat-RAG", // replace with real link
+    technologies: ["Python", "RAG", "Llama-Index", "ChromaDB", "Gradio"],
+    github: "https://github.com/JakeFurtaw/Chat-RAG",
   },
   {
     id: 4,
@@ -54,13 +54,13 @@ const projects: Project[] = [
     description: "AI-powered image editing and generation tool.",
     longDescription: "Web application that lets users modify images using natural language instructions powered by state-of-the-art vision-language models.",
     category: "AI/ML",
-    technologies: ["Python", "Stable Diffusion", "React", "FastAPI"],
+    technologies: ["Python", "Stable Diffusion", "Transformers", "Gradio"],
     github: "https://github.com/JakeFurtaw/ImageAlter",
   },
 
   {
     id: 5,
-    title: "JFCoded: My Developer Portfolio",
+    title: "JFCoded Portfolio Website",
     description: "This very website — a modern space-themed developer portfolio.",
     longDescription: "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui. Features dark space theme, smooth animations, and responsive design.",
     category: "Web",
@@ -81,10 +81,10 @@ const projects: Project[] = [
     // Add more projects from your old site here
 ];
 
-const categories = ["All", "AI/ML", "Web", "Full Stack"] as const;
+const categories = ["All", "AI/ML", "Web"] as const;
 
 export default function ProjectsPage() {
-  const [activeFilter, setActiveFilter] = useState<"All" | "AI/ML" | "Web" | "Full Stack">("All");
+  const [activeFilter, setActiveFilter] = useState<"All" | "AI/ML" | "Web">("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = activeFilter === "All" 
