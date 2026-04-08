@@ -29,7 +29,7 @@ export default function Navbar() {
             <span className="text-2xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
               JFCoded
             </span>
-            <p className="text-[10px] text-cyan-400/70 -mt-1 tracking-[3px]">EXPLORING THE UNKNOWN</p>
+            <p className="text-[10px] text-cyan-400/70 -mt-1 tracking-[3px]">EXPLORING THE UNKNOWN OF AI</p>
           </div>
         </Link>
 
