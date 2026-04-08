@@ -65,7 +65,7 @@ const projects: Project[] = [
     longDescription: "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui. Features dark space theme, smooth animations, and responsive design.",
     category: "Web",
     technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    github: "https://github.com/JakeFurtaw/JFCoded",
+    github: "https://github.com/JakeFurtaw/jf-coded-v2",
     live: "https://www.jfcoded.com",
   },
     {
