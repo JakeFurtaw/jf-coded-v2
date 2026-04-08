@@ -66,12 +66,12 @@ export default function ResumePage() {
           <h1 className="text-6xl font-bold tracking-tighter mb-4">Virtual Resume</h1>
           <p className="text-xl text-white/70">Jacob Furtaw — Machine Learning & AI Engineer</p>
           
-          <Button asChild size="lg" className="mt-8 bg-cyan-400 hover:bg-cyan-300 text-black font-medium">
-            <a href="/resume.pdf" download className="flex items-center gap-2">
-              <Download className="w-5 h-5" />
-              Download Full CV (PDF)
-            </a>
-          </Button>
+          <Button asChild size="lg" className="mt-8 bg-cyan-400 hover:bg-cyan-300 text-black">
+          <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf" className="flex items-center gap-2">
+            <Download className="w-5 h-5" />
+            Download Full CV (PDF)
+          </a>
+        </Button>
         </div>
 
         {/* Experience */}

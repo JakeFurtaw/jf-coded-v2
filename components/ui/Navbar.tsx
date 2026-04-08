@@ -46,12 +46,15 @@ export default function Navbar() {
             </Link>
           ))}
 
+          {/* Desktop */}
           <Button 
             asChild 
             variant="outline" 
             className="border-cyan-400/50 hover:border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all"
           >
-            <a href="/resume.pdf" download>Download CV</a>
+            <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf">
+              Download CV
+            </a>
           </Button>
         </div>
 
@@ -75,7 +78,9 @@ export default function Navbar() {
                 </Link>
               ))}
               <Button asChild className="mt-6 bg-cyan-400 text-black hover:bg-cyan-300">
-                <a href="/resume.pdf" download>Download CV</a>
+                <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf">
+                  Download CV
+                </a>
               </Button>
             </div>
           </SheetContent>
