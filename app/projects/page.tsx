@@ -25,27 +25,27 @@ const projects: Project[] = [
     id: 1,
     title: "Cloak AI",
     description: "Advanced AI agent built with Nemotron Nano 3.",
-    longDescription: "A powerful AI agent capable of complex reasoning and tool usage. This agent can search the web, gather weather information, provide stock information, currency exchange rates, and more.",
+    longDescription: "A powerful AI agent capable of complex reasoning and tool usage. This agent can search the web, gather weather information from Earth 2 Studio models and GFS data, provide stock information from Yahoo Finance, currency exchange rates, and more.",
     category: "AI/ML",
-    technologies: ["Python", "Nemotron", "FastAPI", "Tool Use"],
-    github: "https://github.com/JakeFurtaw", // update if needed
+    technologies: ["Python", "Nemotron Nano 3", "FastAPI", "Earth 2 Studio", "Tool Use"],
+    github: "https://github.com/JakeFurtaw",
   },
-    {
+  {
     id: 2,
     title: "Agent Qwen",
     description: "A powerful multi-modal AI agent designed to emulate a Geek Squad Agent.",
     longDescription: "A powerful Multi-Modal AI agent designed to emulate a Geek Squad Agent. Built with Qwen 2.5-Omni, this agent can understand and respond to voice, text, video and images, making it ideal for a wide range of applications from customer support to interactive assistants.",
     category: "AI/ML",
     technologies: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal"],
-    github: "https://github.com/JakeFurtaw/Agent-Qwen", // update if needed
+    github: "https://github.com/JakeFurtaw/Agent-Qwen",
   },
   {
     id: 3,
     title: "Chat RAG",
     description: "Retrieval-Augmented Generation powered coding AI assistant.",
-    longDescription: "Full-featured RAG pipeline that allows users to chat with their own documents. Includes document upload, exisiting vector datastores, and github repository integration.",
+    longDescription: "Full-featured RAG pipeline that allows users to chat with documents, exisiting vector datastores, and github repositories. Flexible architecture that has dynamic model selection, vector store agnostic design, and support for multiple LLM providers. Built with Llama-Index, ChromaDB, Gradio, and LangChain.",
     category: "AI/ML",
-    technologies: ["Python", "RAG", "Llama-Index", "ChromaDB", "Gradio"],
+    technologies: ["Python", "RAG", "Llama-Index", "ChromaDB", "Gradio", "LangChain", "Transformers", "Neo4j"],
     github: "https://github.com/JakeFurtaw/Chat-RAG",
   },
   {
@@ -54,12 +54,30 @@ const projects: Project[] = [
     description: "AI-powered image editing and generation tool.",
     longDescription: "Web application that lets users modify images using natural language instructions powered by state-of-the-art vision-language models.",
     category: "AI/ML",
-    technologies: ["Python", "Stable Diffusion", "Transformers", "Gradio"],
+    technologies: ["Python", "Stable Diffusion", "Gradio", "Diffusers"],
     github: "https://github.com/JakeFurtaw/ImageAlter",
+  },
+  {
+    id: 5,
+    title: "Health Bot",
+    description: "HealthBot is an AI-powered chatbot designed to assist users with health-related questions and advice.",
+    longDescription: "HealthBot is an AI-powered chatbot designed to assist users with health-related questions and advice. It provides information on fitness, nutrition, mental health, and general well-being.",
+    category: "AI/ML",
+    technologies: ["Python", "Llama-Index", "Transformers", "Gradio", "Diffusers"],
+    github: "https://github.com/JakeFurtaw/HealthReelDemo",
+  },
+  {
+    id: 6,
+    title: "Repo Ripper",
+    description: "A tool chatting with github repositories with any Ollama LLM.",
+    longDescription: "Repo Ripper is a tool designed to extract and analyze code repositories, providing insights into code structure, dependencies, and potential issues.",
+    category: "AI/ML",
+    technologies: ["Python", "Llama-Index", "Ollama"],
+    github: "https://github.com/JakeFurtaw/RepoRipper",
   },
 
   {
-    id: 5,
+    id: 7,
     title: "JFCoded Portfolio Website",
     description: "This very website — a modern space-themed developer portfolio.",
     longDescription: "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui. Features dark space theme, smooth animations, and responsive design.",
@@ -68,8 +86,8 @@ const projects: Project[] = [
     github: "https://github.com/JakeFurtaw/jf-coded-v2",
     live: "https://www.jfcoded.com",
   },
-    {
-    id: 6,
+  {
+    id: 8,
     title: "Frontier Signal Partners Website",
     description: "Modern single page website for Frontier Signal Partners.",
     longDescription: "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui.",
