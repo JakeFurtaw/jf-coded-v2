@@ -8,14 +8,14 @@ import { Badge } from "@/components/ui/badge";
 
 export default function ResumePage() {
   const experiences = [
-    {
-      title: "GenAI Engineer",
-      company: "Frontier Signal Partners",
-      location: "Baltimore, MD",
-      period: "Jan 2026 – Present",
-      description: "Building advanced generative AI solutions and intelligent systems.",
-      technologies: ["Python", "LLMs", "Generative AI"],
-    },
+    // {
+    //   title: "GenAI Engineer",
+    //   company: "Frontier Signal Partners",
+    //   location: "Baltimore, MD",
+    //   period: "Jan 2026 – Present",
+    //   description: "Building advanced generative AI solutions and intelligent systems.",
+    //   technologies: ["Python", "LLMs", "Generative AI"],
+    // },
     {
       title: "Co-Founder & Machine Learning Engineer",
       company: "SurgePoint Software LLC",
