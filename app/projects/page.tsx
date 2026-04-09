@@ -49,7 +49,16 @@ const projects: Project[] = [
     github: "https://github.com/JakeFurtaw/Chat-RAG",
   },
   {
-    id: 4,
+  id: 4,
+  title: "ASTNN Mutant Classifier",
+  description: "Abstract Syntax Tree Neural Network for detecting equivalent mutants in Java and C++.",
+  longDescription: "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model converts mutated programs into AST representations, learns structural features, and classifies semantic equivalence. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
+  category: "AI/ML",
+  technologies: ["Python", "PyTorch", "Neural Networks", "Java", "C++", "Over/Undersampling", "Model Training & Optimization"],
+  github: "https://gitlab.com/JakeFurtaw/ASTNN-COSC490",
+  },
+  {
+    id: 5,
     title: "Image Alter",
     description: "AI-powered image generation and editing tool that lets users create and modify images using natural language prompts.",
     longDescription: "A Gradio web application for AI image generation and editing powered by Stable Diffusion. Supports text-to-image generation and image-to-image transformation using Flux models (FLUX.1-schnell and fine-tuned variants). Features customizable generation parameters, interactive image gallery, and responsive UI. Built with the Diffusers library and PyTorch for GPU-accelerated inference.",
@@ -58,7 +67,7 @@ const projects: Project[] = [
     github: "https://github.com/JakeFurtaw/ImageAlter",
   },
   {
-    id: 5,
+    id: 6,
     title: "Health Bot",
     description: "Personalized AI health assistant that provides context-aware advice on fitness, nutrition, mental health, and general well-being.",
     longDescription: "An AI health assistant with user authentication and persistent per-user chat history. Built using Llama-Index for the retrieval-augmented chat engine, Hugging Face embeddings (stella_en_400M_v5), and Ollama (Mistral-Nemo) as the backend LLM. Features context-aware conversations, memory buffering, and a clean Gradio web interface for interactive health-related guidance on fitness, nutrition, mental health, and wellness.",
@@ -67,7 +76,7 @@ const projects: Project[] = [
     github: "https://github.com/JakeFurtaw/HealthReelDemo",
   },
   {
-    id: 6,
+    id: 7,
     title: "Repo Ripper",
     description: "Command-line tool that lets you chat with any GitHub repository using local Ollama LLMs.",
     longDescription: "A privacy-focused command-line tool that allows users to interact with entire GitHub repositories using local Ollama LLMs. Repo Ripper uses Llama-Index to index codebases and enables natural language queries about structure, dependencies, and functionality. Supports file filtering, conversation memory, and works entirely offline after initial setup.",
@@ -76,7 +85,7 @@ const projects: Project[] = [
     github: "https://github.com/JakeFurtaw/RepoRipper",
   },
   {
-    id: 7,
+    id: 8,
     title: "JFCoded Portfolio Website",
     description: "This very website — a modern space-themed developer portfolio.",
     longDescription: "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui. Features dark space theme, smooth animations, and responsive design.",
@@ -86,7 +95,7 @@ const projects: Project[] = [
     live: "https://www.jfcoded.com",
   },
   {
-    id: 8,
+    id: 9,
     title: "Frontier Signal Partners Website",
     description: "Modern single page website for Frontier Signal Partners.",
     longDescription: "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui.",
