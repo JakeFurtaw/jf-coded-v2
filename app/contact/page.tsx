@@ -19,7 +19,6 @@ export default function ContactPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* SOCIAL LINKS - Now on the LEFT (more prominent) */}
           <Card className="glass p-12 border-white/10">
             <h3 className="text-2xl font-semibold mb-8">Socials</h3>
             
