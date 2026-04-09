@@ -95,20 +95,20 @@ export default function Home() {
           {[
             {
               title: "Cloak AI",
-              desc: "Advanced multi tool AI agent built with Nemotron Nano 3.",
-              tech: ["Ollama", "Nemotron", "FastAPI", "Tool Use"],
+              desc: "Advanced AI agent built with Nemotron Nano 3 and Ollama.",
+              tech: ["Python", "Nemotron Nano 3", "Ollama", "React", "TypeScript", "FastAPI", "Tailwind CSS", "Earth 2 Studio", "GFS Weather Data", "Yahoo Finance API", "Whisper", "Nemotron Parse", "SAM3", "Tool Use", "Web Scraping", "Geocoding", "Satellite Imagery"],
               link: "/projects"
             },
             {
               title: "Agent Qwen",
-              desc: "Advanced Multi-Modal AI agent built with Qwen 2.5-Omni.",
-              tech: ["Qwen", "LangChain", "Agents", "Python"],
+              desc: "Multi-modal AI agent designed to emulate a Geek Squad technician, capable of understanding text, images, audio, and video.",
+              tech: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal", "Whisper", "FastRTC", "PyTorch", "Transformers"],
               link: "/projects"
             },
             {
               title: "Chat RAG",
-              desc: "Gradio powered advanced AI coding assistant.",
-              tech: ["RAG", "Gradio", "ChromaDB", "Python"],
+              desc: "Advanced Retrieval-Augmented Generation (RAG) coding assistant with support for multiple LLMs, documents, and GitHub repositories.",
+              tech: ["Python", "RAG", "Llama-Index", "LangChain", "Gradio", "ChromaDB", "Milvus", "Neo4j", "Ollama", "Transformers"],
               link: "/projects"
             }
           ].map((project, index) => (
