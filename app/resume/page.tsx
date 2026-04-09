@@ -21,16 +21,16 @@ export default function ResumePage() {
       company: "SurgePoint Software LLC",
       location: "Towson, MD",
       period: "Aug 2023 – Jan 2025",
-      description: "Led the development of an AI-powered student information AI assistant using Llama 3.1, Mistral models, and a custom RAG pipeline. Curated a 13M-line dataset from 200M+ of webscrapped data and raw documents. Co-founded the startup and won $1,000 in the Towson StartUp Cohort.",
-      technologies: ["Python", "RAG", "Llama 3.1", "Mistral 7B", "Prompt Engineering", "LLMs", "Data Engineering"],
+      description: "Co-founded SurgePoint and led the development of an AI-powered student information assistant using Llama 3.1 and Mistral models. Built a custom RAG pipeline and curated a 13M-line dataset from 200M+ raw web-scraped data and documents. Implemented advanced prompt engineering to serve accurate information to over 15,000 students. Won $1,000 in the Towson StartUp Cohort.",
+      technologies: ["Python", "RAG", "Llama 3.1", "Mistral", "Prompt Engineering", "LLMs", "Data Engineering"],
     },
     {
       title: "Advanced Repair Agent",
       company: "Geek Squad / Best Buy",
       location: "Towson & Owings Mills, MD",
-      period: "Mar 2022 – Apr 2026",
-      description: "Diagnosed and repaired complex hardware and software issues for computers, laptops, smartphones, and consumer electronics. Specialized in data recovery, malware removal, and OS troubleshooting (Windows/macOS).",
-      technologies: ["Hardware Repair", "Software Troubleshooting", "Customer Service", "Data Recovery", "Malware Removal", "Windows", "macOS"],
+      period: "Mar 2022 – Present",
+      description: "Provided advanced technical support and repairs for computers, laptops, smartphones, and consumer electronics. Specialized in complex diagnostics, data recovery, malware removal, and OS troubleshooting across Windows and macOS platforms. Handled escalated repairs with a focus on first-time fix rates and excellent customer service.",
+      technologies: ["Hardware Repair", "Software Troubleshooting", "Data Recovery", "Malware Removal", "Windows", "macOS", "Technical Diagnostics"],
     },
   ];
 
