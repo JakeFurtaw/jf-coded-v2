@@ -47,7 +47,7 @@ export default function ResumePage() {
       school: "Howard Community College",
       location: "Columbia, MD",
       period: "Aug 2019 – Dec 2021",
-      details: "Relevant coursework: Computer Science I & II, Discrete Mathematics, Python, Calculus I & II",
+      details: "Relevant coursework: Computer Science I & II (C++), Discrete Mathematics, Intro to Python, Calculus I & II",
     },
   ];
 
