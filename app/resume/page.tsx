@@ -30,7 +30,7 @@ export default function ResumePage() {
       location: "Towson & Owings Mills, MD",
       period: "Mar 2022 – Apr 2026",
       description: "Diagnosed and repaired complex hardware and software issues for computers, laptops, smartphones, and consumer electronics. Specialized in data recovery, malware removal, and OS troubleshooting (Windows/macOS).",
-      technologies: ["Hardware Repair", "Software Troubleshooting", "Data Recovery", "Malware Removal", "Windows", "macOS"],
+      technologies: ["Hardware Repair", "Software Troubleshooting", "Customer Service", "Data Recovery", "Malware Removal", "Windows", "macOS"],
     },
   ];
 
@@ -51,12 +51,34 @@ export default function ResumePage() {
     },
   ];
 
-  const skills = [
-    "Python", "PyTorch", "TensorFlow", "Machine Learning", "Deep Learning",
-    "Natural Language Processing", "Computer Vision", "RAG", "LLMs", "Prompt Engineering",
-    "Data Engineering", "React", "Next.js", "TypeScript", "Tailwind CSS",
-    "Docker", "AWS", "Git", "Hardware Troubleshooting", "Data Recovery",
-  ];
+const skills = [
+  "Python",
+  "PyTorch",
+  "TensorFlow",
+  "Machine Learning",
+  "Deep Learning",
+  "Large Language Models (LLMs)",
+  "Retrieval-Augmented Generation (RAG)",
+  "Multi-Modal AI",
+  "Prompt Engineering",
+  "LangChain",
+  "Llama-Index",
+  "Ollama",
+  "Gradio",
+  "Stable Diffusion",
+  "Computer Vision",
+  "Natural Language Processing",
+  "Data Engineering",
+  "Vector Databases",
+  "React",
+  "Next.js",
+  "TypeScript",
+  "Tailwind CSS",
+  "Docker",
+  "Jupyter Notebooks",
+  "Git",
+  "Hardware Troubleshooting",
+];
 
   return (
     <div className="min-h-screen pb-24 bg-space-bg">
@@ -64,7 +86,7 @@ export default function ResumePage() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-6xl font-bold tracking-tighter mb-4">Virtual Resume</h1>
-          <p className="text-xl text-white/70">Jacob Furtaw — Machine Learning & AI Engineer</p>
+          <p className="text-xl text-white/70">Jacob Furtaw — Machine Learning Engineer</p>
           
           <Button asChild size="lg" className="mt-8 bg-cyan-400 hover:bg-cyan-300 text-black">
           <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf" className="flex items-center gap-2">

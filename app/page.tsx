@@ -80,7 +80,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h2 className="text-5xl font-bold tracking-tighter mb-3">Featured Projects</h2>
-            <p className="text-xl text-white/70">Some of my recent work in AI and full-stack development</p>
+            <p className="text-xl text-white/70">Some of my recent work in AI and Web Development</p>
           </div>
           <Button 
             asChild 
@@ -101,13 +101,13 @@ export default function Home() {
             },
             {
               title: "Agent Qwen",
-              desc: "Multi-modal AI agent designed to emulate a Geek Squad technician, capable of understanding text, images, audio, and video.",
+              desc: "Multi-modal AI agent designed to emulate a Geek Squad Agent, capable of understanding text, images, audio, and video.",
               tech: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal", "Whisper", "FastRTC", "PyTorch", "Transformers"],
               link: "/projects"
             },
             {
               title: "Chat RAG",
-              desc: "Advanced Retrieval-Augmented Generation (RAG) coding assistant with support for multiple LLMs, documents, and GitHub repositories.",
+              desc: "Advanced RAG powered coding AI assistant with support for multiple LLMs, documents, and GitHub repositories.",
               tech: ["Python", "RAG", "Llama-Index", "LangChain", "Gradio", "ChromaDB", "Milvus", "Neo4j", "Ollama", "Transformers"],
               link: "/projects"
             }
