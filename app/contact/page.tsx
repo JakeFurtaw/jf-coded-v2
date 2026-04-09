@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div className="text-center mb-20">
           <h1 className="text-6xl font-bold tracking-tighter mb-4">Let's Connect</h1>
           <p className="text-xl text-white/70 max-w-md mx-auto">
-            Open to opportunities, collaborations, or just chatting about AI and space.
+            Open to opportunities, collaborations, or just chatting about AI.
           </p>
         </div>
 
