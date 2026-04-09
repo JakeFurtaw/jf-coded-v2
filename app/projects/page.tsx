@@ -51,8 +51,8 @@ const projects: Project[] = [
   {
   id: 4,
   title: "ASTNN Mutant Classifier",
-  description: "Abstract Syntax Tree Neural Network for detecting equivalent mutants in Java and C++.",
-  longDescription: "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model converts mutated programs into AST representations, learns structural features, and classifies semantic equivalence. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
+  description: "Abstract Syntax Tree Neural Network for detecting equivalent mutants in Java and C++ code.",
+  longDescription: "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model sorts a of unlabeled dataset of equivalent and non-equivalent mutants into a labeled dataset automatically. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
   category: "AI/ML",
   technologies: ["Python", "PyTorch", "Neural Networks", "Java", "C++", "Over/Undersampling", "Model Training & Optimization"],
   github: "https://gitlab.com/JakeFurtaw/ASTNN-COSC490",
