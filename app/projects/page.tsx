@@ -24,8 +24,8 @@ const projects: Project[] = [
     {
     id: 1,
     title: "Cloak AI",
-    description: "Advanced AI agent built with Nemotron Nano 3 and Ollama.",
-    longDescription: "A sophisticated AI-powered chat application featuring real-time streaming responses, markdown support with code syntax highlighting, and a responsive dark theme interface. The agent leverages Ollama with Nemotron Nano 3 for advanced language processing and includes powerful tool integration for web search, weather forecasting with animated video embeds, stock market data from Yahoo Finance, currency exchange rates, and date/time information. Built with React, TypeScript, and FastAPI backend services, it offers persistent chat history, chat management features, and a modern UI with animated elements. The system supports document parsing using Nemotron Parse, speech-to-text transcription with Whisper, and satellite image segmentation with SAM3.",
+    description: "Advanced tool using AI agent built with Nemotron Nano 3 and Ollama.",
+    longDescription: "A sophisticated AI agent featuring real-time streaming responses, markdown formatted responses, code syntax highlighting and language identification, and a responsive dark theme user interface. The agent leverages Nemotron Nano 3 for advanced language processing and includes powerful tool integration for web search, weather forecasting with animated video embeds, stock market data from Yahoo Finance, currency exchange rates, and date/time information. Built with React, TypeScript, Tailwind CSS,and has a FastAPI backend. The app has persistent user specific chat history, chat management features, and a modern UI with animated elements. The system also supports document parsing using Nemotron Parse, speech-to-text transcription with Whisper, and satellite image segmentation with SAM3.",
     category: "AI/ML",
     technologies: ["Python", "Nemotron Nano 3", "Ollama", "React", "TypeScript", "FastAPI", "Tailwind CSS", "Earth 2 Studio", "GFS Weather Data", "Yahoo Finance API", "Whisper", "Nemotron Parse", "SAM3", "Tool Use", "Web Scraping", "Geocoding", "Satellite Imagery"],
     github: "https://github.com/JakeFurtaw",
