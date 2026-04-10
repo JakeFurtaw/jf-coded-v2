@@ -69,7 +69,7 @@ const projects: Project[] = [
   {
   id: 4,
   title: "Auto Mutant Classifier",
-  description: "Trained an Abstract Syntax Tree Neural Network to detect equivalent mutants in Java and C++ code.",
+  description: "An Abstract Syntax Tree Neural Network trainedto detect equivalent mutants in Java and C++ code.",
   longDescription: "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model sorts a of unlabeled dataset of equivalent and non-equivalent mutants into a labeled dataset automatically. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
   images: [
       "/projectImages/AEMI/ASTNN_Flow_Chart.png",
