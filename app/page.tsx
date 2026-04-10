@@ -95,14 +95,14 @@ export default function Home() {
           {[
             {
               title: "Cloak AI",
-              desc: "Advanced AI agent built with Nemotron Nano 3 and Ollama.",
+              desc: "Advanced AI agent built with Nemotron Nano 3.",
               tech: ["Python", "Nemotron Nano 3", "Ollama", "React", "TypeScript", "FastAPI", "Tailwind CSS", "Earth 2 Studio", "GFS Weather Data", "Yahoo Finance API", "Whisper", "Nemotron Parse", "SAM3", "Tool Use", "Web Scraping", "Geocoding", "Satellite Imagery"],
               image: "/projectImages/Cloak/ChatPage.png",
               link: "/projects"
             },
             {
               title: "Agent Qwen",
-              desc: "Multi-modal AI agent designed to emulate a Geek Squad Agent, capable of understanding text, images, audio, and video.",
+              desc: "Multi-modal AI agent designed to emulate a Geek Squad Agent.",
               tech: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal", "Whisper", "FastRTC", "PyTorch", "Transformers"],
               image: "/projectImages/AgentQwen/StartScreen.png",
               link: "/projects"
