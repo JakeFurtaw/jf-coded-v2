@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jacob Furtaw | ML Engineer & Developer",
-  description: "Machine Learning Engineer & Full-Stack Developer | Building intelligent systems that explore the unknown",
+  title: "Jacob Furtaw | ML Engineer",
+  description: "Machine Learning Engineer | Building intelligent systems that explore the unknown",
   icons: {
     icon: "/favicon.ico",
   },
