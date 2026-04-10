@@ -80,7 +80,6 @@ export default function Home() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <h2 className="text-5xl font-bold tracking-tighter mb-3">Featured Projects</h2>
-            <p className="text-xl text-white/70">My favorite projects</p>
           </div>
           <Button 
             asChild 
