@@ -8,14 +8,14 @@ import { Badge } from "@/components/ui/badge";
 
 export default function ResumePage() {
   const experiences = [
-    // {
-    //   title: "GenAI Engineer",
-    //   company: "Frontier Signal Partners",
-    //   location: "Baltimore, MD",
-    //   period: "Jan 2026 – Present",
-    //   description: "Building advanced generative AI solutions and intelligent systems.",
-    //   technologies: ["Python", "LLMs", "Generative AI"],
-    // },
+    {
+      title: "GenAI Engineer",
+      company: "Stealth AI Startup",
+      location: "Baltimore, MD",
+      period: "Jan 2026 – Present",
+      description: "Building advanced generative AI solutions and intelligent systems.",
+      technologies: ["Python", "LLMs", "Generative AI"],
+    },
     {
       title: "Co-Founder & Machine Learning Engineer",
       company: "SurgePoint Software LLC",
@@ -28,7 +28,7 @@ export default function ResumePage() {
       title: "Advanced Repair Agent",
       company: "Geek Squad / Best Buy",
       location: "Towson & Owings Mills, MD",
-      period: "Mar 2022 – Present",
+      period: "Mar 2022 – Apr 2026",
       description: "Provided advanced technical support and repairs for computers, laptops, smartphones, and other consumer electronics. Specialized in complex diagnostics, data recovery, malware removal, and OS troubleshooting across Windows and macOS platforms. Handled escalated repairs with a focus on first-time fix rates and excellent customer service. Consistently the top preforming ARA in the micromarket averging 1.2+ tags per hour and 150%+ utilization.",
       technologies: ["Hardware Repair", "Software Troubleshooting", "Data Recovery", "Malware Removal", "Windows", "macOS", "Technical Diagnostics"],
     },
