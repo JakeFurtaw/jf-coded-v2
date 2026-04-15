@@ -148,7 +148,7 @@ const skills = [
           </div>
         </section>
 
-        {/* Skills - Now placed here */}
+        {/* Skills & Technologies */}
         <section className="mb-20">
           <h2 className="text-3xl font-semibold mb-10 flex items-center gap-3">
             <Cpu className="text-cyan-400" /> Skills & Technologies
