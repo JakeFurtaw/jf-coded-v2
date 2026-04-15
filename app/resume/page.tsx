@@ -39,7 +39,7 @@ export default function ResumePage() {
       degree: "Bachelor of Science in Computer Science",
       school: "Towson University",
       location: "Towson, MD",
-      period: "Jan 2021 – Dec 2023",
+      period: "Jan 2022 – Dec 2023",
       details: "Software Engineering Track | Relevant coursework: Artificial Intelligence, Data Structures & Algorithms, Software Engineering, Database Management, Object-Oriented Design, Web Programming, Linear Algebra, Statistics",
     },
     {
