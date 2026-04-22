@@ -158,7 +158,7 @@ const skills = [
               {skills.map((skill) => (
                 <Badge 
                   key={skill} 
-                  className="px-5 py-2.5 text-base bg-space-card hover:bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 transition-all hover:scale-105"
+                  className="px-5 py-2.5 text-base bg-space-card hover:bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 transition-all hover:scale-105 whitespace-normal break-words max-w-full"
                 >
                   {skill}
                 </Badge>
