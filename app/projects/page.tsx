@@ -281,15 +281,18 @@ export default function ProjectsPage() {
       {/* Fullscreen Lightbox Overlay */}
       <AnimatePresence>
         {isLightboxOpen && selectedProject && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/98 backdrop-blur-xl p-4 md:p-12">
-            <button
-              onClick={() => setIsLightboxOpen(false)}
-              className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10"
-            >
-              <X size={32} />
-            </button>
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/98 backdrop-blur-xl p-4">
+            {/* 1. Main Container matches your image size */}
+            <div className="relative w-[70%] h-[60%] flex items-center justify-center">
+              
+              {/* 2. Move the X button INSIDE the relative container */}
+              <button
+                onClick={() => setIsLightboxOpen(false)}
+                className="absolute -top-12 -right-4 text-white/60 hover:text-white transition-colors z-20 p-2"
+              >
+                <X size={32} />
+              </button>
 
-            <div className="relative w-full h-full flex items-center justify-center">
               <motion.img 
                 key={currentImageIndex}
                 src={selectedProject.images?.[currentImageIndex]} 
@@ -297,26 +300,21 @@ export default function ProjectsPage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="max-w-full max-h-full object-contain shadow-2xl"
+                className="max-w-full max-h-full w-auto h-auto object-contain shadow-2xl rounded-lg"
               />
               
+              {/* Navigation buttons */}
               {selectedProject.images && selectedProject.images.length > 1 && (
                 <>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      prevImage();
-                    }}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-all"
+                    onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                    className="absolute -left-16 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-all"
                   >
                     <ChevronLeft size={32} />
                   </button>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      nextImage();
-                    }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-all"
+                    onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                    className="absolute -right-16 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-all"
                   >
                     <ChevronRight size={32} />
                   </button>
@@ -347,109 +345,104 @@ export default function ProjectsPage() {
                   <X size={24} />
                 </button>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                  {/* LEFT COLUMN: Cinematic Gallery */}
-                  <div className="space-y-6">
-                    {selectedProject.images && selectedProject.images.length > 0 && (
-                      <div className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
-                        <AnimatePresence mode="wait">
-                          <motion.img 
-                            key={currentImageIndex}
-                            src={selectedProject.images[currentImageIndex]} 
-                            alt={selectedProject.title}
-                            initial={{ opacity: 0, scale: 1.1 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.4 }}
-                            className="w-full h-full object-contain"
-                          />
-                        </AnimatePresence>
+                <div className="p-6 md:p-10 relative">
+                  <div className="flex flex-col gap-10">
+                    {/* 1. TOP-DOWN HERO LAYOUT */}
+                    <div className="w-full space-y-4">
+                      {selectedProject.images && selectedProject.images.length > 0 && (
+                        <div className="relative aspect-video md:aspect-[16/9] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
+                          <AnimatePresence mode="wait">
+                            <motion.img 
+                              key={currentImageIndex}
+                              src={selectedProject.images[currentImageIndex]} 
+                              alt={selectedProject.title}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="w-full h-full object-contain cursor-zoom-in"
+                              // 2. LIGHTBOX ACTIVATION
+                              onClick={() => setIsLightboxOpen(true)}
+                            />
+                          </AnimatePresence>
+                          
+                          {/* Lightbox Hint Button */}
+                          <button 
+                            onClick={() => setIsLightboxOpen(true)}
+                            className="absolute top-4 left-4 bg-black/60 backdrop-blur-md p-2 rounded-full text-white/70 opacity-0 group-hover:opacity-100 transition-all border border-white/10"
+                          >
+                            <Maximize2 size={20} />
+                          </button>
+
+                          {selectedProject.images.length > 1 && (
+                            <>
+                              <button
+                                onClick={prevImage}
+                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
+                              >
+                                <ChevronLeft size={24} />
+                              </button>
+                              <button
+                                onClick={nextImage}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
+                              >
+                                <ChevronRight size={24} />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 2. NARRATIVE CONTENT SECTION */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                      <div className="lg:col-span-2">
+                        <div className="flex items-center gap-3 mb-4">
+                          <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1">
+                            {selectedProject.category}
+                          </Badge>
+                          <span className="text-white/30 text-sm">•</span>
+                          <span className="text-white/50 text-sm font-medium uppercase tracking-wider">Case Study</span>
+                        </div>
+
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+                          {selectedProject.title}
+                        </h2>
                         
-                        {selectedProject.images.length > 1 && (
-                          <>
-                            <button
-                              onClick={prevImage}
-                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
-                            >
-                              <ChevronLeft size={20} />
-                            </button>
-                            <button
-                              onClick={nextImage}
-                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
-                            >
-                              <ChevronRight size={20} />
-                            </button>
-                          </>
-                        )}
-                        {/* Image Counter */}
-                        <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">
-                          {currentImageIndex + 1} / {selectedProject.images.length}
+                        <p className="text-lg text-white/70 leading-relaxed">
+                          {selectedProject.longDescription}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col gap-8">
+                        <div>
+                          <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Links</h4>
+                          <div className="flex flex-col gap-3">
+                            {selectedProject.github && (
+                              <Button variant="outline" className="w-full border-white/10 hover:border-cyan-400/50" asChild>
+                                <a href={selectedProject.github} target="_blank"><FaGithub className="mr-2" /> Source Code</a>
+                              </Button>
+                            )}
+                            {selectedProject.live && (
+                              <Button className="w-full bg-cyan-400 text-black hover:bg-cyan-300" asChild>
+                                <a href={selectedProject.live} target="_blank"><ExternalLink className="mr-2" /> Live Demo</a>
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Tech Stack</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedProject.technologies.map((tech) => (
+                              <Badge key={tech} className="px-3 py-1 bg-white/5 border border-white/10 text-cyan-300">
+                                {tech}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    )}
-                    
-                    {/* Additional Project Metadata / Quick Links */}
-                    <div className="flex gap-4">
-                      {selectedProject.github && (
-                        <Button size="sm" variant="outline" className="flex-1 border-white/10 hover:border-cyan-400/50 transition-all" asChild>
-                          <a href={selectedProject.github} target="_blank">
-                            <FaGithub className="mr-2" /> Source
-                          </a>
-                        </Button>
-                      )}
-                      {selectedProject.live && (
-                        <Button size="sm" className="flex-1 bg-cyan-400 text-black hover:bg-cyan-300 transition-all" asChild>
-                          <a href={selectedProject.live} target="_blank">
-                            <ExternalLink className="mr-2" /> Demo
-                          </a>
-                        </Button>
-                      )}
                     </div>
                   </div>
-
-                  {/* RIGHT COLUMN: Narrative Content */}
-                  <motion.div 
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="flex flex-col"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1">
-                        {selectedProject.category}
-                      </Badge>
-                      <span className="text-white/30 text-sm">•</span>
-                      <span className="text-white/50 text-sm font-medium tracking-wide uppercase">Case Study</span>
-                    </div>
-
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
-                      {selectedProject.title}
-                    </h2>
-                    
-                    <p className="text-lg text-white/70 leading-relaxed mb-8">
-                      {selectedProject.longDescription}
-                    </p>
-
-                    <div className="mt-auto">
-                      <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Tech Stack</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProject.technologies.map((tech, i) => (
-                          <motion.div
-                            key={tech}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3 + (i * 0.03) }}
-                          >
-                            <Badge 
-                              className="px-4 py-2 text-sm bg-white/5 border border-white/10 text-cyan-300 hover:border-cyan-400/50 transition-colors"
-                            >
-                              {tech}
-                            </Badge>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
                 </div>
               </div>
             </motion.div>
