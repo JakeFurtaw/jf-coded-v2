@@ -6,6 +6,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import MagneticButton from "@/components/ui/magnetic-button";
 
 export default function Home() {
   return (
@@ -46,19 +47,19 @@ export default function Home() {
         </motion.p>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg" className="group bg-cyan-400 hover:bg-cyan-300 text-black text-lg px-10 py-7 rounded-xl">
+          <MagneticButton size="lg" className="group bg-cyan-400 hover:bg-cyan-300 text-black text-lg px-10 py-7 rounded-xl">
             <a href="/projects">View My Projects</a>
             <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          </MagneticButton>
 
-          <Button 
+          <MagneticButton 
             size="lg" 
             variant="outline" 
             className="text-lg px-10 py-7 border-cyan-400/50 hover:bg-white/5"
             asChild
           >
             <a href="/contact">Connect With Me</a>
-          </Button>
+          </MagneticButton>
         </div>
 
         {/* Social Links */}
