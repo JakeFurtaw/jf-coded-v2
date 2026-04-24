@@ -277,83 +277,131 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* Project Modal with Image Carousel */}
+      {/* Project Modal with Image Carousel - CINEMA MODE */}
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 md:p-6 backdrop-blur-sm">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="glass max-w-4xl w-full max-h-[90vh] overflow-auto rounded-3xl border border-white/10"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative glass max-w-5xl w-full max-h-[95vh] overflow-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)]"
             >
-              <div className="p-10 relative">
+              {/* Gradient Border Overlay */}
+              <div className="absolute inset-0 pointer-events-none rounded-3xl border border-white/10 ring-1 ring-inset ring-cyan-400/20" />
+              
+              <div className="p-6 md:p-12 relative">
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-6 right-6 text-white/60 hover:text-white z-10"
+                  className="absolute top-6 right-6 text-white/40 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all z-10"
                 >
-                  <X size={28} />
+                  <X size={24} />
                 </button>
 
-                {/* Image Carousel */}
-                {selectedProject.images && selectedProject.images.length > 0 && (
-                  <div className="relative mb-8 rounded-2xl overflow-hidden bg-black">
-                    <img 
-                      src={selectedProject.images[currentImageIndex]} 
-                      alt={selectedProject.title}
-                      className="w-full max-h-[420px] object-contain"
-                    />
-                    
-                    {selectedProject.images.length > 1 && (
-                      <>
-                        <button
-                          onClick={prevImage}
-                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white"
-                        >
-                          <ChevronLeft size={24} />
-                        </button>
-                        <button
-                          onClick={nextImage}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 p-2 rounded-full text-white"
-                        >
-                          <ChevronRight size={24} />
-                        </button>
-                      </>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  {/* LEFT COLUMN: Cinematic Gallery */}
+                  <div className="space-y-6">
+                    {selectedProject.images && selectedProject.images.length > 0 && (
+                      <div className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
+                        <AnimatePresence mode="wait">
+                          <motion.img 
+                            key={currentImageIndex}
+                            src={selectedProject.images[currentImageIndex]} 
+                            alt={selectedProject.title}
+                            initial={{ opacity: 0, scale: 1.1 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.4 }}
+                            className="w-full h-full object-contain"
+                          />
+                        </AnimatePresence>
+                        
+                        {selectedProject.images.length > 1 && (
+                          <>
+                            <button
+                              onClick={prevImage}
+                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <ChevronLeft size={20} />
+                            </button>
+                            <button
+                              onClick={nextImage}
+                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <ChevronRight size={20} />
+                            </button>
+                          </>
+                        )}
+                        {/* Image Counter */}
+                        <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs text-white/70 border border-white/10">
+                          {currentImageIndex + 1} / {selectedProject.images.length}
+                        </div>
+                      </div>
                     )}
+                    
+                    {/* Additional Project Metadata / Quick Links */}
+                    <div className="flex gap-4">
+                      {selectedProject.github && (
+                        <Button size="sm" variant="outline" className="flex-1 border-white/10 hover:border-cyan-400/50 transition-all" asChild>
+                          <a href={selectedProject.github} target="_blank">
+                            <FaGithub className="mr-2" /> Source
+                          </a>
+                        </Button>
+                      )}
+                      {selectedProject.live && (
+                        <Button size="sm" className="flex-1 bg-cyan-400 text-black hover:bg-cyan-300 transition-all" asChild>
+                          <a href={selectedProject.live} target="_blank">
+                            <ExternalLink className="mr-2" /> Demo
+                          </a>
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                )}
 
-                <h2 className="text-4xl font-bold mb-6">{selectedProject.title}</h2>
-                <p className="text-xl text-white/80 leading-relaxed mb-10">
-                  {selectedProject.longDescription}
-                </p>
+                  {/* RIGHT COLUMN: Narrative Content */}
+                  <motion.div 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex flex-col"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1">
+                        {selectedProject.category}
+                      </Badge>
+                      <span className="text-white/30 text-sm">•</span>
+                      <span className="text-white/50 text-sm font-medium tracking-wide uppercase">Case Study</span>
+                    </div>
 
-                <div className="flex flex-wrap gap-3 mb-10">
-                  {selectedProject.technologies.map((tech) => (
-                    <Badge 
-                      key={tech} 
-                      className="px-6 py-2.5 text-base bg-white/10 border border-cyan-400/40 text-cyan-300"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+                      {selectedProject.title}
+                    </h2>
+                    
+                    <p className="text-lg text-white/70 leading-relaxed mb-8">
+                      {selectedProject.longDescription}
+                    </p>
 
-                <div className="flex gap-4">
-                  {selectedProject.github && (
-                    <Button size="lg" variant="outline" asChild>
-                      <a href={selectedProject.github} target="_blank">
-                        <FaGithub className="mr-2" /> View Source Code
-                      </a>
-                    </Button>
-                  )}
-                  {selectedProject.live && (
-                    <Button size="lg" className="bg-cyan-400 text-black" asChild>
-                      <a href={selectedProject.live} target="_blank">
-                        <ExternalLink className="mr-2" /> Visit Live Demo
-                      </a>
-                    </Button>
-                  )}
+                    <div className="mt-auto">
+                      <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Tech Stack</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.technologies.map((tech, i) => (
+                          <motion.div
+                            key={tech}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.3 + (i * 0.03) }}
+                          >
+                            <Badge 
+                              className="px-4 py-2 text-sm bg-white/5 border border-white/10 text-cyan-300 hover:border-cyan-400/50 transition-colors"
+                            >
+                              {tech}
+                            </Badge>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
