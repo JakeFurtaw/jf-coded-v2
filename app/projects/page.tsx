@@ -163,10 +163,6 @@ export default function ProjectsPage() {
     ? projects 
     : projects.filter(p => p.category === activeFilter);
 
-  const filteredProjects = activeFilter === "All" 
-    ? projects 
-    : projects.filter(p => p.category === activeFilter);
-
   const nextImage = () => {
     if (selectedProject?.images) {
       setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images!.length);
