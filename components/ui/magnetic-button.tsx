@@ -8,7 +8,6 @@ interface MagneticButtonProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  ...rest: any;
 }
 
 export default function MagneticButton({ children, className, ...props }: any) {
