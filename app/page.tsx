@@ -142,7 +142,7 @@ export default function Home() {
                   <h3 className={`font-semibold mb-3 group-hover:text-cyan-400 transition-colors ${project.size === 'large' ? 'text-3xl' : 'text-2xl'}`}>
                     {project.title}
                   </h3>
-                  <p className="text-white/70 mb-6 line-clamp-3 min-h-[4.25rem]">
+                  <p className="text-white/70 mb-6 line-clamp-12 min-h-[4.25rem]">
                     {project.desc}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-8 mt-auto">
