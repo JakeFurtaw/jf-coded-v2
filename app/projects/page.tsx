@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ExternalLink, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { FaGithub } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -157,6 +157,11 @@ export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<"All" | "AI/ML" | "Web">("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  const filteredProjects = activeFilter === "All" 
+    ? projects 
+    : projects.filter(p => p.category === activeFilter);
 
   const filteredProjects = activeFilter === "All" 
     ? projects 
@@ -277,7 +282,54 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* Project Modal with Image Carousel - CINEMA MODE */}
+      {/* Fullscreen Lightbox Overlay */}
+      <AnimatePresence>
+        {isLightboxOpen && selectedProject && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/98 backdrop-blur-xl p-4 md:p-12">
+            <button
+              onClick={() => setIsLightboxOpen(false)}
+              className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10"
+            >
+              <X size={32} />
+            </button>
+
+            <div className="relative w-full h-full flex items-center justify-center">
+              <motion.img 
+                key={currentImageIndex}
+                src={selectedProject.images?.[currentImageIndex]} 
+                alt={selectedProject.title}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="max-w-full max-h-full object-contain shadow-2xl"
+              />
+              
+              {selectedProject.images && selectedProject.images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-all"
+                  >
+                    <ChevronLeft size={32} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-4 rounded-full text-white transition-all"
+                  >
+                    <ChevronRight size={32} />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {selectedProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 md:p-6 backdrop-blur-sm">
