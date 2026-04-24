@@ -342,13 +342,13 @@ export default function ProjectsPage() {
       <AnimatePresence>
         {selectedProject && (
           /* Wrapper remains fixed to viewport for perfect centering */
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-6 overflow-hidden">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-3 sm:p-4 md:p-6 overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative glass max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)]"
+              className="relative glass max-w-5xl w-full my-auto max-h-[92vh] overflow-y-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)]"
             >
               {/* Gradient Border Overlay */}
               <div className="absolute inset-0 pointer-events-none rounded-3xl border border-white/10 ring-1 ring-inset ring-cyan-400/20" />
@@ -409,7 +409,7 @@ export default function ProjectsPage() {
                   </div>
 
                   {/* 2. NARRATIVE CONTENT SECTION */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
                       <div className="flex items-center gap-3 mb-4">
                         <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1">
@@ -419,11 +419,11 @@ export default function ProjectsPage() {
                         <span className="text-white/50 text-sm font-medium uppercase tracking-wider">Case Study</span>
                       </div>
 
-                      <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight text-white break-words">
                         {selectedProject.title}
                       </h2>
                       
-                      <p className="text-lg text-white/70 leading-relaxed">
+                      <p className="text-base sm:text-lg text-white/70 leading-relaxed">
                         {selectedProject.longDescription}
                       </p>
                     </div>
