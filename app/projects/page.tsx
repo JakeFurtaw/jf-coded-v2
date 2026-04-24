@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { FaGithub } from 'react-icons/fa';
@@ -175,6 +176,15 @@ export default function ProjectsPage() {
     }
   };
 
+  useEffect(() => {
+  if (selectedProject) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'unset';
+  }
+  return () => { document.body.style.overflow = 'unset'; };
+  }, [selectedProject]);
+
   return (
     <div className="min-h-screen pb-24 bg-space-bg">
       <div className="max-w-6xl mx-auto px-6 pt-16">
@@ -278,7 +288,8 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* Fullscreen Lightbox Overlay */}
+      {/* Fullscreen Lightbox Overlay — rendered in a portal so fixed positioning is relative to the viewport */}
+      {typeof window !== "undefined" && createPortal(
       <AnimatePresence>
         {isLightboxOpen && selectedProject && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/98 backdrop-blur-xl p-4">
@@ -324,121 +335,124 @@ export default function ProjectsPage() {
           </div>
         )}
       </AnimatePresence>
+      , document.body)}
+
+      {/* Project Detail Modal — rendered in a portal so fixed positioning is relative to the viewport */}
+      {typeof window !== "undefined" && createPortal(
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 md:p-6 backdrop-blur-sm">
+          /* Wrapper remains fixed to viewport for perfect centering */
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 md:p-6 overflow-hidden">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative glass max-w-5xl w-full max-h-[95vh] overflow-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)]"
+              className="relative glass max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)]"
             >
               {/* Gradient Border Overlay */}
               <div className="absolute inset-0 pointer-events-none rounded-3xl border border-white/10 ring-1 ring-inset ring-cyan-400/20" />
               
-              <div className="p-6 md:p-12 relative">
+              {/* SINGLE Padding Container */}
+              <div className="p-6 md:p-10 relative">
+                {/* Close Button - positioned absolutely within the padded container */}
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-6 right-6 text-white/40 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all z-10"
+                  className="absolute top-4 right-4 text-white/40 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all z-20"
                 >
                   <X size={24} />
                 </button>
 
-                <div className="p-6 md:p-10 relative">
-                  <div className="flex flex-col gap-10">
-                    {/* 1. TOP-DOWN HERO LAYOUT */}
-                    <div className="w-full space-y-4">
-                      {selectedProject.images && selectedProject.images.length > 0 && (
-                        <div className="relative aspect-video md:aspect-[16/9] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
-                          <AnimatePresence mode="wait">
-                            <motion.img 
-                              key={currentImageIndex}
-                              src={selectedProject.images[currentImageIndex]} 
-                              alt={selectedProject.title}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              className="w-full h-full object-contain cursor-zoom-in"
-                              // 2. LIGHTBOX ACTIVATION
-                              onClick={() => setIsLightboxOpen(true)}
-                            />
-                          </AnimatePresence>
-                          
-                          {/* Lightbox Hint Button */}
-                          <button 
+                <div className="flex flex-col gap-10">
+                  {/* 1. TOP-DOWN HERO LAYOUT */}
+                  <div className="w-full">
+                    {selectedProject.images && selectedProject.images.length > 0 && (
+                      <div className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
+                        <AnimatePresence mode="wait">
+                          <motion.img 
+                            key={currentImageIndex}
+                            src={selectedProject.images[currentImageIndex]} 
+                            alt={selectedProject.title}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="w-full h-full object-contain cursor-zoom-in"
                             onClick={() => setIsLightboxOpen(true)}
-                            className="absolute top-4 left-4 bg-black/60 backdrop-blur-md p-2 rounded-full text-white/70 opacity-0 group-hover:opacity-100 transition-all border border-white/10"
-                          >
-                            <Maximize2 size={20} />
-                          </button>
-
-                          {selectedProject.images.length > 1 && (
-                            <>
-                              <button
-                                onClick={prevImage}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
-                              >
-                                <ChevronLeft size={24} />
-                              </button>
-                              <button
-                                onClick={nextImage}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
-                              >
-                                <ChevronRight size={24} />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 2. NARRATIVE CONTENT SECTION */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                      <div className="lg:col-span-2">
-                        <div className="flex items-center gap-3 mb-4">
-                          <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1">
-                            {selectedProject.category}
-                          </Badge>
-                          <span className="text-white/30 text-sm">•</span>
-                          <span className="text-white/50 text-sm font-medium uppercase tracking-wider">Case Study</span>
-                        </div>
-
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
-                          {selectedProject.title}
-                        </h2>
+                          />
+                        </AnimatePresence>
                         
-                        <p className="text-lg text-white/70 leading-relaxed">
-                          {selectedProject.longDescription}
-                        </p>
+                        <button 
+                          onClick={() => setIsLightboxOpen(true)}
+                          className="absolute top-4 left-4 bg-black/60 backdrop-blur-md p-2 rounded-full text-white/70 opacity-0 group-hover:opacity-100 transition-all border border-white/10"
+                        >
+                          <Maximize2 size={20} />
+                        </button>
+
+                        {selectedProject.images.length > 1 && (
+                          <>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <ChevronLeft size={24} />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <ChevronRight size={24} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 2. NARRATIVE CONTENT SECTION */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    <div className="lg:col-span-2">
+                      <div className="flex items-center gap-3 mb-4">
+                        <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1">
+                          {selectedProject.category}
+                        </Badge>
+                        <span className="text-white/30 text-sm">•</span>
+                        <span className="text-white/50 text-sm font-medium uppercase tracking-wider">Case Study</span>
                       </div>
 
-                      <div className="flex flex-col gap-8">
-                        <div>
-                          <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Links</h4>
-                          <div className="flex flex-col gap-3">
-                            {selectedProject.github && (
-                              <Button variant="outline" className="w-full border-white/10 hover:border-cyan-400/50" asChild>
-                                <a href={selectedProject.github} target="_blank"><FaGithub className="mr-2" /> Source Code</a>
-                              </Button>
-                            )}
-                            {selectedProject.live && (
-                              <Button className="w-full bg-cyan-400 text-black hover:bg-cyan-300" asChild>
-                                <a href={selectedProject.live} target="_blank"><ExternalLink className="mr-2" /> Live Demo</a>
-                              </Button>
-                            )}
-                          </div>
-                        </div>
+                      <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-white">
+                        {selectedProject.title}
+                      </h2>
+                      
+                      <p className="text-lg text-white/70 leading-relaxed">
+                        {selectedProject.longDescription}
+                      </p>
+                    </div>
 
-                        <div>
-                          <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Tech Stack</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {selectedProject.technologies.map((tech) => (
-                              <Badge key={tech} className="px-3 py-1 bg-white/5 border border-white/10 text-cyan-300">
-                                {tech}
-                              </Badge>
-                            ))}
-                          </div>
+                    <div className="flex flex-col gap-8">
+                      <div>
+                        <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Links</h4>
+                        <div className="flex flex-col gap-3">
+                          {selectedProject.github && (
+                            <Button variant="outline" className="w-full border-white/10 hover:border-cyan-400/50" asChild>
+                              <a href={selectedProject.github} target="_blank"><FaGithub className="mr-2" /> Source Code</a>
+                            </Button>
+                          )}
+                          {selectedProject.live && (
+                            <Button className="w-full bg-cyan-400 text-black hover:bg-cyan-300" asChild>
+                              <a href={selectedProject.live} target="_blank"><ExternalLink className="mr-2" /> Live Demo</a>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">Tech Stack</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedProject.technologies.map((tech) => (
+                            <Badge key={tech} className="px-3 py-1 bg-white/5 border border-white/10 text-cyan-300">
+                              {tech}
+                            </Badge>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -449,6 +463,7 @@ export default function ProjectsPage() {
           </div>
         )}
       </AnimatePresence>
+      , document.body)}
     </div>
   );
 }
