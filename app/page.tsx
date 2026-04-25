@@ -96,7 +96,7 @@ export default function Home() {
           {[
             {
               title: "Cloak AI",
-              desc: "A sophisticated AI agent featuring real-time streaming responses, markdown formatted responses, code syntax highlighting and language identification, and a responsive dark theme user interface. The agent leverages Nemotron Nano 3 for advanced language processing and includes powerful tool integration for web search, weather forecasting with animated video embeds, stock market data from Yahoo Finance, currency exchange rates, and date/time information. Built with React, TypeScript, Tailwind CSS,and has a FastAPI backend. The app has persistent user specific chat history, chat management features, and a modern UI with animated elements. The system also supports document parsing using Nemotron Parse, speech-to-text transcription with Whisper, and satellite image segmentation with SAM3.",
+              desc: "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
               tech: ["Python", "Nemotron Nano 3", "Ollama", "React", "TypeScript", "FastAPI", "Tailwind CSS", "Earth 2 Studio", "GFS Weather Data", "Yahoo Finance API", "Whisper", "Nemotron Parse", "SAM3", "Tool Use", "Web Scraping", "Geocoding", "Satellite Imagery"],
               image: "/projectImages/Cloak/ChatPage.png",
               link: "/projects",
@@ -140,32 +140,43 @@ export default function Home() {
                     <span className="text-6xl opacity-40 group-hover:scale-110 transition-transform duration-300">🧠</span>
                   )}
                 </div>
-                <div className="p-8 flex flex-col flex-grow">
-                  <h3 className={`font-semibold mb-3 group-hover:text-cyan-400 transition-colors ${project.size === 'large' ? 'text-3xl' : 'text-2xl'}`}>
-                    {project.title}
-                  </h3>
-                  <p className="text-white/70 mb-6 line-clamp-12 min-h-[4.25rem]">
-                    {project.desc}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-8 mt-auto">
-                    {project.tech.slice(0, project.size === 'large' ? 15 : 6).map((t) => (
-                      <Badge 
-                        key={t} 
-                        className="bg-white/10 hover:bg-cyan-400/20 text-cyan-300 text-xs border border-cyan-400/30 px-3 py-1"
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className={`font-semibold mb-3 group-hover:text-cyan-400 transition-colors ${project.size === 'large' ? 'text-3xl' : 'text-2xl'}`}>
+                      {project.title}
+                    </h3>
+                    
+                    <p className="text-white/70 mb-6 text-xl leading-relaxed">
+                      {project.desc}
+                    </p>
+
+                    {/* Pushes content to the bottom */}
+                    <div className="mt-auto"> 
+                      <div className={`flex flex-wrap mb-8 ${project.size === 'large' ? 'gap-4' : 'gap-2'}`}>
+                        {project.tech.slice(0, project.size === 'large' ? 15 : 6).map((t) => (
+                          <Badge 
+                            key={t} 
+                            className={`bg-white/10 hover:bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 transition-all duration-300
+                              ${project.size === 'large' 
+                                ? 'text-base px-6 py-2.5 font-bold tracking-wider shadow-lg shadow-cyan-500/10 hover:scale-105' 
+                                : 'text-xs px-3 py-1 font-medium'
+                              }`}
+                          >
+                            {t}
+                          </Badge>
+                        ))}
+                      </div>
+                      
+                      <Button 
+                        variant="outline" 
+                        size={project.size === 'large' ? "lg" : "sm"} 
+                        className={`w-full border-white/20 hover:border-cyan-400 hover:text-cyan-400 
+                          ${project.size === 'large' ? 'py-7 text-xl font-bold' : ''}`} 
+                        asChild
                       >
-                        {t}
-                      </Badge>
-                    ))}
+                        <a href={project.link}>View Project</a>
+                      </Button>
+                    </div>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full border-white/20 hover:border-cyan-400 hover:text-cyan-400" 
-                    asChild
-                  >
-                    <a href={project.link}>View Project</a>
-                  </Button>
-                </div>
               </Card>
             </motion.div>
           ))}
