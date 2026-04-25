@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { ExternalLink, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { FaGithub } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ interface Project {
   github?: string;
   live?: string;
   category: "AI/ML" | "Web";
+  subCategory?: string[];
   technologies: string[];
 }
 
@@ -35,6 +37,7 @@ const projects: Project[] = [
       "/projectImages/Cloak/ImgSegSat.png",
     ],
     category: "AI/ML",
+    subCategory: ["Agentic", "RAG", "Multi-Modal"],
     technologies: ["Python", "Nemotron Nano 3", "Ollama", "React", "TypeScript", "FastAPI", "Tailwind CSS", "Earth 2 Studio", "GFS Weather Data", "Yahoo Finance API", "Whisper", "Nemotron Parse", "SAM3", "Tool Use", "Web Scraping", "Geocoding", "Satellite Imagery"],
     github: "https://github.com/JakeFurtaw",
   },
@@ -48,6 +51,7 @@ const projects: Project[] = [
       "/projectImages/AgentQwen/ActivateChat.png",
     ],
     category: "AI/ML",
+    subCategory: ["Agentic", "Multi-Modal"],
     technologies: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal", "Whisper", "FastRTC", "PyTorch", "Transformers"],
     github: "https://github.com/JakeFurtaw/Agent-Qwen",
     live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
@@ -64,6 +68,7 @@ const projects: Project[] = [
       "/projectImages/Chat-RAG/RAG_Query.png",
     ],
     category: "AI/ML",
+    subCategory: ["RAG"],
     technologies: ["Python", "RAG", "Llama-Index", "LangChain", "Gradio", "ChromaDB", "Milvus", "Neo4j", "Ollama", "Transformers"],
     github: "https://github.com/JakeFurtaw/Chat-RAG",
   },
@@ -74,12 +79,13 @@ const projects: Project[] = [
   longDescription: "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model sorts a of unlabeled dataset of equivalent and non-equivalent mutants into a labeled dataset automatically. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
   images: [
       "/projectImages/AEMI/ASTNN_Flow_Chart.png",
-      "/projectImages/AEMI/ASTNN_Flow_Chart2.png",
+      "/projectImages/AEMI/ASTNN_Flow_Chart_2.png",
       "/projectImages/AEMI/code2vec_pipeline.png",
       "/projectImages/AEMI/codeBERT_pipeline.png",
       "/projectImages/AEMI/modded_astnn_pipeline.png",
     ],
   category: "AI/ML",
+  subCategory: ["Research"],
   technologies: ["Python", "PyTorch", "Neural Networks", "Java", "C++", "Over/Undersampling", "Model Training & Optimization"],
   github: "https://gitlab.com/JakeFurtaw/ASTNN-COSC490",
   },
@@ -96,6 +102,7 @@ const projects: Project[] = [
       "/projectImages/ImageAlter/out_img_gal.png",
     ],
     category: "AI/ML",
+    subCategory: ["Research"],
     technologies: ["Python", "Stable Diffusion", "Gradio", "Diffusers", "PyTorch", "Transformers"],
     github: "https://github.com/JakeFurtaw/ImageAlter",
   },
@@ -110,6 +117,7 @@ const projects: Project[] = [
       "/projectImages/HealthG-Demo/WIthQuestionsAsked.png",
     ],
     category: "AI/ML",
+    subCategory: ["RAG"],
     technologies: ["Python", "Llama-Index", "Gradio", "Ollama", "Transformers", "PyTorch"],
     github: "https://github.com/JakeFurtaw/HealthReelDemo",
   },
@@ -119,6 +127,7 @@ const projects: Project[] = [
     description: "Command-line tool that lets you chat with any GitHub repository using local Ollama LLMs.",
     longDescription: "A privacy-focused command-line tool that allows users to interact with entire GitHub repositories using local Ollama LLMs. Repo Ripper uses Llama-Index to index codebases and enables natural language queries about structure, dependencies, and functionality. Supports file filtering, conversation memory, and works entirely offline after initial setup.",
     category: "AI/ML",
+    subCategory: ["RAG"],
     technologies: ["Python", "Llama-Index", "Ollama", "Hugging Face Embeddings", "GitHub API"],
     github: "https://github.com/JakeFurtaw/RepoRipper",
   },
@@ -153,16 +162,28 @@ const projects: Project[] = [
 ];
 
 const categories = ["All", "AI/ML", "Web"] as const;
+const aiMlSubCategories = ["All", "Agentic", "RAG", "Research", "Multi-Modal"] as const;
 
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<"All" | "AI/ML" | "Web">("All");
+  const [activeSubFilter, setActiveSubFilter] = useState<typeof aiMlSubCategories[number]>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
-  const filteredProjects = activeFilter === "All" 
-    ? projects 
-    : projects.filter(p => p.category === activeFilter);
+  const filteredProjects = projects.filter(p => {
+    const categoryMatch = activeFilter === "All" || p.category === activeFilter;
+    const subCategoryMatch = activeFilter === "AI/ML" && activeSubFilter !== "All" 
+      ? p.subCategory?.includes(activeSubFilter) 
+      : true;
+    return categoryMatch && subCategoryMatch;
+  });
+
+  useEffect(() => {
+    if (activeFilter !== "AI/ML") {
+      setActiveSubFilter("All");
+    }
+  }, [activeFilter]);
 
   const nextImage = () => {
     if (selectedProject?.images) {
@@ -197,33 +218,67 @@ export default function ProjectsPage() {
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={activeFilter === category ? "default" : "outline"}
-              onClick={() => setActiveFilter(category)}
-              className={`px-8 py-2 rounded-full transition-all ${
-                activeFilter === category 
-                  ? "bg-cyan-400 text-black" 
-                  : "border-cyan-400/50 hover:border-cyan-400 hover:text-cyan-400"
-              }`}
-            >
-              {category}
-            </Button>
-          ))}
+        <div className="flex flex-col items-center gap-6 mb-12">
+          <div className="flex flex-wrap justify-center gap-3">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={activeFilter === category ? "default" : "outline"}
+                onClick={() => setActiveFilter(category)}
+                className={`px-8 py-2 rounded-full transition-all ${
+                  activeFilter === category 
+                    ? "bg-cyan-400 text-black" 
+                    : "border-cyan-400/50 hover:border-cyan-400 hover:text-cyan-400"
+                }`}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+
+          <AnimatePresence>
+            {activeFilter === "AI/ML" && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-wrap justify-center gap-2"
+              >
+                {aiMlSubCategories.map((sub) => (
+                  <Button
+                    key={sub}
+                    variant={activeSubFilter === sub ? "default" : "outline"}
+                    onClick={() => setActiveSubFilter(sub)}
+                    className={`px-4 py-1 rounded-full text-xs transition-all ${
+                      activeSubFilter === sub 
+                        ? "bg-cyan-400 text-black" 
+                        : "border-cyan-400/30 hover:border-cyan-400 hover:text-cyan-400 text-white/60"
+                    }`}
+                  >
+                    {sub}
+                  </Button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Projects Grid - unchanged except for image placeholder */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              whileHover={{ y: -8 }}
-            >
+        <motion.div 
+          layout 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ y: -8 }}
+              >
               <Card 
                 className="glass h-full overflow-hidden border-white/10 cursor-pointer group hover:border-cyan-400/30 transition-all"
                 onClick={() => {
@@ -232,12 +287,13 @@ export default function ProjectsPage() {
                 }}
               >
                 {/* Image Area - Shows first image or placeholder */}
-                <div className="h-48 bg-gradient-to-br from-cyan-900/50 to-purple-900/50 flex items-center justify-center border-b border-white/10 overflow-hidden">
+                <div className="h-48 relative bg-gradient-to-br from-cyan-900/50 to-purple-900/50 flex items-center justify-center border-b border-white/10 overflow-hidden">
                   {project.images && project.images.length > 0 ? (
-                    <img 
+                    <Image 
                       src={project.images[0]} 
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
                     <div className="text-cyan-400/30 text-6xl group-hover:scale-110 transition-transform">
@@ -284,8 +340,10 @@ export default function ProjectsPage() {
                 </div>
               </Card>
             </motion.div>
+            
           ))}
-        </div>
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* Fullscreen Lightbox Overlay — rendered in a portal so fixed positioning is relative to the viewport */}
@@ -293,10 +351,10 @@ export default function ProjectsPage() {
       <AnimatePresence>
         {isLightboxOpen && selectedProject && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/98 backdrop-blur-xl p-4">
-            {/* 1. Main Container matches your image size */}
-            <div className="relative w-[70%] h-[60%] flex items-center justify-center">
+            {/* 1. Main Container */}
+            <div className="relative w-[85%] h-[80%] flex items-center justify-center">
               
-              {/* 2. Move the X button INSIDE the relative container */}
+              {/* Close Button */}
               <button
                 onClick={() => setIsLightboxOpen(false)}
                 className="absolute -top-12 -right-4 text-white/60 hover:text-white transition-colors z-20 p-2"
@@ -304,15 +362,21 @@ export default function ProjectsPage() {
                 <X size={32} />
               </button>
 
-              <motion.img 
-                key={currentImageIndex}
-                src={selectedProject.images?.[currentImageIndex]} 
-                alt={selectedProject.title}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="max-w-full max-h-full w-auto h-auto object-contain shadow-2xl rounded-lg"
-              />
+              <motion.div 
+                key={currentImageIndex} 
+                className="relative w-full h-full flex items-center justify-center glass rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)] p-4 md:p-8"
+              >
+                {selectedProject.images && selectedProject.images[currentImageIndex] && (
+                  <div className="relative w-full h-full">
+                    <Image 
+                      src={selectedProject.images[currentImageIndex]} 
+                      alt={selectedProject.title}
+                      fill
+                      className="object-contain shadow-2xl rounded-lg"
+                    />
+                  </div>
+                )}
+              </motion.div>
               
               {/* Navigation buttons */}
               {selectedProject.images && selectedProject.images.length > 1 && (
@@ -348,10 +412,9 @@ export default function ProjectsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="relative glass max-w-5xl w-full my-auto max-h-[92vh] overflow-y-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)]"
+              className="relative glass max-w-5xl w-full my-auto max-h-[92vh] overflow-y-auto rounded-3xl border border-cyan-400/20 shadow-[0_0_50px_-12px_rgba(34,211,238,0.3)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             >
-              {/* Gradient Border Overlay */}
-              <div className="absolute inset-0 pointer-events-none rounded-3xl border border-white/10 ring-1 ring-inset ring-cyan-400/20" />
+
               
               {/* SINGLE Padding Container */}
               <div className="p-6 md:p-10 relative">
@@ -369,16 +432,23 @@ export default function ProjectsPage() {
                     {selectedProject.images && selectedProject.images.length > 0 && (
                       <div className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
                         <AnimatePresence mode="wait">
-                          <motion.img 
+                          <motion.div 
                             key={currentImageIndex}
-                            src={selectedProject.images[currentImageIndex]} 
-                            alt={selectedProject.title}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="w-full h-full object-contain cursor-zoom-in"
+                            className="relative w-full h-full cursor-zoom-in"
                             onClick={() => setIsLightboxOpen(true)}
-                          />
+                          >
+                            {selectedProject.images && selectedProject.images[currentImageIndex] && (
+                              <Image 
+                                src={selectedProject.images[currentImageIndex]} 
+                                alt={selectedProject.title}
+                                fill
+                                className="object-contain"
+                              />
+                            )}
+                          </motion.div>
                         </AnimatePresence>
                         
                         <button 

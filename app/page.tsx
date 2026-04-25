@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight, Mail } from "lucide-react";
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
@@ -129,10 +130,11 @@ export default function Home() {
               <Card className="glass h-full overflow-hidden border border-white/10 hover:border-cyan-400/30 transition-all rounded-3xl flex flex-col">
                 <div className={`relative ${project.size === 'large' ? 'h-80 md:h-[400px]' : 'h-52'} bg-gradient-to-br from-cyan-900/50 to-purple-900/40 flex items-center justify-center border-b border-white/10 overflow-hidden`}>
                   {project.image ? (
-                    <img
+                    <Image
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <span className="text-6xl opacity-40 group-hover:scale-110 transition-transform duration-300">🧠</span>
