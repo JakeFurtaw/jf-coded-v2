@@ -289,12 +289,14 @@ export default function ProjectsPage() {
                 {/* Image Area - Shows first image or placeholder */}
                 <div className="h-48 relative bg-gradient-to-br from-cyan-900/50 to-purple-900/50 flex items-center justify-center border-b border-white/10 overflow-hidden">
                   {project.images && project.images.length > 0 ? (
-                    <Image 
-                      src={project.images[0]} 
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                  <Image 
+                    src={project.images[0]} 
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    priority={index === 0}
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                   ) : (
                     <div className="text-cyan-400/30 text-6xl group-hover:scale-110 transition-transform">
                       {project.category === "AI/ML" ? "🤖" : "💻"}
@@ -372,6 +374,8 @@ export default function ProjectsPage() {
                       src={selectedProject.images[currentImageIndex]} 
                       alt={selectedProject.title}
                       fill
+                      sizes="85vw"
+                      priority
                       className="object-contain shadow-2xl rounded-lg"
                     />
                   </div>
@@ -445,6 +449,8 @@ export default function ProjectsPage() {
                                 src={selectedProject.images[currentImageIndex]} 
                                 alt={selectedProject.title}
                                 fill
+                                sizes="(max-width: 768px) 95vw, (max-width: 1280px) 80vw, 1024px"
+                                priority
                                 className="object-contain"
                               />
                             )}
