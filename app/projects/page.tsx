@@ -107,7 +107,7 @@ const projects: Project[] = [
     images: [
       "/projectImages/HealthG-Demo/ChatWindow.png",
       "/projectImages/HealthG-Demo/ChatbotWMemory.png",
-      "/projectImages/HealthG-Demo/WithQuestionsAsked.png",
+      "/projectImages/HealthG-Demo/WIthQuestionsAsked.png",
     ],
     category: "AI/ML",
     technologies: ["Python", "Llama-Index", "Gradio", "Ollama", "Transformers", "PyTorch"],
