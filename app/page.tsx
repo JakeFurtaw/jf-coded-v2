@@ -104,7 +104,7 @@ export default function Home() {
             },
             {
               title: "Agent Qwen",
-              desc: "Multi-modal AI agent designed to emulate a Geek Squad Agent.",
+              desc: "Multi-modal AI agent designed to emulate a Geek Squad Consultation Agent.",
               tech: ["Python", "Qwen 2.5 Omni", "Gradio", "Multi-Modal", "Whisper", "FastRTC", "PyTorch", "Transformers"],
               image: "/projectImages/AgentQwen/StartScreen.png",
               link: "/projects",
@@ -112,7 +112,7 @@ export default function Home() {
             },
             {
               title: "Chat RAG",
-              desc: "Advanced RAG powered coding AI assistant with support for multiple LLMs, documents, and GitHub repositories.",
+              desc: "RAG powered coding AI assistant with support for multiple LLMs from multiple providers. Supports local and API inference.",
               tech: ["Python", "RAG", "Llama-Index", "LangChain", "Gradio", "ChromaDB", "Milvus", "Neo4j", "Ollama", "Transformers"],
               image: "/projectImages/Chat-RAG/start_state.png",
               link: "/projects",

@@ -29,7 +29,7 @@ const projects: Project[] = [
     id: 1,
     title: "Cloak AI",
     description: "Advanced tool using AI agent built with Nemotron Nano 3 and Ollama.",
-    longDescription: "A sophisticated AI agent featuring real-time streaming responses, markdown formatted responses, code syntax highlighting and language identification, and a responsive dark theme user interface. The agent leverages Nemotron Nano 3 for advanced language processing and includes powerful tool integration for web search, weather forecasting with animated video embeds, stock market data from Yahoo Finance, currency exchange rates, and date/time information. Built with React, TypeScript, Tailwind CSS,and has a FastAPI backend. The app has persistent user specific chat history, chat management features, and a modern UI with animated elements. The system also supports document parsing using Nemotron Parse, speech-to-text transcription with Whisper, and satellite image segmentation with SAM3.",
+    longDescription: "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
     images: [
       "/projectImages/Cloak/ChatPage.png",
       "/projectImages/Cloak/ImgSegPage.png",
@@ -44,8 +44,8 @@ const projects: Project[] = [
   {
     id: 2,
     title: "Agent Qwen",
-    description: "Multi-modal AI agent designed to emulate a Geek Squad technician, capable of understanding text, images, audio, and video.",
-    longDescription: "A powerful multi-modal AI agent built with Qwen 2.5-Omni that emulates a Geek Squad technician. The agent can process and respond to text, images, audio, and video inputs, making it highly effective for customer support, device troubleshooting, and interactive assistance. It features automatic speech recognition via Whisper, audio response generation with speaker selection, and a custom system prompt designed to deliver clear, professional troubleshooting reports.",
+    description: "Multi-modal AI agent designed to emulate a Geek Squad Consultation Agent, capable of understanding text, images, audio, and video.",
+    longDescription: "A powerful multi-modal AI agent built with Qwen 2.5-Omni that emulates a Geek Squad Consultation Agent. The agent can process and respond to text, images, audio, and video inputs, making it highly effective for customer support, device troubleshooting, and interactive assistance. It features automatic speech recognition via Whisper, audio response generation with speaker selection, and a custom system prompt designed to deliver clear, professional troubleshooting reports.",
     images: [
       "/projectImages/AgentQwen/StartScreen.png",
       "/projectImages/AgentQwen/ActivateChat.png",
