@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import CursorGlow from "@/components/ui/cursor-glow";
+import PageTransition from "@/components/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,9 @@ export default function RootLayout({
         <CursorGlow />
         <Navbar />
         <main className="pt-20 min-h-[calc(100vh-5rem)]"> {/* padding to account for fixed navbar */}
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </main>
         <Footer />
       </body>

@@ -54,7 +54,7 @@ export default function Home() {
             className="group bg-cyan-400 hover:bg-cyan-300 text-black text-lg px-10 py-7 rounded-xl font-medium tracking-tight"
           >
             <a href="/projects">View My Projects</a>
-            <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="ml-3 transition-transform group-hover:translate-x-1 group-active:translate-x-2" />
           </MagneticButton>
 
           <MagneticButton 
@@ -72,20 +72,20 @@ export default function Home() {
           <a 
             href="https://github.com/JakeFurtaw" 
             target="_blank" 
-            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 transition-all active:scale-95"
+            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
           >
             <FaGithub size={26} />
           </a>
           <a 
             href="https://linkedin.com/in/jacob-furtaw" 
             target="_blank" 
-            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 transition-all active:scale-95"
+            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
           >
             <FaLinkedin size={26} />
           </a>
           <a 
             href="/contact" 
-            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 transition-all active:scale-95"
+            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
           >
             <Mail size={26} />
           </a>
@@ -102,7 +102,7 @@ export default function Home() {
           <Button 
             asChild 
             variant="outline" 
-            className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black whitespace-nowrap font-medium tracking-tight"
+            className="border-cyan-400/50 hover:border-cyan-400 hover:bg-cyan-400 hover:text-black whitespace-nowrap font-medium tracking-tight active:scale-[0.985] transition-all"
           >
             <a href="/projects">View All Projects →</a>
           </Button>
@@ -159,7 +159,7 @@ export default function Home() {
                         {project.tech.slice(0, project.size === 'large' ? 15 : 6).map((t) => (
                           <Badge
                             key={t}
-                            className={`bg-white/10 text-cyan-300 border border-white/10 transition-all duration-200 group-hover:border-cyan-400/30 group-hover:bg-white/15 group-hover:text-cyan-200
+                            className={`bg-white/10 text-cyan-300 border border-white/10 transition-all duration-200 group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200
                               ${project.size === 'large'
                                 ? 'text-sm md:text-base px-4 md:px-6 py-1.5 md:py-2.5 font-bold tracking-wider shadow-lg shadow-cyan-500/10'
                                 : 'text-xs px-3 py-1 font-medium'

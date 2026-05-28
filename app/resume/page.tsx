@@ -90,9 +90,9 @@ const skills = [
           <h1 className="text-6xl font-bold tracking-tighter mb-3">Virtual Resume</h1>
           <p className="text-lg md:text-xl text-white/70">Jacob Furtaw — Machine Learning Engineer</p>
           
-          <Button asChild size="lg" className="mt-6 bg-cyan-400 hover:bg-cyan-300 text-black font-medium tracking-tight active:scale-[0.985] touch-manipulation">
+          <Button asChild size="lg" className="mt-6 bg-cyan-400 hover:bg-cyan-300 text-black font-medium tracking-tight active:scale-[0.985] touch-manipulation group">
           <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf" className="flex items-center gap-2">
-            <Download className="w-5 h-5" />
+            <Download className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
             Download Full CV (PDF)
           </a>
         </Button>
@@ -136,7 +136,7 @@ const skills = [
                     {exp.technologies.map((tech) => (
                       <Badge 
                         key={tech} 
-                        className="bg-white/5 text-cyan-300 border border-white/10 transition-all group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200 active:scale-95 touch-manipulation text-sm px-3 py-1"
+                        className="bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200 active:scale-95 touch-manipulation text-sm px-3 py-1"
                       >
                         {tech}
                       </Badge>
@@ -155,13 +155,19 @@ const skills = [
           </h2>
           <div className="glass p-6 md:p-8 rounded-2xl border border-white/10">
             <div className="flex flex-wrap gap-2 md:gap-3">
-              {skills.map((skill) => (
-                <Badge 
-                  key={skill} 
-                  className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+              {skills.map((skill, index) => (
+                <motion.div
+                  key={skill}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(index * 0.015, 0.4) }}
                 >
-                  {skill}
-                </Badge>
+                  <Badge 
+                    className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                  >
+                    {skill}
+                  </Badge>
+                </motion.div>
               ))}
             </div>
           </div>
