@@ -146,6 +146,7 @@ export default function ProjectsPage() {
                     alt={project.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    quality={82}
                     priority={index === 0}
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -226,7 +227,8 @@ export default function ProjectsPage() {
                       src={selectedProject.images[currentImageIndex]} 
                       alt={selectedProject.title}
                       fill
-                      sizes="85vw"
+                      sizes="(max-width: 768px) 95vw, 80vw"
+                      quality={85}
                       priority
                       className="object-contain shadow-2xl rounded-lg"
                     />
@@ -302,6 +304,7 @@ export default function ProjectsPage() {
                                 alt={selectedProject.title}
                                 fill
                                 sizes="(max-width: 768px) 95vw, (max-width: 1280px) 80vw, 1024px"
+                                quality={85}
                                 priority
                                 className="object-contain"
                               />

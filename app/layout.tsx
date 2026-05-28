@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 import CursorGlow from "@/components/ui/cursor-glow";
 
 const geistSans = Geist({
@@ -36,9 +37,10 @@ export default function RootLayout({
       >
         <CursorGlow />
         <Navbar />
-        <main className="pt-20"> {/* padding to account for fixed navbar */}
+        <main className="pt-20 min-h-[calc(100vh-5rem)]"> {/* padding to account for fixed navbar */}
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );
