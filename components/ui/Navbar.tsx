@@ -2,19 +2,21 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Rocket } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, Rocket, Home, FileText, FolderOpen, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/resume", label: "Virtual Resume" },
-  { href: "/projects", label: "Projects" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/resume", label: "Resume", icon: FileText },
+  { href: "/projects", label: "Projects", icon: FolderOpen },
+  { href: "/contact", label: "Contact", icon: Mail },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
@@ -33,24 +35,36 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-10 text-sm uppercase tracking-widest">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="hover:text-cyan-400 transition-colors duration-200 relative group"
-            >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-cyan-400 group-hover:w-full transition-all" />
-            </Link>
-          ))}
+        {/* Desktop Navigation - Modernized */}
+        <div className="hidden md:flex items-center gap-9 text-sm font-medium tracking-tight">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`group relative transition-all duration-200 ${
+                  isActive 
+                    ? "text-cyan-400" 
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                {link.label}
+                <span 
+                  className={`absolute -bottom-1 left-0 h-px bg-gradient-to-r from-cyan-400 to-cyan-400 transition-all duration-300 ${
+                    isActive 
+                      ? "w-full" 
+                      : "w-0 group-hover:w-full"
+                  }`} 
+                />
+              </Link>
+            );
+          })}
 
-          {/* Desktop */}
           <Button 
             asChild 
             variant="outline" 
-            className="border-cyan-400/50 hover:border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all"
+            className="ml-3 border-cyan-400/50 hover:border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all"
           >
             <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf">
               Download CV
@@ -65,23 +79,61 @@ export default function Navbar() {
               <Menu className="w-6 h-6" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="glass border-white/10 w-80">
-            <div className="flex flex-col gap-8 mt-12 text-lg">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="hover:text-cyan-400 transition-colors py-2 border-b border-white/10"
+          <SheetContent side="right" className="glass border-white/10 w-80 p-0">
+            <div className="flex flex-col h-full pt-16 pb-8 px-6">
+              {/* Navigation Links */}
+              <div className="flex flex-col gap-1">
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  const Icon = link.icon;
+
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`group flex items-center gap-4 rounded-xl px-4 py-4 text-lg font-medium tracking-tight transition-all duration-200 ${
+                        isActive 
+                          ? "bg-white/5 text-cyan-400" 
+                          : "text-white/80 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      <div className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+                        isActive 
+                          ? "bg-cyan-400/10 text-cyan-400" 
+                          : "bg-white/5 text-white/60 group-hover:bg-white/10 group-hover:text-white/80"
+                      }`}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <span>{link.label}</span>
+                      
+                      {/* Active indicator bar */}
+                      {isActive && (
+                        <div className="ml-auto h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Action Section */}
+              <div className="mt-auto pt-8 border-t border-white/10">
+                <Button 
+                  asChild 
+                  className="w-full bg-cyan-400 text-black hover:bg-cyan-300 font-medium h-12 text-base"
                 >
-                  {link.label}
-                </Link>
-              ))}
-              <Button asChild className="mt-6 bg-cyan-400 text-black hover:bg-cyan-300">
-                <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf">
-                  Download CV
-                </a>
-              </Button>
+                  <a 
+                    href="/Jacob_Furtaw_Resume.pdf" 
+                    download="Jacob_Furtaw_Resume.pdf"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Download CV
+                  </a>
+                </Button>
+                <p className="text-center text-[10px] text-white/40 mt-4 tracking-[2px]">
+                  PDF • 1 PAGE
+                </p>
+              </div>
             </div>
           </SheetContent>
         </Sheet>
