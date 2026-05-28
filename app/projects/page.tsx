@@ -267,9 +267,10 @@ export default function ProjectsPage() {
           >
             <button
               onClick={() => setIsLightboxOpen(false)}
-              className="absolute top-6 right-6 text-white/60 hover:text-white z-20 p-3 rounded-full hover:bg-white/10 transition-all"
+              className="group absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 right-6 touch-manipulation"
+              style={{ top: 'calc(1.5rem + env(safe-area-inset-top))' }}
             >
-              <X size={28} />
+              <X className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
             </button>
 
             <div 
@@ -283,18 +284,25 @@ export default function ProjectsPage() {
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 className="relative w-full h-full flex items-center justify-center"
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.3}
+                drag
+                dragConstraints={{ left: 0, right: 0, top: 0 }}
+                dragElastic={0.25}
                 onDragEnd={(event, info) => {
-                  const swipeThreshold = 60;
-                  if (info.offset.x < -swipeThreshold) {
+                  const horizontalThreshold = 60;
+                  const verticalDismissThreshold = 140;
+
+                  // Vertical swipe down to close (with preference for vertical movement)
+                  if (info.offset.y > verticalDismissThreshold && Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
+                    setIsLightboxOpen(false);
+                  } 
+                  // Horizontal swipe for image navigation
+                  else if (info.offset.x < -horizontalThreshold) {
                     nextImage();
-                  } else if (info.offset.x > swipeThreshold) {
+                  } else if (info.offset.x > horizontalThreshold) {
                     prevImage();
                   }
                 }}
-                whileDrag={{ scale: 0.99 }}
+                whileDrag={{ scale: 0.985 }}
               >
                 {selectedProject.images && selectedProject.images[currentImageIndex] && (
                   <div className="relative w-full h-full">
@@ -315,14 +323,14 @@ export default function ProjectsPage() {
                 <>
                   <button
                     onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
+                    className="absolute left-[calc(1rem+env(safe-area-inset-left))] md:left-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
                     aria-label="Previous image"
                   >
                     <ChevronLeft size={26} />
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
+                    className="absolute right-[calc(1rem+env(safe-area-inset-right))] md:right-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
                     aria-label="Next image"
                   >
                     <ChevronRight size={26} />
@@ -330,9 +338,9 @@ export default function ProjectsPage() {
                 </>
               )}
 
-              {/* Image counter - better mobile visibility */}
+              {/* Image counter - better mobile visibility + safe area */}
               {selectedProject.images && selectedProject.images.length > 1 && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-xs md:text-sm tracking-widest bg-black/60 px-4 py-1.5 rounded-full backdrop-blur border border-white/10">
+                <div className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/80 text-xs md:text-sm tracking-widest bg-black/60 px-4 py-1.5 rounded-full backdrop-blur border border-white/10">
                   {currentImageIndex + 1} / {selectedProject.images.length}
                 </div>
               )}
@@ -346,7 +354,7 @@ export default function ProjectsPage() {
       <AnimatePresence>
         {selectedProject && (
           /* Wrapper remains fixed to viewport for perfect centering */
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -355,18 +363,18 @@ export default function ProjectsPage() {
               className="relative w-full max-w-5xl my-auto bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
             >
 
-              
-              {/* Content Container */}
-              <div className="p-6 md:p-10 relative bg-[#0f0f12]">
-                {/* Close Button - better mobile touch target */}
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-4 right-4 text-white/50 active:text-white active:bg-white/10 p-3 md:p-2 rounded-full transition-all z-20 touch-manipulation"
-                  aria-label="Close project details"
-                >
-                  <X size={22} />
-                </button>
+              {/* Close Button - positioned outside content so it doesn't overlap the image */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="group absolute flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 z-50 touch-manipulation"
+                style={{ top: 'calc(1.25rem + env(safe-area-inset-top))', right: '1.25rem' }}
+                aria-label="Close project details"
+              >
+                <X className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
+              </button>
 
+              {/* Content Container */}
+              <div className="p-6 md:p-10 pt-16 md:pt-20 relative bg-[#0f0f12]">
                 <div className="flex flex-col gap-10">
                   {/* 1. MODERN IMAGE GALLERY */}
                   <div className="w-full">
