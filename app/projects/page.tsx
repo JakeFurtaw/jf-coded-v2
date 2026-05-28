@@ -26,6 +26,9 @@ export default function ProjectsPage() {
   // Track recent drag to prevent lightbox from opening after swipe
   const dragJustEndedRef = useRef(false);
 
+  // Ref for the scrollable area inside the project modal
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+
   const filteredProjects = projects.filter(p => {
     const categoryMatch = activeFilter === "All" || p.category === activeFilter;
     const subCategoryMatch = activeFilter === "AI/ML" && activeSubFilter !== "All" 
@@ -47,6 +50,13 @@ export default function ProjectsPage() {
     setCurrentImageIndex(0);
     setIsLightboxOpen(false);
   };
+
+  // Scroll to top when switching projects inside the modal
+  useEffect(() => {
+    if (modalScrollRef.current) {
+      modalScrollRef.current.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [selectedProject?.id]);
 
   useEffect(() => {
     if (activeFilter !== "AI/ML") {
@@ -360,10 +370,10 @@ export default function ProjectsPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.97 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-5xl my-auto bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
             >
 
-              {/* Close Button - positioned outside content so it doesn't overlap the image */}
+              {/* Close Button - floating above content */}
               <button
                 onClick={() => setSelectedProject(null)}
                 className="group absolute flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 z-50 touch-manipulation"
@@ -373,9 +383,13 @@ export default function ProjectsPage() {
                 <X className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
               </button>
 
-              {/* Content Container */}
-              <div className="p-6 md:p-10 pt-16 md:pt-20 relative bg-[#0f0f12]">
-                <div className="flex flex-col gap-10">
+              {/* Scrollable Content */}
+              <div 
+                ref={modalScrollRef}
+                className="flex-1 overflow-y-auto overscroll-contain pt-16 md:pt-20"
+              >
+                <div className="p-6 md:p-10 relative bg-[#0f0f12]">
+                  <div className="flex flex-col gap-10">
                   {/* 1. MODERN IMAGE GALLERY */}
                   <div className="w-full">
                     {selectedProject.images && selectedProject.images.length > 0 && (
@@ -517,13 +531,61 @@ export default function ProjectsPage() {
                         <div className="h-px flex-1 bg-white/10" />
                       </div>
 
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter text-white mb-8 leading-none">
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter text-white mb-2 leading-none">
                         {selectedProject.title}
                       </h2>
+
+                      {selectedProject.dateBuilt && (
+                        <p className="text-white/50 text-sm tracking-wide mb-6">
+                          Built in {selectedProject.dateBuilt}
+                        </p>
+                      )}
                       
-                      <div className="prose prose-invert max-w-none text-[15px] leading-relaxed text-white/80">
+                      <div className="prose prose-invert max-w-none text-[15px] md:text-base leading-relaxed text-white/80">
                         <p>{selectedProject.longDescription}</p>
                       </div>
+
+                      {/* Rich Storytelling Sections - Mobile optimized */}
+                      {selectedProject.story && (
+                        <div className="mt-8 md:mt-10 space-y-6 md:space-y-8 border-t border-white/10 pt-6 md:pt-8">
+                          {selectedProject.story.role && (
+                            <div>
+                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">My Role</h4>
+                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.role}</p>
+                            </div>
+                          )}
+                          {selectedProject.story.context && (
+                            <div>
+                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Context & Problem</h4>
+                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.context}</p>
+                            </div>
+                          )}
+                          {selectedProject.story.challenges && (
+                            <div>
+                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Challenges</h4>
+                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.challenges}</p>
+                            </div>
+                          )}
+                          {selectedProject.story.approach && (
+                            <div>
+                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Approach & Decisions</h4>
+                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.approach}</p>
+                            </div>
+                          )}
+                          {selectedProject.story.learnings && (
+                            <div>
+                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Key Learnings</h4>
+                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.learnings}</p>
+                            </div>
+                          )}
+                          {selectedProject.story.impact && (
+                            <div>
+                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Impact & Results</h4>
+                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.impact}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {/* Sidebar */}
@@ -613,7 +675,8 @@ export default function ProjectsPage() {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
+          </motion.div>
           </div>
         )}
       </AnimatePresence>

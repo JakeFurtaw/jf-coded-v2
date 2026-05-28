@@ -9,6 +9,19 @@ export interface Project {
   category: "AI/ML" | "Web";
   subCategory?: string[];
   technologies: string[];
+
+  // When the project was primarily built (shown in modal for context)
+  dateBuilt?: string;
+
+  // Richer storytelling (optional)
+  story?: {
+    role?: string;
+    context?: string;
+    challenges?: string;
+    approach?: string;
+    learnings?: string;
+    impact?: string;
+  };
 }
 
 // Full project data - single source of truth
@@ -47,6 +60,16 @@ export const allProjects: Project[] = [
       "Satellite Imagery",
     ],
     github: "https://github.com/JakeFurtaw",
+    dateBuilt: "2026",
+
+    story: {
+      role: "Lead developer and system architect for the entire platform.",
+      context: "I wanted to build a powerful local AI agent that could use real tools without ever sending user data to the cloud.",
+      challenges: "Getting reliable tool calling, streaming responses, and multimodal capabilities (especially SAM3 image segmentation) working locally with acceptable latency was very difficult.",
+      approach: "I built a custom FastAPI backend with Nemotron Nano 3 via Ollama and designed a clean React frontend with real-time streaming and persistent local history.",
+      learnings: "Local LLMs have come incredibly far. With the right prompting and tool design, you can build agents that feel genuinely capable while keeping everything private.",
+      impact: "Became a core part of my daily workflow and proved that high-quality, private AI agents are very achievable today.",
+    },
   },
   {
     id: 2,
@@ -73,6 +96,16 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/Agent-Qwen",
     live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
+    dateBuilt: "2024-2025",
+
+    story: {
+      role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
+      context: "I wanted to explore what a truly multi-modal local agent could feel like in a real-world support scenario.",
+      challenges: "Coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
+      approach: "Used Qwen 2.5-Omni with custom tooling around Whisper and FastRTC, plus a carefully engineered system prompt for professional troubleshooting.",
+      learnings: "Multi-modal agents are extremely powerful, but prompt engineering and tool orchestration matter even more than raw model capability.",
+      impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about multi-modal agent design.",
+    },
   },
   {
     id: 3,
@@ -102,6 +135,16 @@ export const allProjects: Project[] = [
       "Transformers",
     ],
     github: "https://github.com/JakeFurtaw/Chat-RAG",
+    dateBuilt: "2023 – 2024",
+
+    story: {
+      role: "Primary developer — designed the full RAG architecture and built the Gradio interface.",
+      context: "I needed a flexible local + cloud RAG system that could handle codebases, PDFs, and multiple vector stores without vendor lock-in.",
+      challenges: "Managing multiple vector stores, dynamic model switching, and maintaining good retrieval quality across very different data types was non-trivial.",
+      approach: "Built a highly modular pipeline using LlamaIndex + LangChain with support for Chroma, Milvus, Neo4j, and multiple LLM providers through a unified interface.",
+      learnings: "The quality of retrieval and chunking strategy often matters more than the LLM itself. Good RAG is mostly an engineering problem.",
+      impact: "This system became my primary research and coding assistant and significantly accelerated how I work with large codebases and documents.",
+    },
   },
   {
     id: 4,
@@ -129,6 +172,7 @@ export const allProjects: Project[] = [
       "Model Training & Optimization",
     ],
     github: "https://gitlab.com/JakeFurtaw/ASTNN-COSC490",
+    dateBuilt: "2023",
   },
   {
     id: 5,
@@ -155,6 +199,7 @@ export const allProjects: Project[] = [
       "Transformers",
     ],
     github: "https://github.com/JakeFurtaw/ImageAlter",
+    dateBuilt: "2024",
   },
   {
     id: 6,
@@ -179,6 +224,7 @@ export const allProjects: Project[] = [
       "PyTorch",
     ],
     github: "https://github.com/JakeFurtaw/HealthReelDemo",
+    dateBuilt: "2024",
   },
   {
     id: 7,
@@ -215,6 +261,7 @@ export const allProjects: Project[] = [
     category: "Web",
     technologies: ["Node.js", "React", "Express", "MongoDB"],
     github: "https://github.com/JakeFurtaw",
+    dateBuilt: "2023",
   },
   {
     id: 9,
