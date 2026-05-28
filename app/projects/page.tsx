@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -22,6 +22,9 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  // Track recent drag to prevent lightbox from opening after swipe
+  const dragJustEndedRef = useRef(false);
 
   const filteredProjects = projects.filter(p => {
     const categoryMatch = activeFilter === "All" || p.category === activeFilter;
@@ -113,10 +116,10 @@ export default function ProjectsPage() {
                 key={category}
                 variant={activeFilter === category ? "default" : "outline"}
                 onClick={() => setActiveFilter(category)}
-                className={`px-8 py-2 rounded-full transition-all ${
+                className={`px-6 md:px-8 py-2 rounded-full transition-all active:scale-95 touch-manipulation ${
                   activeFilter === category 
                     ? "bg-cyan-400 text-black" 
-                    : "border-cyan-400/50 hover:border-cyan-400 hover:text-cyan-400"
+                    : "border-cyan-400/50 active:border-cyan-400 active:text-cyan-400"
                 }`}
               >
                 {category}
@@ -137,10 +140,10 @@ export default function ProjectsPage() {
                     key={sub}
                     variant={activeSubFilter === sub ? "default" : "outline"}
                     onClick={() => setActiveSubFilter(sub)}
-                    className={`px-4 py-1 rounded-full text-xs transition-all ${
+                    className={`px-4 py-1 rounded-full text-xs transition-all active:scale-95 touch-manipulation ${
                       activeSubFilter === sub 
                         ? "bg-cyan-400 text-black" 
-                        : "border-cyan-400/30 hover:border-cyan-400 hover:text-cyan-400 text-white/60"
+                        : "border-cyan-400/30 active:border-cyan-400 active:text-cyan-400 text-white/60"
                     }`}
                   >
                     {sub}
@@ -173,7 +176,7 @@ export default function ProjectsPage() {
                 className="group"
               >
               <Card 
-                className="glass h-full overflow-hidden border border-white/10 cursor-pointer transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]"
+                className="glass h-full overflow-hidden border border-white/10 cursor-pointer transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 touch-manipulation"
                 onClick={() => {
                   setSelectedProject(project);
                   setCurrentImageIndex(0);
@@ -280,6 +283,18 @@ export default function ProjectsPage() {
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 className="relative w-full h-full flex items-center justify-center"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.3}
+                onDragEnd={(event, info) => {
+                  const swipeThreshold = 60;
+                  if (info.offset.x < -swipeThreshold) {
+                    nextImage();
+                  } else if (info.offset.x > swipeThreshold) {
+                    prevImage();
+                  }
+                }}
+                whileDrag={{ scale: 0.99 }}
               >
                 {selectedProject.images && selectedProject.images[currentImageIndex] && (
                   <div className="relative w-full h-full">
@@ -295,27 +310,29 @@ export default function ProjectsPage() {
                 )}
               </motion.div>
 
-              {/* Elegant navigation */}
+              {/* Elegant navigation - Mobile friendly */}
               {selectedProject.images && selectedProject.images.length > 1 && (
                 <>
                   <button
                     onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10"
+                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
+                    aria-label="Previous image"
                   >
-                    <ChevronLeft size={28} />
+                    <ChevronLeft size={26} />
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10"
+                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
+                    aria-label="Next image"
                   >
-                    <ChevronRight size={28} />
+                    <ChevronRight size={26} />
                   </button>
                 </>
               )}
 
-              {/* Image counter */}
+              {/* Image counter - better mobile visibility */}
               {selectedProject.images && selectedProject.images.length > 1 && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-sm tracking-widest bg-black/40 px-4 py-1 rounded-full backdrop-blur">
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-xs md:text-sm tracking-widest bg-black/60 px-4 py-1.5 rounded-full backdrop-blur border border-white/10">
                   {currentImageIndex + 1} / {selectedProject.images.length}
                 </div>
               )}
@@ -341,12 +358,13 @@ export default function ProjectsPage() {
               
               {/* Content Container */}
               <div className="p-6 md:p-10 relative bg-[#0f0f12]">
-                {/* Close Button - positioned absolutely within the padded container */}
+                {/* Close Button - better mobile touch target */}
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-4 right-4 text-white/40 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all z-20"
+                  className="absolute top-4 right-4 text-white/50 active:text-white active:bg-white/10 p-3 md:p-2 rounded-full transition-all z-20 touch-manipulation"
+                  aria-label="Close project details"
                 >
-                  <X size={24} />
+                  <X size={22} />
                 </button>
 
                 <div className="flex flex-col gap-10">
@@ -355,8 +373,12 @@ export default function ProjectsPage() {
                     {selectedProject.images && selectedProject.images.length > 0 && (
                       <div className="group relative">
                         <div 
-                          className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-950 border border-white/10 shadow-2xl cursor-zoom-in"
-                          onClick={() => setIsLightboxOpen(true)}
+                          className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-950 border border-white/10 shadow-2xl cursor-zoom-in active:opacity-95 transition-opacity touch-manipulation"
+                          onClick={() => {
+                            // Don't open lightbox if the user just finished a swipe
+                            if (dragJustEndedRef.current) return;
+                            setIsLightboxOpen(true);
+                          }}
                         >
                           <AnimatePresence mode="wait">
                             <motion.div 
@@ -366,6 +388,25 @@ export default function ProjectsPage() {
                               exit={{ opacity: 0.6 }}
                               transition={{ duration: 0.25 }}
                               className="relative w-full h-full"
+                              drag="x"
+                              dragConstraints={{ left: 0, right: 0 }}
+                              dragElastic={0.25}
+                              onDragStart={() => {
+                                dragJustEndedRef.current = true;
+                              }}
+                              onDragEnd={(event, info) => {
+                                const swipeThreshold = 80;
+                                if (info.offset.x < -swipeThreshold) {
+                                  nextImage();
+                                } else if (info.offset.x > swipeThreshold) {
+                                  prevImage();
+                                }
+                                // Reset the flag after a short delay
+                                setTimeout(() => {
+                                  dragJustEndedRef.current = false;
+                                }, 150);
+                              }}
+                              whileDrag={{ scale: 0.985 }}
                             >
                               {selectedProject.images && selectedProject.images[currentImageIndex] && (
                                 <Image 
@@ -380,28 +421,31 @@ export default function ProjectsPage() {
                             </motion.div>
                           </AnimatePresence>
 
-                          {/* Elegant expand hint */}
-                          <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full text-white/80 text-xs tracking-widest flex items-center gap-2 border border-white/10 opacity-0 group-hover:opacity-100 transition-all">
+                          {/* Expand hint - always visible on mobile, hover on desktop */}
+                          <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-white/90 text-xs tracking-widest flex items-center gap-2 border border-white/10 
+                            md:opacity-0 md:group-hover:opacity-100 transition-all active:bg-black/70">
                             <Maximize2 size={14} />
-                            <span>VIEW FULL</span>
+                            <span className="hidden md:inline">VIEW FULL</span>
+                            <span className="md:hidden">FULL</span>
                           </div>
                         </div>
 
                         {/* Gallery Navigation + Thumbnails (Premium touch) */}
                         {selectedProject.images.length > 1 && (
                           <>
-                            {/* Dot + Arrow Navigation */}
+                            {/* Dot + Arrow Navigation - Mobile optimized */}
                             <div className="flex items-center justify-between mt-4">
                               <div className="flex gap-2">
                                 {selectedProject.images.map((_, idx) => (
                                   <button
                                     key={idx}
                                     onClick={() => setCurrentImageIndex(idx)}
-                                    className={`h-1.5 rounded-full transition-all duration-200 ${
+                                    className={`h-2 md:h-1.5 rounded-full transition-all duration-200 touch-manipulation ${
                                       idx === currentImageIndex 
                                         ? 'bg-cyan-400 w-8' 
-                                        : 'bg-white/20 hover:bg-white/40 w-4'
+                                        : 'bg-white/20 active:bg-white/40 w-6 md:w-4'
                                     }`}
+                                    aria-label={`Go to image ${idx + 1}`}
                                   />
                                 ))}
                               </div>
@@ -410,31 +454,34 @@ export default function ProjectsPage() {
                                 <button
                                   onClick={prevImage}
                                   disabled={currentImageIndex === 0}
-                                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 disabled:opacity-30 transition-all border border-white/10"
+                                  className="p-3 md:p-2 rounded-full bg-white/5 active:bg-white/15 text-white/80 disabled:opacity-30 transition-all border border-white/10 touch-manipulation"
+                                  aria-label="Previous image"
                                 >
-                                  <ChevronLeft size={18} />
+                                  <ChevronLeft size={20} />
                                 </button>
                                 <button
                                   onClick={nextImage}
                                   disabled={currentImageIndex === selectedProject.images.length - 1}
-                                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 disabled:opacity-30 transition-all border border-white/10"
+                                  className="p-3 md:p-2 rounded-full bg-white/5 active:bg-white/15 text-white/80 disabled:opacity-30 transition-all border border-white/10 touch-manipulation"
+                                  aria-label="Next image"
                                 >
-                                  <ChevronRight size={18} />
+                                  <ChevronRight size={20} />
                                 </button>
                               </div>
                             </div>
 
-                            {/* Thumbnail Strip (very premium for case studies) */}
-                            <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/20">
+                            {/* Thumbnail Strip - Mobile optimized */}
+                            <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/20 -mx-1 px-1">
                               {selectedProject.images.map((img, idx) => (
                                 <button
                                   key={idx}
                                   onClick={() => setCurrentImageIndex(idx)}
-                                  className={`relative flex-shrink-0 w-16 h-10 rounded-lg overflow-hidden border transition-all ${
+                                  className={`relative flex-shrink-0 w-20 h-12 md:w-16 md:h-10 rounded-lg overflow-hidden border transition-all touch-manipulation ${
                                     idx === currentImageIndex 
                                       ? 'border-cyan-400 ring-1 ring-cyan-400/30' 
-                                      : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'
+                                      : 'border-white/10 active:border-white/40 opacity-70 active:opacity-100'
                                   }`}
+                                  aria-label={`View image ${idx + 1}`}
                                 >
                                   <Image 
                                     src={img} 
@@ -518,37 +565,37 @@ export default function ProjectsPage() {
                     </div>
                   </div>
 
-                  {/* Project Navigation (Premium "browse my work" experience) */}
+                  {/* Project Navigation - Mobile optimized */}
                   {(previousProject || nextProject) && (
-                    <div className="flex items-center justify-between pt-6 border-t border-white/10">
-                      <div>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t border-white/10">
+                      <div className="sm:flex-1">
                         {previousProject && (
                           <button
                             onClick={() => goToProject(previousProject)}
-                            className="flex items-center gap-3 text-sm text-white/60 hover:text-white transition-colors group"
+                            className="flex w-full sm:w-auto items-center gap-3 text-sm text-white/70 active:text-white active:bg-white/5 transition-all group rounded-xl p-3 -m-3 sm:p-0 sm:m-0 touch-manipulation"
                           >
-                            <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10 border border-white/10">
+                            <div className="p-2 rounded-full bg-white/5 active:bg-white/10 border border-white/10 flex-shrink-0">
                               <ChevronLeft size={16} />
                             </div>
-                            <div className="text-left">
-                              <div className="text-[10px] uppercase tracking-widest">Previous</div>
-                              <div className="text-white/90">{previousProject.title}</div>
+                            <div className="text-left min-w-0">
+                              <div className="text-[10px] uppercase tracking-widest text-white/40">Previous</div>
+                              <div className="text-white/90 truncate text-sm">{previousProject.title}</div>
                             </div>
                           </button>
                         )}
                       </div>
 
-                      <div>
+                      <div className="sm:flex-1 sm:text-right">
                         {nextProject && (
                           <button
                             onClick={() => goToProject(nextProject)}
-                            className="flex items-center gap-3 text-sm text-white/60 hover:text-white transition-colors group text-right"
+                            className="flex w-full sm:w-auto sm:justify-end items-center gap-3 text-sm text-white/70 active:text-white active:bg-white/5 transition-all group rounded-xl p-3 -m-3 sm:p-0 sm:m-0 touch-manipulation"
                           >
-                            <div className="text-right">
-                              <div className="text-[10px] uppercase tracking-widest">Next</div>
-                              <div className="text-white/90">{nextProject.title}</div>
+                            <div className="text-right min-w-0 order-1 sm:order-none">
+                              <div className="text-[10px] uppercase tracking-widest text-white/40">Next</div>
+                              <div className="text-white/90 truncate text-sm">{nextProject.title}</div>
                             </div>
-                            <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10 border border-white/10">
+                            <div className="p-2 rounded-full bg-white/5 active:bg-white/10 border border-white/10 flex-shrink-0 order-2 sm:order-none">
                               <ChevronRight size={16} />
                             </div>
                           </button>
