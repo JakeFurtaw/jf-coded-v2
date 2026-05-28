@@ -84,13 +84,13 @@ const skills = [
 
   return (
     <div className="min-h-screen pb-24 bg-space-bg">
-      <div className="max-w-4xl mx-auto px-6 pt-16">
+      <div className="max-w-4xl mx-auto px-6 pt-12 md:pt-16">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold tracking-tighter mb-4">Virtual Resume</h1>
-          <p className="text-xl text-white/70">Jacob Furtaw — Machine Learning Engineer</p>
+        <div className="text-center mb-14">
+          <h1 className="text-6xl font-bold tracking-tighter mb-3">Virtual Resume</h1>
+          <p className="text-lg md:text-xl text-white/70">Jacob Furtaw — Machine Learning Engineer</p>
           
-          <Button asChild size="lg" className="mt-8 bg-cyan-400 hover:bg-cyan-300 text-black">
+          <Button asChild size="lg" className="mt-6 bg-cyan-400 hover:bg-cyan-300 text-black font-medium tracking-tight active:scale-[0.985] touch-manipulation">
           <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf" className="flex items-center gap-2">
             <Download className="w-5 h-5" />
             Download Full CV (PDF)
@@ -99,8 +99,8 @@ const skills = [
         </div>
 
         {/* Experience */}
-        <section className="mb-20">
-          <h2 className="text-3xl font-semibold mb-10 flex items-center gap-3">
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold tracking-tighter mb-8 flex items-center gap-3">
             <Calendar className="text-cyan-400" /> Experience
           </h2>
 
@@ -112,31 +112,31 @@ const skills = [
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
+                className="group"
               >
-                <Card className="glass p-8 border-white/10 hover:border-cyan-400/30 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+                <Card className="glass p-6 md:p-8 border border-white/10 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 touch-manipulation">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-5 mb-5">
                     <div>
-                      <h3 className="text-2xl font-semibold">{exp.title}</h3>
-                      <p className="text-cyan-400 text-xl mt-1">{exp.company}</p>
+                      <h3 className="text-2xl font-semibold tracking-tight">{exp.title}</h3>
+                      <p className="text-cyan-400 text-lg mt-0.5 tracking-tight">{exp.company}</p>
                     </div>
-                    <div className="text-right text-sm text-white/60 flex-shrink-0">
+                    <div className="text-right text-xs md:text-sm text-white/60 flex-shrink-0">
                       <div className="flex items-center gap-1 justify-end">
-                        <MapPin size={18} /> {exp.location}
+                        <MapPin size={16} className="md:size-[18px]" /> {exp.location}
                       </div>
-                      <div className="mt-1">{exp.period}</div>
+                      <div className="mt-0.5">{exp.period}</div>
                     </div>
                   </div>
 
-                  <p className="text-lg text-white/80 leading-relaxed mb-6">
+                  <p className="text-base md:text-lg text-white/80 leading-relaxed mb-5">
                     {exp.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mt-1">
                     {exp.technologies.map((tech) => (
                       <Badge 
                         key={tech} 
-                        variant="secondary" 
-                        className="bg-white/5 text-cyan-400 border border-cyan-400/30 hover:bg-cyan-400/10 transition-colors"
+                        className="bg-white/5 text-cyan-300 border border-white/10 transition-all group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200 active:scale-95 touch-manipulation text-sm px-3 py-1"
                       >
                         {tech}
                       </Badge>
@@ -149,16 +149,16 @@ const skills = [
         </section>
 
         {/* Skills & Technologies */}
-        <section className="mb-20">
-          <h2 className="text-3xl font-semibold mb-10 flex items-center gap-3">
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold tracking-tighter mb-8 flex items-center gap-3">
             <Cpu className="text-cyan-400" /> Skills & Technologies
           </h2>
-          <div className="glass p-8 rounded-2xl border border-white/10">
-            <div className="flex flex-wrap gap-3">
+          <div className="glass p-6 md:p-8 rounded-2xl border border-white/10">
+            <div className="flex flex-wrap gap-2 md:gap-3">
               {skills.map((skill) => (
                 <Badge 
                   key={skill} 
-                  className="px-3 py-1 text-base bg-space-card hover:bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 transition-all hover:scale-105 h-auto min-h-fit whitespace-normal break-words max-w-full flex items-center justify-center text-center"
+                  className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
                 >
                   {skill}
                 </Badge>
@@ -169,7 +169,7 @@ const skills = [
 
         {/* Education */}
         <section>
-          <h2 className="text-3xl font-semibold mb-10 flex items-center gap-3">
+          <h2 className="text-3xl font-bold tracking-tighter mb-8 flex items-center gap-3">
             <Award className="text-cyan-400" /> Education
           </h2>
 
@@ -181,15 +181,16 @@ const skills = [
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15 }}
+                className="group"
               >
-                <Card className="glass p-8 border-white/10">
-                  <h3 className="text-2xl font-semibold">{edu.degree}</h3>
-                  <p className="text-cyan-400 text-xl mt-1">{edu.school}</p>
-                  <div className="flex items-center gap-2 text-white/60 mt-3">
-                    <MapPin size={18} /> {edu.location} • {edu.period}
+                <Card className="glass p-6 md:p-8 border border-white/10 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 touch-manipulation">
+                  <h3 className="text-2xl font-semibold tracking-tight">{edu.degree}</h3>
+                  <p className="text-cyan-400 text-lg mt-0.5 tracking-tight">{edu.school}</p>
+                  <div className="flex items-center gap-2 text-xs md:text-sm text-white/60 mt-2.5">
+                    <MapPin size={16} className="md:size-[18px]" /> {edu.location} • {edu.period}
                   </div>
                   {edu.details && (
-                    <p className="mt-6 text-white/80 leading-relaxed">
+                    <p className="mt-5 text-base md:text-lg text-white/80 leading-relaxed">
                       {edu.details}
                     </p>
                   )}
