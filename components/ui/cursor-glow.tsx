@@ -1,16 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useEffect } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 export default function CursorGlow() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smoothing the cursor movement
-  const springConfig = { damping: 25, stiffness: 150 };
+  const springConfig = { damping: 28, stiffness: 140, mass: 0.4 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
+
+  // Center the 700px glow on the cursor
+  const glowX = useTransform(smoothX, (x) => x - 350);
+  const glowY = useTransform(smoothY, (y) => y - 350);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -18,32 +21,19 @@ export default function CursorGlow() {
       mouseY.set(e.clientY);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   return (
     <motion.div
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      className="pointer-events-none fixed -inset-[350px] z-0"
       style={{
-        background: `radial-gradient(600px circle at var(--x) var(--y), rgba(34, 211, 238, 0.15), transparent 80%)`,
+        x: glowX,
+        y: glowY,
+        background:
+          "radial-gradient(700px circle at center, rgba(34, 211, 238, 0.12), transparent 75%)",
       }}
-    >
-      {/* We use a dummy div to sync the CSS variables with Framer Motion values */}
-      <motion.div 
-        className="absolute inset-0"
-        style={{
-          x: smoothX,
-          y: smoothY,
-          // This is a trick to update CSS variables via a style object
-        }}
-      />
-      <style jsx global>{`
-        :root {
-          --x: ${smoothX.get()}px;
-          --y: ${smoothY.get()}px;
-        }
-      `}</style>
-    </motion.div>
+    />
   );
 }

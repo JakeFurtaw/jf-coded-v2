@@ -40,6 +40,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-space-bg: var(--space-bg);
+  --color-space-card: var(--space-card);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -70,11 +72,14 @@
   --input: rgba(0, 245, 255, 0.1);
   --ring: #00f5ff;
   --radius: 0.625rem;
+
+  /* Space theme semantic colors (for bg-space-bg / bg-space-card) */
+  --space-bg: #0a0a0f;
+  --space-card: #12121a;
 }
 
 /* Force dark mode on the whole site */
 html {
-  class: dark;   /* This forces .dark class */
   color-scheme: dark;
 }
 
