@@ -76,6 +76,21 @@
   /* Space theme semantic colors (for bg-space-bg / bg-space-card) */
   --space-bg: #0a0a0f;
   --space-card: #12121a;
+
+  /* Modal scaling based on device pixel ratio (for high-res monitors like 4K) */
+  --modal-scale: 1;
+}
+
+@media (min-resolution: 2dppx) {
+  :root {
+    --modal-scale: 1.4;
+  }
+}
+
+@media (min-resolution: 3dppx) {
+  :root {
+    --modal-scale: 1.8;
+  }
 }
 
 /* Force dark mode on the whole site */

@@ -280,9 +280,13 @@ export default function ProjectsPage() {
             <div 
               className="relative w-full h-[94vh] flex items-center justify-center px-2 md:px-4 lg:px-6"
               onClick={e => e.stopPropagation()}
+              style={{ height: 'calc(min(94vh, 100vh) * var(--modal-scale))' }}
             >
               {/* Gray modal-like frame matching the project modal */}
-              <div className="bg-[#111114] border border-white/10 rounded-2xl overflow-hidden w-full max-w-[min(99vw,1800px)] h-[85vh] max-h-[93vh] flex flex-col shadow-2xl">
+              <div 
+                className="bg-[#111114] border border-white/10 rounded-2xl overflow-hidden w-full max-w-[min(99vw,1800px)] h-[85vh] max-h-[93vh] flex flex-col shadow-2xl"
+                style={{ maxHeight: 'calc(min(93vh, 900px) * var(--modal-scale))' }}
+              >
                 
                 {/* Image section - takes most of the space */}
                 <div className="relative flex-1 min-h-0 bg-black/5 px-3 md:px-5 lg:px-8 flex flex-col">
@@ -396,7 +400,7 @@ export default function ProjectsPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.97 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-5xl max-h-[85vh] md:max-h-[92vh] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-[min(90vw,1400px)] max-h-[min(90dvh,92vh)] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Scrollable Content */}
