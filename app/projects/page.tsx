@@ -14,7 +14,15 @@ import { allProjects, type Project } from "@/lib/projects";
 const projects = allProjects;
 
 const categories = ["All", "AI/ML", "Web"] as const;
-const aiMlSubCategories = ["All", "Agentic", "RAG", "Research", "Multi-Modal"] as const;
+const aiMlSubCategories = [
+  "All",
+  "Agentic",
+  "RAG & Retrieval",
+  "Multimodal",
+  "Computer Vision/Generative AI",
+  "Research",
+  "Developer Tools"
+] as const;
 
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState<"All" | "AI/ML" | "Web">("All");

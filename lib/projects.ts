@@ -35,9 +35,9 @@ export const allProjects: Project[] = [
   {
     id: 1,
     title: "Cloak AI 2.0",
-    description: "The second iteration of Cloak AI, a privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 Omni as the default model via Ollama to provide advanced language processing without data ever leaving the local environment.",
-    longDescription:
-      "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 Omni via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features dynamic model switching between four different models, real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
+    description: "The second iteration of Cloak AI, a privacy-first, locally-hosted AI agent with real tool use, rich transparency, and serious multimodal capabilities. Runs entirely on consumer hardware via Ollama with dynamic model switching, high-quality document understanding, satellite imagery analysis, and voice input—never sending data off-device.",
+    longDescription: "Cloak AI is a fully local, privacy-first AI agent built for real work. It runs on Ollama with dynamic switching across four strong models (Nemotron Nano 3 Omni as default) and features genuine tool calling with live transparency—every reasoning step and tool invocation is visible in real time through the Agent Activity panel, while sources are cleanly separated into a dedicated sidebar.\n\n" +
+  "The backend is where it gets interesting: a FastAPI service powering advanced local capabilities including Whisper-large-v3-turbo for voice transcription, NVIDIA's Nemotron Parse model for high-accuracy PDF and image document extraction, and a fine-tuned SAM3 model for both general image segmentation and satellite imagery analysis via Google Earth Engine (Sentinel-2 and Landsat). Weather forecasting uses Earth2Studio with the FuXi model plus animated GFS visualizations. All of this runs locally with no data leaving the machine.",
     images: [
       { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron Nano 3 Omni and other local models." },
       { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing a detailed AI response with the Agent Activity button and Sources panel enabled." },
@@ -45,25 +45,22 @@ export const allProjects: Project[] = [
       { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent reasoning steps shown directly inside a chat message during response generation." },
     ],
     category: "AI/ML",
-    subCategory: ["Agentic", "RAG", "Multi-Modal"],
+    subCategory: ["Agentic", "Multimodal", "Developer Tools"] ,
     technologies: [
       "Python",
-      "Nemotron Nano 3 Omni",
-      "Ollama",
-      "React",
-      "TypeScript",
       "FastAPI",
+      "React 19",
+      "TypeScript",
+      "Ollama",
+      "Nemotron Nano 3 Omni",
+      "NVIDIA Nemotron Parse",
+      "Whisper Large v3 Turbo",
+      "SAM3 (fine-tuned)",
+      "Earth2Studio + FuXi",
+      "Google Earth Engine",
+      "Yahoo Finance",
+      "Playwright + Trafilatura",
       "Tailwind CSS",
-      "Earth 2 Studio",
-      "GFS Weather Data",
-      "Yahoo Finance API",
-      "Whisper",
-      "Nemotron Parse",
-      "SAM3",
-      "Tool Use",
-      "Web Scraping",
-      "Geocoding",
-      "Satellite Imagery",
     ],
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
@@ -73,7 +70,7 @@ export const allProjects: Project[] = [
     story: {
       role: "Sole developer and system architect for the entire platform.",
       context: "I was happy with the first iteration of Cloak AI but I knew there was room for improvement. This version was a complete rewrite to integrate the new Omni model along with dynamic model switching to let the user choose which model they want to use, add more tools and upgrade current tool functionality, and significantly modernize the UI/UX.",
-      challenges: "Integrating the new Omni model required significant backend modifications and ensuring seamless dynamic model switching without compromising performance.",
+      challenges: "Integrating the new Omni model required significant backend modifications. The new and improved web search tool was a major undertaking, and getting reliable tool calling with live transparency working smoothly was also difficult.",
       approach: "Using the skeleton of the original software I did a full frontend overhaul, and major backend renovations. The new version integrates Dynamic model switching adding more model options, a new an improved web search tool, live agent reasoning outputs, agent activity button for agent timeline. ",
       learnings: "LLM post training has come a long way in the past few months. When I revisited Cloak just a few months after \"finishing\" the first version, it became aparent the tool needed a total overhaul to reach its full potential.",
       impact: "Became a core part of my daily workflow and proved that high-quality, private AI agents are very achievable today.",
@@ -85,7 +82,7 @@ export const allProjects: Project[] = [
     title: "Cloak AI",
     description: "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 as the default model via Ollama to provide advanced language processing without data ever leaving the local environment.",
     longDescription:
-      "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features dynamic model switching between four different models, real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
+      "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
     images: [
       { src: "/projectImages/Cloak/ChatPage.png", caption: "Main chat landing page of the original Cloak AI with quick action cards and Deep Search mode toggle." },
       { src: "/projectImages/Cloak/ImgSegPage.png", caption: "Local image segmentation interface with upload area and prompt input for object detection." },
@@ -93,7 +90,7 @@ export const allProjects: Project[] = [
       { src: "/projectImages/Cloak/ImgSegSat.png", caption: "Satellite image segmentation mode with coordinate inputs (latitude, longitude, buffer size)." },
     ],
     category: "AI/ML",
-    subCategory: ["Agentic", "RAG", "Multi-Modal"],
+    subCategory: ["Agentic", "Multimodal"],
     technologies: [
       "Python",
       "Nemotron Nano 3",
@@ -131,24 +128,24 @@ export const allProjects: Project[] = [
     id: 3,
     title: "Agent Qwen",
     description:
-      "Multi-modal AI agent designed to emulate a Geek Squad Consultation Agent, capable of understanding text, images, audio, and video.",
+      "Multimodal AI agent designed to emulate a Geek Squad Consultation Agent. Built on Qwen2.5-Omni-7B that can understand and respond with text, images, audio, and video. Designed as a Geek Squad-style troubleshooting assistant with voice output.",
     longDescription:
-      "A powerful multi-modal AI agent built with Qwen 2.5-Omni that emulates a Geek Squad Consultation Agent. The agent can process and respond to text, images, audio, and video inputs, making it highly effective for customer support, device troubleshooting, and interactive assistance. It features automatic speech recognition via Whisper, audio response generation with speaker selection, and a custom system prompt designed to deliver clear, professional troubleshooting reports.",
+      "Agent Qwen is a multimodal interface built around Alibaba's Qwen2.5-Omni-7B model, which natively handles text, image, audio, and video inputs while generating both text responses and spoken audio output. The agent is role-played as a professional Geek Squad consultant through a carefully engineered system prompt that guides it to gather device issues, ask clarifying questions, and produce structured troubleshooting reports.\n\n" +
+      "User voice input is captured through Gradio and transcribed with Whisper-large-v3-turbo when needed. The Qwen-Omni model then generates responses that can be spoken back to the user using one of its built-in voices (currently 'Ethan'). The entire experience runs locally with a clean black-and-orange Geek Squad themed Gradio interface.",
     images: [
-      { src: "/projectImages/AgentQwen/StartScreen.png", caption: "Starting screen of the multi-modal Agent Qwen Gradio interface for device troubleshooting." },
-      { src: "/projectImages/AgentQwen/ActivateChat.png", caption: "Active multi-modal conversation with the Qwen 2.5-Omni agent processing user input." },
+      { src: "/projectImages/AgentQwen/StartScreen.png", caption: "Starting screen of the Multimodal Agent Qwen Gradio interface for device troubleshooting." },
+      { src: "/projectImages/AgentQwen/ActivateChat.png", caption: "Active Multimodal conversation with the Qwen 2.5-Omni agent processing user input." },
     ],
     category: "AI/ML",
-    subCategory: ["Agentic", "Multi-Modal"],
+    subCategory: ["Multimodal"],
     technologies: [
       "Python",
-      "Qwen 2.5 Omni",
+      "Qwen2.5-Omni-7B",
       "Gradio",
-      "Multi-Modal",
-      "Whisper",
-      "FastRTC",
+      "Whisper Large v3 Turbo",
       "PyTorch",
       "Transformers",
+      "Hugging Face",
     ],
     github: "https://github.com/JakeFurtaw/Agent-Qwen",
     live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
@@ -159,11 +156,11 @@ export const allProjects: Project[] = [
 
     story: {
       role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
-      context: "I wanted to explore what a truly multi-modal local agent could feel like in a real-world support scenario.",
+      context: "I wanted to explore what a local Multimodal could feel like in a real-world support scenario.",
       challenges: "This was my first time working with an Omni model. At the time documentation was limited, and coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
       approach: "Used Qwen 2.5-Omni with custom tooling around Whisper and FastRTC, plus a carefully engineered system prompt for professional troubleshooting.",
-      learnings: "Multi-modal agents are extremely powerful, but prompt engineering and tool orchestration matter even more than raw model capability.",
-      impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about multi-modal agent design.",
+      learnings: "Multimodal systems are extremely powerful,but the technology is still evolving and needs more research.",
+      impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about Multimodal models.",
     },
   },
   {
@@ -172,7 +169,8 @@ export const allProjects: Project[] = [
     description:
       "Advanced Retrieval-Augmented Generation (RAG) coding assistant with support for multiple LLMs, documents, and GitHub repositories.",
     longDescription:
-      "Full-featured RAG pipeline built with Llama-Index and LangChain that supports chatting with documents (PDF, DOCX, etc.), GitHub repositories, and multiple vector stores (ChromaDB, Milvus, Neo4j). Features dynamic model selection across Ollama, OpenAI, Anthropic, NVIDIA NIM, and quantized Hugging Face models. Includes streaming responses, advanced memory management, custom system prompts, and GPU-aware model handling.",
+      "Chat RAG is a Gradio-based RAG coding assistant built on Llama-Index. It supports dynamic model switching across Ollama (local), Hugging Face (with 2/4/8-bit quantization), NVIDIA NIM, OpenAI, and Anthropic, with per-provider model lists and extensive parameter controls (temperature, top-p, max tokens, context window, and custom system prompts).\n\n" +
+      "Users can upload documents (PDF, DOCX, XLSX, code files, etc.) for context, with advanced parsing via LlamaParse when available. It also supports ingesting entire GitHub repositories using a personal access token. The system uses a local Hugging Face embedding model and implements streaming responses with model-aware chat memory.",
     images: [
       { src: "/projectImages/Chat-RAG/start_state.png", caption: "Initial state of the advanced RAG chat interface before any queries." },
       { src: "/projectImages/Chat-RAG/model_dropdown.png", caption: "Model selection dropdown showing support for multiple LLM providers (Ollama, OpenAI, Anthropic, etc.)." },
@@ -180,17 +178,21 @@ export const allProjects: Project[] = [
       { src: "/projectImages/Chat-RAG/RAG_Query.png", caption: "Example of a successful RAG query with retrieved context and cited sources." },
     ],
     category: "AI/ML",
-    subCategory: ["RAG"],
+    subCategory: ["RAG & Retrieval", "Developer Tools"],
     technologies: [
       "Python",
-      "RAG",
       "Llama-Index",
-      "LangChain",
       "Gradio",
+      "Ollama",
+      "Hugging Face Transformers",
+      "LlamaParse",
       "ChromaDB",
+      "GitHub API",
+      "OpenAI",
+      "Anthropic",
+      "NVIDIA NIM",
       "Milvus",
       "Neo4j",
-      "Ollama",
       "Transformers",
     ],
     github: "https://github.com/JakeFurtaw/Chat-RAG",
@@ -243,9 +245,10 @@ export const allProjects: Project[] = [
     id: 6,
     title: "Image Alter",
     description:
-      "AI-powered image generation and editing tool that lets users create and modify images using natural language prompts.",
+      "Gradio interface for local text-to-image generation using FLUX models, with extensive parameter controls and gallery management.",
     longDescription:
-      "A Gradio web application for AI image generation and editing powered by Stable Diffusion. Supports text-to-image generation and image-to-image transformation using Flux models (FLUX.1-schnell and fine-tuned variants). Features customizable generation parameters, interactive image gallery, and responsive UI. Built with the Diffusers library and PyTorch for GPU-accelerated inference.",
+      "Image Alter is a Gradio-based local image generation tool built around Black Forest Labs' FLUX diffusion models. It provides a clean interface for text-to-image generation with fine-grained control over inference steps, guidance scale, resolution, seed, and number of outputs.\n\n" +
+      "The app features a responsive dark UI with tabbed navigation, an advanced settings accordion, example prompts, live output gallery, and an accumulating output history with download/fullscreen support. Generation runs on GPU via the Diffusers library with proper memory management between runs.",
     images: [
       { src: "/projectImages/ImageAlter/advanced_options.png", caption: "Advanced generation settings panel in the Stable Diffusion / Flux image editing Gradio app." },
       { src: "/projectImages/ImageAlter/gen_imgs.png", caption: "Text-to-image generation results using fine-tuned Flux models." },
@@ -254,13 +257,13 @@ export const allProjects: Project[] = [
       { src: "/projectImages/ImageAlter/out_img_gal.png", caption: "Output gallery showing multiple generated and edited images side by side." },
     ],
     category: "AI/ML",
-    subCategory: ["Research"],
+    subCategory: ["Computer Vision/Generative AI"],
     technologies: [
       "Python",
-      "Stable Diffusion",
       "Gradio",
       "Diffusers",
       "PyTorch",
+      "FLUX.1",
       "Transformers",
     ],
     github: "https://github.com/JakeFurtaw/ImageAlter",
@@ -273,22 +276,24 @@ export const allProjects: Project[] = [
     id: 7,
     title: "Health Bot",
     description:
-      "Personalized AI health assistant that provides context-aware advice on fitness, nutrition, mental health, and general well-being.",
+      "Personal health assistant chatbot with long-term conversational memory. Remembers past discussions across sessions using retrieval over chat history, with strong guardrails for health topics.",
     longDescription:
-      "An AI health assistant with user authentication and persistent per-user chat history. Built using Llama-Index for the retrieval-augmented chat engine, Hugging Face embeddings (stella_en_400M_v5), and Ollama (Mistral-Nemo) as the backend LLM. Features context-aware conversations, memory buffering, and a clean Gradio web interface for interactive health-related guidance on fitness, nutrition, mental health, and wellness.",
+      "Health Bot is a Gradio-based conversational health assistant that maintains long-term memory across sessions by retrieving from a user's own previous chat history. It uses Llama-Index to convert past conversation turns into a temporary vector index, allowing the model (Ollama + Mistral-Nemo) to reference earlier context when responding.\n\n" +
+      "The system includes a strong health-focused system prompt with clear guardrails, streaming responses, and dual JSON-based persistence for chat history. A simple username flow creates per-user sessions without requiring real authentication infrastructure.\n\n" +
+      "Important: This is a general wellness conversation tool only. It does not contain a medical knowledge base and is not a substitute for professional healthcare advice.",
     images: [
       { src: "/projectImages/HealthG-Demo/ChatWindow.png", caption: "Main chat window of the personalized Health Bot RAG assistant." },
       { src: "/projectImages/HealthG-Demo/ChatbotWMemory.png", caption: "Health Bot conversation demonstrating memory and context retention across messages." },
       { src: "/projectImages/HealthG-Demo/WIthQuestionsAsked.png", caption: "Example interaction showing suggested health-related follow-up questions." },
     ],
     category: "AI/ML",
-    subCategory: ["RAG"],
+    subCategory: ["RAG & Retrieval"],
     technologies: [
       "Python",
-      "Llama-Index",
       "Gradio",
+      "Llama-Index",
       "Ollama",
-      "Transformers",
+      "Hugging Face Embeddings",
       "PyTorch",
     ],
     github: "https://github.com/JakeFurtaw/HealthReelDemo",
@@ -301,11 +306,12 @@ export const allProjects: Project[] = [
     id: 8,
     title: "Repo Ripper",
     description:
-      "Command-line tool that lets you chat with any GitHub repository using local Ollama LLMs.",
+      "Lightweight CLI script for chatting with GitHub repositories using local Ollama models and Llama-Index retrieval.",
     longDescription:
-      "A privacy-focused command-line tool that allows users to interact with entire GitHub repositories using local Ollama LLMs. Repo Ripper uses Llama-Index to index codebases and enables natural language queries about structure, dependencies, and functionality. Supports file filtering, conversation memory, and works entirely offline after initial setup.",
+      "Repo Ripper is a simple Python script that lets you query and chat with the contents of any GitHub repository using a local Ollama model. It uses Llama-Index’s GithubRepositoryReader to fetch files, builds a VectorStoreIndex with local Hugging Face embeddings, and supports both one-off queries and multi-turn conversations with memory.\n\n" +
+      "File extension filtering is supported, and all processing happens locally after the initial repository fetch. Designed as a practical tool for quickly understanding unfamiliar codebases without sending code to cloud services.",
     category: "AI/ML",
-    subCategory: ["RAG"],
+    subCategory: ["RAG & Retrieval", "Developer Tools"],
     technologies: [
       "Python",
       "Llama-Index",
