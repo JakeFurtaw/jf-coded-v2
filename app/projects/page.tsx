@@ -284,7 +284,7 @@ export default function ProjectsPage() {
             </button>
 
             <div 
-              className="relative w-full max-w-7xl h-[85vh] flex items-center justify-center px-6"
+              className="relative w-full h-[92vh] flex items-center justify-center px-4 md:px-8 lg:px-12"
               onClick={e => e.stopPropagation()}
             >
               <motion.div 
@@ -364,29 +364,22 @@ export default function ProjectsPage() {
       <AnimatePresence>
         {selectedProject && (
           /* Wrapper remains fixed to viewport for perfect centering */
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]"
+            onClick={() => setSelectedProject(null)}
+          >
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.97 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
             >
-
-              {/* Close Button - floating above content */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="group absolute flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 z-50 touch-manipulation"
-                style={{ top: 'calc(1.25rem + env(safe-area-inset-top))', right: '1.25rem' }}
-                aria-label="Close project details"
-              >
-                <X className="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" />
-              </button>
-
               {/* Scrollable Content */}
               <div 
                 ref={modalScrollRef}
-                className="flex-1 overflow-y-auto overscroll-contain pt-16 md:pt-20"
+                className="flex-1 overflow-y-auto overscroll-contain pt-8 md:pt-10"
               >
                 <div className="p-6 md:p-10 relative bg-[#0f0f12]">
                   <div className="flex flex-col gap-10">
@@ -677,6 +670,16 @@ export default function ProjectsPage() {
               </div>
             </div>
           </motion.div>
+
+            {/* Close Button — placed on the backdrop layer so images/content can never cover it */}
+            <button
+              onClick={(e) => { e.stopPropagation(); setSelectedProject(null); }}
+              className="group absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 z-[60] touch-manipulation"
+              style={{ top: 'calc(1.5rem + env(safe-area-inset-top))', right: '1.5rem' }}
+              aria-label="Close project details"
+            >
+              <X className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
+            </button>
           </div>
         )}
       </AnimatePresence>

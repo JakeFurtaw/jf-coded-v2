@@ -28,10 +28,55 @@ export interface Project {
 export const allProjects: Project[] = [
   {
     id: 1,
-    title: "Cloak AI",
-    description: "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment.",
+    title: "Cloak AI 2.0",
+    description: "The second iteration of Cloak AI, a privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 Omni as the default model via Ollama to provide advanced language processing without data ever leaving the local environment.",
     longDescription:
-      "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
+      "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 Omni via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features dynamic model switching between four different models, real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
+    images: [
+      "/projectImages/Cloak2.0/Cloak_Welcome.png",
+      "/projectImages/Cloak2.0/Chat_Interface.png",
+      "/projectImages/Cloak2.0/Agent_Activity.png",
+      "/projectImages/Cloak2.0/Inline_Agent_Activity.png",
+    ],
+    category: "AI/ML",
+    subCategory: ["Agentic", "RAG", "Multi-Modal"],
+    technologies: [
+      "Python",
+      "Nemotron Nano 3 Omni",
+      "Ollama",
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "Tailwind CSS",
+      "Earth 2 Studio",
+      "GFS Weather Data",
+      "Yahoo Finance API",
+      "Whisper",
+      "Nemotron Parse",
+      "SAM3",
+      "Tool Use",
+      "Web Scraping",
+      "Geocoding",
+      "Satellite Imagery",
+    ],
+    github: "https://github.com/JakeFurtaw",
+    dateBuilt: "Under active development since ",
+    story: {
+      role: "Sole developer and system architect for the entire platform.",
+      context: "I was happy with the first iteration of Cloak AI but I knew there was room for improvement. This version was a complete rewrite to integrate the new Omni model along with dynamic model switching to let the user choose which model they want to use, add more tools and upgrade current tool functionality, and significantly modernize the UI/UX.",
+      challenges: "Integrating the new Omni model required significant backend modifications and ensuring seamless dynamic model switching without compromising performance.",
+      approach: "Using the skeleton of the original software I did a full frontend overhaul, and major backend renovations. The new version integrates Dynamic model switching adding more model options, a new an improved web search tool, live agent reasoning outputs, agent activity button for agent timeline. ",
+      learnings: "LLM post training has come a long way in the past few months. When I revisited Cloak just a few months after \"finishing\" the first version, it became aparent the tool needed a total overhaul to reach its full potential.",
+      impact: "Became a core part of my daily workflow and proved that high-quality, private AI agents are very achievable today.",
+    },
+  },
+  
+  {
+    id: 4,
+    title: "Cloak AI",
+    description: "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 as the default model via Ollama to provide advanced language processing without data ever leaving the local environment.",
+    longDescription:
+      "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features dynamic model switching between four different models, real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
     images: [
       "/projectImages/Cloak/ChatPage.png",
       "/projectImages/Cloak/ImgSegPage.png",
@@ -60,10 +105,9 @@ export const allProjects: Project[] = [
       "Satellite Imagery",
     ],
     github: "https://github.com/JakeFurtaw",
-    dateBuilt: "2026",
-
-    story: {
-      role: "Lead developer and system architect for the entire platform.",
+    dateBuilt: "January-March 2026",
+      story: {
+      role: "Sole developer and system architect for the entire platform.",
       context: "I wanted to build a powerful local AI agent that could use real tools without ever sending user data to the cloud.",
       challenges: "Getting reliable tool calling, streaming responses, and multimodal capabilities (especially SAM3 image segmentation) working locally with acceptable latency was very difficult.",
       approach: "I built a custom FastAPI backend with Nemotron Nano 3 via Ollama and designed a clean React frontend with real-time streaming and persistent local history.",
@@ -72,7 +116,7 @@ export const allProjects: Project[] = [
     },
   },
   {
-    id: 2,
+    id: 3,
     title: "Agent Qwen",
     description:
       "Multi-modal AI agent designed to emulate a Geek Squad Consultation Agent, capable of understanding text, images, audio, and video.",
@@ -101,14 +145,14 @@ export const allProjects: Project[] = [
     story: {
       role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
       context: "I wanted to explore what a truly multi-modal local agent could feel like in a real-world support scenario.",
-      challenges: "Coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
+      challenges: "This was my first time working with an Omni model. At the time documentation was limited, and coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
       approach: "Used Qwen 2.5-Omni with custom tooling around Whisper and FastRTC, plus a carefully engineered system prompt for professional troubleshooting.",
       learnings: "Multi-modal agents are extremely powerful, but prompt engineering and tool orchestration matter even more than raw model capability.",
       impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about multi-modal agent design.",
     },
   },
   {
-    id: 3,
+    id: 2,
     title: "Chat RAG",
     description:
       "Advanced Retrieval-Augmented Generation (RAG) coding assistant with support for multiple LLMs, documents, and GitHub repositories.",
@@ -138,7 +182,7 @@ export const allProjects: Project[] = [
     dateBuilt: "2023 – 2024",
 
     story: {
-      role: "Primary developer — designed the full RAG architecture and built the Gradio interface.",
+      role: "Sole developer — designed the full RAG architecture and built the Gradio interface.",
       context: "I needed a flexible local + cloud RAG system that could handle codebases, PDFs, and multiple vector stores without vendor lock-in.",
       challenges: "Managing multiple vector stores, dynamic model switching, and maintaining good retrieval quality across very different data types was non-trivial.",
       approach: "Built a highly modular pipeline using LlamaIndex + LangChain with support for Chroma, Milvus, Neo4j, and multiple LLM providers through a unified interface.",
@@ -147,7 +191,7 @@ export const allProjects: Project[] = [
     },
   },
   {
-    id: 4,
+    id: 5,
     title: "Auto Mutant Classifier",
     description:
       "An Abstract Syntax Tree Neural Network trained to detect equivalent mutants in Java and C++ code.",
@@ -175,7 +219,7 @@ export const allProjects: Project[] = [
     dateBuilt: "2023",
   },
   {
-    id: 5,
+    id: 6,
     title: "Image Alter",
     description:
       "AI-powered image generation and editing tool that lets users create and modify images using natural language prompts.",
@@ -202,7 +246,7 @@ export const allProjects: Project[] = [
     dateBuilt: "2024",
   },
   {
-    id: 6,
+    id: 7,
     title: "Health Bot",
     description:
       "Personalized AI health assistant that provides context-aware advice on fitness, nutrition, mental health, and general well-being.",
@@ -227,7 +271,7 @@ export const allProjects: Project[] = [
     dateBuilt: "2024",
   },
   {
-    id: 7,
+    id: 8,
     title: "Repo Ripper",
     description:
       "Command-line tool that lets you chat with any GitHub repository using local Ollama LLMs.",
@@ -245,7 +289,7 @@ export const allProjects: Project[] = [
     github: "https://github.com/JakeFurtaw/RepoRipper",
   },
   {
-    id: 8,
+    id: 9,
     title: "Oceans",
     description:
       "React web app built as a semester long project for my Web Development course.",
@@ -264,7 +308,7 @@ export const allProjects: Project[] = [
     dateBuilt: "2023",
   },
   {
-    id: 9,
+    id: 10,
     title: "Frontier Signal Partners Website",
     description: "Modern single page website for Frontier Signal Partners.",
     longDescription:
