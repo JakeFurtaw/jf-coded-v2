@@ -35,31 +35,35 @@ export const allProjects: Project[] = [
   {
     id: 1,
     title: "Cloak AI 2.0",
-    description: "The second iteration of Cloak AI, a privacy-first, locally-hosted AI agent with real tool use, rich transparency, and serious multimodal capabilities. Runs entirely on consumer hardware via Ollama with dynamic model switching, high-quality document understanding, satellite imagery analysis, and voice input—never sending data off-device.",
-    longDescription: "Cloak AI is a fully local, privacy-first AI agent built for real work. It runs on Ollama with dynamic switching across four strong models (Nemotron Nano 3 Omni as default) and features genuine tool calling with live transparency—every reasoning step and tool invocation is visible in real time through the Agent Activity panel, while sources are cleanly separated into a dedicated sidebar.\n\n" +
-  "The backend is where it gets interesting: a FastAPI service powering advanced local capabilities including Whisper-large-v3-turbo for voice transcription, NVIDIA's Nemotron Parse model for high-accuracy PDF and image document extraction, and a fine-tuned SAM3 model for both general image segmentation and satellite imagery analysis via Google Earth Engine (Sentinel-2 and Landsat). Weather forecasting uses Earth2Studio with the FuXi model plus animated GFS visualizations. All of this runs locally with no data leaving the machine.",
+    description: "The second iteration of Cloak AI, a privacy-first, fully local AI agent with genuine tool use, mature RAG, and strong multimodal capabilities. Runs entirely on consumer hardware via Ollama with dynamic model switching, real-time agent transparency, named knowledge bases, and the ability to retrieve and display web images inline.",
+    longDescription: "Cloak AI 2.0 is a fully local, privacy-first AI workspace built for real productivity. It runs on Ollama with seamless dynamic model switching and features reliable tool calling with exceptional transparency — every reasoning step and tool invocation is visible in real time through the Agent Activity sidebar, while sources appear in a dedicated panel.\n\n" +
+    "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases.\n\n" +
+    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses.\n\n" +
+    "Additional local capabilities include high-quality document parsing with NVIDIA Nemotron Parse, voice input via Whisper Large v3 Turbo, satellite and general image segmentation with a fine-tuned SAM3 model (integrated with Google Earth Engine), and advanced weather forecasting using Earth2Studio + FuXi with animated GFS visualizations. Everything runs locally with zero data leaving the device.",
     images: [
       { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron Nano 3 Omni and other local models." },
+      { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent reasoning steps shown directly inside a chat message during response generation." },
+      { src: "/projectImages/Cloak2.0/Inline_Image.png", caption: "Inline image display within chat messages." },
+      { src: "/projectImages/Cloak2.0/Knowledge_Base_Manager.png", caption: "Knowledge Base Manager interface for creating and managing named knowledge bases." },
+      { src: "/projectImages/Cloak2.0/Attachments.png", caption: "Attachments panel for managing files and images in chat messages." },
       { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing a detailed AI response with the Agent Activity button and Sources panel enabled." },
       { src: "/projectImages/Cloak2.0/Agent_Activity.png", caption: "Agent Activity sidebar expanded, displaying the step-by-step reasoning trace and tool calls in real time." },
-      { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent reasoning steps shown directly inside a chat message during response generation." },
+
     ],
     category: "AI/ML",
-    subCategory: ["Agentic", "Multimodal", "Developer Tools"] ,
+    subCategory: ["Agentic", "Multimodal", "Developer Tools", "RAG & Retrieval"],
     technologies: [
-      "Python",
-      "FastAPI",
-      "React 19",
-      "TypeScript",
+      "React 19 + TypeScript",
+      "Python + FastAPI",
       "Ollama",
       "Nemotron Nano 3 Omni",
       "NVIDIA Nemotron Parse",
       "Whisper Large v3 Turbo",
       "SAM3 (fine-tuned)",
       "Earth2Studio + FuXi",
-      "Google Earth Engine",
-      "Yahoo Finance",
+      "ChromaDB + bge-m3 (RAG)",
       "Playwright + Trafilatura",
+      "Google Earth Engine",
       "Tailwind CSS",
     ],
     github: "https://github.com/JakeFurtaw",
@@ -69,11 +73,11 @@ export const allProjects: Project[] = [
     },
     story: {
       role: "Sole developer and system architect for the entire platform.",
-      context: "I was happy with the first iteration of Cloak AI but I knew there was room for improvement. This version was a complete rewrite to integrate the new Omni model along with dynamic model switching to let the user choose which model they want to use, add more tools and upgrade current tool functionality, and significantly modernize the UI/UX.",
-      challenges: "Integrating the new Omni model required significant backend modifications. The new and improved web search tool was a major undertaking, and getting reliable tool calling with live transparency working smoothly was also difficult.",
-      approach: "Using the skeleton of the original software I did a full frontend overhaul, and major backend renovations. The new version integrates Dynamic model switching adding more model options, a new an improved web search tool, live agent reasoning outputs, agent activity button for agent timeline. ",
-      learnings: "LLM post training has come a long way in the past few months. When I revisited Cloak just a few months after \"finishing\" the first version, it became aparent the tool needed a total overhaul to reach its full potential.",
-      impact: "Became a core part of my daily workflow and proved that high-quality, private AI agents are very achievable today.",
+      context: "After shipping the first version of Cloak AI, I quickly realized the rapid progress in local models and tooling meant the project needed a full evolution rather than incremental updates. The goal for 2.0 was to build something I would actually use daily — with real tool reliability, proper long-term memory via RAG, and excellent observability.",
+      challenges: "Making tool calling reliable and transparent with smaller local models was difficult. Building a usable named-collection RAG system (with proper UI) took significant iteration. Adding first-class multimodal input (mixed images + documents, drag & drop, and multi-turn image referencing) while keeping the experience clean required careful state and prompt engineering.",
+      approach: "I kept the solid FastAPI + Ollama foundation but did a major frontend and capability overhaul. Key additions include dynamic model switching, a full RAG system with named collections and management UI, advanced multimodal input (5 attachments, drag & drop, explicit multi-turn image references), the ability for the agent to search and display web images inline, and significantly improved Agent Activity visualization for live reasoning and tool traces.",
+      learnings: "Local models have improved dramatically in tool use and instruction following over just a few months. The biggest leap in user trust didn't come from model size — it came from radical transparency (showing every step) and giving users real control over memory (named RAG collections).",
+      impact: "Cloak AI 2.0 became my primary daily AI tool. It proved that a high-quality, private, multimodal agent with useful tool use and memory is not only possible today on consumer hardware — it's genuinely pleasant to use.",
     },
   },
   
