@@ -298,9 +298,10 @@ export default function ProjectsPage() {
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
                       className="relative w-full h-full"
-                      drag
-                      dragConstraints={{ left: 0, right: 0, top: 0 }}
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
                       dragElastic={0.25}
+                      style={{ touchAction: 'pan-y pinch-zoom' }}
                       onDragEnd={(event, info) => {
                         const horizontalThreshold = 60;
                         const verticalDismissThreshold = 140;
@@ -433,6 +434,7 @@ export default function ProjectsPage() {
                               drag="x"
                               dragConstraints={{ left: 0, right: 0 }}
                               dragElastic={0.25}
+                              style={{ touchAction: 'pan-y pinch-zoom' }}
                               onDragStart={() => {
                                 dragJustEndedRef.current = true;
                               }}
