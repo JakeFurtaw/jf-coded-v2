@@ -14,8 +14,8 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-white/10 bg-[#0a0a0f]/80 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10">
+      <div className="max-w-6xl mx-auto px-6 py-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           {/* Brand */}
           <div>
             <Link href="/" className="group inline-block">
@@ -23,14 +23,14 @@ export default function Footer() {
                 JFCoded
               </span>
             </Link>
-            <p className="mt-2 text-sm text-white/50 max-w-[240px]">
+            <p className="mt-1 text-sm text-white/50 max-w-[240px]">
               Machine Learning Engineer exploring the unknown of AI.
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <div className="text-xs uppercase tracking-[3px] text-white/40 mb-4 font-medium">
+            <div className="text-xs uppercase tracking-[3px] text-white/40 mb-3 font-medium">
               Navigate
             </div>
             <ul className="space-y-2 text-sm">
@@ -49,10 +49,10 @@ export default function Footer() {
 
           {/* Connect */}
           <div>
-            <div className="text-xs uppercase tracking-[3px] text-white/40 mb-4 font-medium">
+            <div className="text-xs uppercase tracking-[3px] text-white/40 mb-3 font-medium">
               Connect
             </div>
-            <div className="flex flex-col gap-2.5 text-sm">
+            <div className="flex flex-col gap-2 text-sm">
               <a
                 href="https://github.com/JakeFurtaw"
                 target="_blank"
@@ -95,7 +95,7 @@ export default function Footer() {
             <a
               href="/Jacob_Furtaw_Resume.pdf"
               download="Jacob_Furtaw_Resume.pdf"
-              className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-medium text-white hover:border-cyan-400/50 hover:bg-cyan-400/10 hover:text-cyan-400 transition-all"
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:border-cyan-400/50 hover:bg-cyan-400/10 hover:text-cyan-400 transition-all"
             >
               Download CV (PDF)
             </a>
@@ -103,7 +103,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-white/40">
+        <div className="mt-6 pt-3 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-white/40">
           <div>
             © {currentYear} Jacob Furtaw. All rights reserved.
           </div>

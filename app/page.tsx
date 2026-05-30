@@ -113,9 +113,9 @@ export default function Home() {
             const isLarge = index === 0;
             const project = {
               title: p.title,
-              desc: p.description,
+              desc: isLarge ? p.longDescription : p.description,
               tech: p.technologies,
-              image: p.images?.[0] ?? null,
+              image: p.images?.[0]?.src ?? null,
               link: "/projects",
               size: isLarge ? "large" : "small",
             } as const;
@@ -138,7 +138,7 @@ export default function Home() {
                           alt={project.title}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          quality={82}
+                          unoptimized
                           className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -151,7 +151,9 @@ export default function Home() {
                     <h3 className={`font-semibold mb-3 text-white transition-all duration-200 group-hover:text-cyan-400 group-hover:tracking-[-0.02em] ${project.size === 'large' ? 'text-3xl' : 'text-2xl'}`}>
                       {project.title}
                     </h3>
-                    <p className="text-white/70 mb-6 text-lg md:text-xl leading-relaxed transition-colors duration-200 group-hover:text-white/80">
+                    <p className={`text-white/70 mb-6 leading-relaxed transition-colors duration-200 group-hover:text-white/80 ${
+                      project.size === 'large' ? 'text-lg md:text-xl lg:text-[21px]' : 'text-base md:text-lg'
+                    }`}>
                       {project.desc}
                     </p>
                     <div className="mt-auto">

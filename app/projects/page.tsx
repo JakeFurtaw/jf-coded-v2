@@ -197,7 +197,7 @@ export default function ProjectsPage() {
                   {project.images && project.images.length > 0 ? (
                     <>
                       <Image 
-                        src={project.images[0]} 
+                        src={project.images[0].src} 
                         alt={project.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -275,87 +275,110 @@ export default function ProjectsPage() {
             className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 backdrop-blur-2xl"
             onClick={() => setIsLightboxOpen(false)}
           >
+
+
+            <div 
+              className="relative w-full h-[94vh] flex items-center justify-center px-2 md:px-4 lg:px-6"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Gray modal-like frame matching the project modal */}
+              <div className="bg-[#111114] border border-white/10 rounded-2xl overflow-hidden w-full max-w-[min(99vw,1800px)] h-[85vh] max-h-[93vh] flex flex-col shadow-2xl">
+                
+                {/* Image section - takes most of the space */}
+                <div className="relative flex-1 min-h-0 bg-black/5 px-3 md:px-5 lg:px-8 flex flex-col">
+                  <div className="flex-1 flex items-center justify-center">
+                    <motion.div 
+                      key={currentImageIndex}
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="relative w-full h-full"
+                      drag
+                      dragConstraints={{ left: 0, right: 0, top: 0 }}
+                      dragElastic={0.25}
+                      onDragEnd={(event, info) => {
+                        const horizontalThreshold = 60;
+                        const verticalDismissThreshold = 140;
+
+                        if (info.offset.y > verticalDismissThreshold && Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
+                          setIsLightboxOpen(false);
+                        } 
+                        else if (info.offset.x < -horizontalThreshold) {
+                          nextImage();
+                        } else if (info.offset.x > horizontalThreshold) {
+                          prevImage();
+                        }
+                      }}
+                      whileDrag={{ scale: 0.985 }}
+                    >
+                      {selectedProject.images && selectedProject.images[currentImageIndex] && (
+                        <div className="relative w-full h-full overflow-hidden rounded-t-2xl">
+                          <Image 
+                            src={selectedProject.images[currentImageIndex].src} 
+                            alt={selectedProject.images[currentImageIndex].caption || selectedProject.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1400px) 90vw, 1200px"
+                            unoptimized
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                    </motion.div>
+                  </div>
+
+                  {/* Image counter directly below the image */}
+                  {selectedProject.images && selectedProject.images.length > 1 && (
+                    <div className="text-white text-xs md:text-sm font-mono tracking-[2px] text-center py-1.5 mb-1">
+                      {currentImageIndex + 1} / {selectedProject.images.length}
+                    </div>
+                  )}
+                </div>
+
+
+
+              {/* Caption section inside the gray frame */}
+              {selectedProject.images?.[currentImageIndex]?.caption && (
+                <div className="border-t border-white/10 px-6 md:px-8 py-5">
+                  <div className="max-w-5xl mx-auto">
+                    <p className="font-bold tracking-tighter text-white text-lg md:text-xl leading-tight">
+                      {selectedProject.images[currentImageIndex].caption}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div> {/* close gray frame */}
+          </div> {/* close relative wrapper */}
+
+            {/* Navigation arrows */}
+            {selectedProject.images && selectedProject.images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                  className="absolute left-[calc(1rem+env(safe-area-inset-left))] md:left-8 top-[42%] -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation z-10"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={26} />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                  className="absolute right-[calc(1rem+env(safe-area-inset-right))] md:right-8 top-[42%] -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation z-10"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={26} />
+                </button>
+              </>
+            )}
+
+            {/* Close button - last in DOM so it has highest stacking order */}
             <button
               onClick={() => setIsLightboxOpen(false)}
-              className="group absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 right-6 touch-manipulation"
+              className="group absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 right-6 touch-manipulation z-[60]"
               style={{ top: 'calc(1.5rem + env(safe-area-inset-top))' }}
             >
               <X className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
             </button>
-
-            <div 
-              className="relative w-full h-[92vh] flex items-center justify-center px-4 md:px-8 lg:px-12"
-              onClick={e => e.stopPropagation()}
-            >
-              <motion.div 
-                key={currentImageIndex}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="relative w-full h-full flex items-center justify-center"
-                drag
-                dragConstraints={{ left: 0, right: 0, top: 0 }}
-                dragElastic={0.25}
-                onDragEnd={(event, info) => {
-                  const horizontalThreshold = 60;
-                  const verticalDismissThreshold = 140;
-
-                  // Vertical swipe down to close (with preference for vertical movement)
-                  if (info.offset.y > verticalDismissThreshold && Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
-                    setIsLightboxOpen(false);
-                  } 
-                  // Horizontal swipe for image navigation
-                  else if (info.offset.x < -horizontalThreshold) {
-                    nextImage();
-                  } else if (info.offset.x > horizontalThreshold) {
-                    prevImage();
-                  }
-                }}
-                whileDrag={{ scale: 0.985 }}
-              >
-                {selectedProject.images && selectedProject.images[currentImageIndex] && (
-                  <div className="relative w-full h-full">
-                    <Image 
-                      src={selectedProject.images[currentImageIndex]} 
-                      alt={selectedProject.title}
-                      fill
-                      sizes="100vw"
-                      quality={90}
-                      className="object-contain"
-                    />
-                  </div>
-                )}
-              </motion.div>
-
-              {/* Elegant navigation - Mobile friendly */}
-              {selectedProject.images && selectedProject.images.length > 1 && (
-                <>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                    className="absolute left-[calc(1rem+env(safe-area-inset-left))] md:left-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft size={26} />
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                    className="absolute right-[calc(1rem+env(safe-area-inset-right))] md:right-8 top-1/2 -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight size={26} />
-                  </button>
-                </>
-              )}
-
-              {/* Image counter - better mobile visibility + safe area */}
-              {selectedProject.images && selectedProject.images.length > 1 && (
-                <div className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 text-white/80 text-xs md:text-sm tracking-widest bg-black/60 px-4 py-1.5 rounded-full backdrop-blur border border-white/10">
-                  {currentImageIndex + 1} / {selectedProject.images.length}
-                </div>
-              )}
-            </div>
-          </div>
+          </div> {/* close fixed backdrop */}
         </AnimatePresence>
       , document.body)}
 
@@ -365,7 +388,7 @@ export default function ProjectsPage() {
         {selectedProject && (
           /* Wrapper remains fixed to viewport for perfect centering */
           <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-6 md:p-8 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]"
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
@@ -373,7 +396,7 @@ export default function ProjectsPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.97 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-5xl max-h-[85vh] md:max-h-[92vh] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Scrollable Content */}
@@ -425,11 +448,11 @@ export default function ProjectsPage() {
                             >
                               {selectedProject.images && selectedProject.images[currentImageIndex] && (
                                 <Image 
-                                  src={selectedProject.images[currentImageIndex]} 
-                                  alt={selectedProject.title}
+                                  src={selectedProject.images[currentImageIndex].src} 
+                                  alt={selectedProject.images[currentImageIndex].caption || selectedProject.title}
                                   fill
                                   sizes="(max-width: 768px) 95vw, (max-width: 1280px) 80vw, 1024px"
-                                  quality={85}
+                                  quality={100}
                                   className="object-contain"
                                 />
                               )}
@@ -453,7 +476,7 @@ export default function ProjectsPage() {
                               <div className="flex gap-2">
                                 {selectedProject.images.map((_, idx) => (
                                   <button
-                                    key={idx}
+                                    key={`dot-${idx}`}
                                     onClick={() => setCurrentImageIndex(idx)}
                                     className={`h-2 md:h-1.5 rounded-full transition-all duration-200 touch-manipulation ${
                                       idx === currentImageIndex 
@@ -489,7 +512,7 @@ export default function ProjectsPage() {
                             <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/20 -mx-1 px-1">
                               {selectedProject.images.map((img, idx) => (
                                 <button
-                                  key={idx}
+                                  key={`thumb-${idx}`}
                                   onClick={() => setCurrentImageIndex(idx)}
                                   className={`relative flex-shrink-0 w-20 h-12 md:w-16 md:h-10 rounded-lg overflow-hidden border transition-all touch-manipulation ${
                                     idx === currentImageIndex 
@@ -499,7 +522,7 @@ export default function ProjectsPage() {
                                   aria-label={`View image ${idx + 1}`}
                                 >
                                   <Image 
-                                    src={img} 
+                                    src={img.src} 
                                     alt={`Thumbnail ${idx + 1}`}
                                     fill
                                     className="object-cover"
@@ -528,9 +551,9 @@ export default function ProjectsPage() {
                         {selectedProject.title}
                       </h2>
 
-                      {selectedProject.dateBuilt && (
+                      {selectedProject.dateInfo && (
                         <p className="text-white/50 text-sm tracking-wide mb-6">
-                          Built in {selectedProject.dateBuilt}
+                          {selectedProject.dateInfo.label} {selectedProject.dateInfo.value}
                         </p>
                       )}
                       

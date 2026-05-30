@@ -3,15 +3,21 @@ export interface Project {
   title: string;
   description: string; // Short description for cards
   longDescription: string;
-  images?: string[];
+  images?: Array<{
+    src: string;
+    caption?: string; // Shown in the fullscreen lightbox
+  }>;
   github?: string;
   live?: string;
   category: "AI/ML" | "Web";
   subCategory?: string[];
   technologies: string[];
 
-  // When the project was primarily built (shown in modal for context)
-  dateBuilt?: string;
+  // Timeline / status info shown in the project modal
+  dateInfo?: {
+    label: string;   // e.g. "Built in", "In active development since", "Released"
+    value: string;   // e.g. "2023", "January-March 2026", "May 2026"
+  };
 
   // Richer storytelling (optional)
   story?: {
@@ -33,10 +39,10 @@ export const allProjects: Project[] = [
     longDescription:
       "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 Omni via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features dynamic model switching between four different models, real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
     images: [
-      "/projectImages/Cloak2.0/Cloak_Welcome.png",
-      "/projectImages/Cloak2.0/Chat_Interface.png",
-      "/projectImages/Cloak2.0/Agent_Activity.png",
-      "/projectImages/Cloak2.0/Inline_Agent_Activity.png",
+      { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron Nano 3 Omni and other local models." },
+      { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing a detailed AI response with the Agent Activity button and Sources panel enabled." },
+      { src: "/projectImages/Cloak2.0/Agent_Activity.png", caption: "Agent Activity sidebar expanded, displaying the step-by-step reasoning trace and tool calls in real time." },
+      { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent reasoning steps shown directly inside a chat message during response generation." },
     ],
     category: "AI/ML",
     subCategory: ["Agentic", "RAG", "Multi-Modal"],
@@ -60,7 +66,10 @@ export const allProjects: Project[] = [
       "Satellite Imagery",
     ],
     github: "https://github.com/JakeFurtaw",
-    dateBuilt: "Under active development since ",
+    dateInfo: {
+      label: "In active development since",
+      value: "May 2026",
+    },
     story: {
       role: "Sole developer and system architect for the entire platform.",
       context: "I was happy with the first iteration of Cloak AI but I knew there was room for improvement. This version was a complete rewrite to integrate the new Omni model along with dynamic model switching to let the user choose which model they want to use, add more tools and upgrade current tool functionality, and significantly modernize the UI/UX.",
@@ -78,10 +87,10 @@ export const allProjects: Project[] = [
     longDescription:
       "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 via Ollama to provide advanced language processing without data ever leaving the local environment. Built with a FastAPI backend and React frontend, it features dynamic model switching between four different models, real-time response streaming, persistent local history, and an expansive toolset—ranging from Yahoo Finance and GFS weather data to high-end multimodal capabilities like Whisper transcription and SAM3 satellite image segmentation. Experience the power of a modern AI agent with the security of a closed-loop system.",
     images: [
-      "/projectImages/Cloak/ChatPage.png",
-      "/projectImages/Cloak/ImgSegPage.png",
-      "/projectImages/Cloak/ActivateChat.png",
-      "/projectImages/Cloak/ImgSegSat.png",
+      { src: "/projectImages/Cloak/ChatPage.png", caption: "Main chat landing page of the original Cloak AI with quick action cards and Deep Search mode toggle." },
+      { src: "/projectImages/Cloak/ImgSegPage.png", caption: "Local image segmentation interface with upload area and prompt input for object detection." },
+      { src: "/projectImages/Cloak/ActivateChat.png", caption: "Active chat session showing a detailed response with sources and deep research output." },
+      { src: "/projectImages/Cloak/ImgSegSat.png", caption: "Satellite image segmentation mode with coordinate inputs (latitude, longitude, buffer size)." },
     ],
     category: "AI/ML",
     subCategory: ["Agentic", "RAG", "Multi-Modal"],
@@ -105,7 +114,10 @@ export const allProjects: Project[] = [
       "Satellite Imagery",
     ],
     github: "https://github.com/JakeFurtaw",
-    dateBuilt: "January-March 2026",
+    dateInfo: {
+      label: "Built from ",
+      value: "January to March 2026",
+    },
       story: {
       role: "Sole developer and system architect for the entire platform.",
       context: "I wanted to build a powerful local AI agent that could use real tools without ever sending user data to the cloud.",
@@ -123,8 +135,8 @@ export const allProjects: Project[] = [
     longDescription:
       "A powerful multi-modal AI agent built with Qwen 2.5-Omni that emulates a Geek Squad Consultation Agent. The agent can process and respond to text, images, audio, and video inputs, making it highly effective for customer support, device troubleshooting, and interactive assistance. It features automatic speech recognition via Whisper, audio response generation with speaker selection, and a custom system prompt designed to deliver clear, professional troubleshooting reports.",
     images: [
-      "/projectImages/AgentQwen/StartScreen.png",
-      "/projectImages/AgentQwen/ActivateChat.png",
+      { src: "/projectImages/AgentQwen/StartScreen.png", caption: "Starting screen of the multi-modal Agent Qwen Gradio interface for device troubleshooting." },
+      { src: "/projectImages/AgentQwen/ActivateChat.png", caption: "Active multi-modal conversation with the Qwen 2.5-Omni agent processing user input." },
     ],
     category: "AI/ML",
     subCategory: ["Agentic", "Multi-Modal"],
@@ -140,7 +152,10 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/Agent-Qwen",
     live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
-    dateBuilt: "2024-2025",
+    dateInfo: {
+      label: "Built from ",
+      value: "2024 to 2025",
+    },
 
     story: {
       role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
@@ -159,10 +174,10 @@ export const allProjects: Project[] = [
     longDescription:
       "Full-featured RAG pipeline built with Llama-Index and LangChain that supports chatting with documents (PDF, DOCX, etc.), GitHub repositories, and multiple vector stores (ChromaDB, Milvus, Neo4j). Features dynamic model selection across Ollama, OpenAI, Anthropic, NVIDIA NIM, and quantized Hugging Face models. Includes streaming responses, advanced memory management, custom system prompts, and GPU-aware model handling.",
     images: [
-      "/projectImages/Chat-RAG/start_state.png",
-      "/projectImages/Chat-RAG/model_dropdown.png",
-      "/projectImages/Chat-RAG/query.png",
-      "/projectImages/Chat-RAG/RAG_Query.png",
+      { src: "/projectImages/Chat-RAG/start_state.png", caption: "Initial state of the advanced RAG chat interface before any queries." },
+      { src: "/projectImages/Chat-RAG/model_dropdown.png", caption: "Model selection dropdown showing support for multiple LLM providers (Ollama, OpenAI, Anthropic, etc.)." },
+      { src: "/projectImages/Chat-RAG/query.png", caption: "RAG query in progress with document retrieval and streaming response." },
+      { src: "/projectImages/Chat-RAG/RAG_Query.png", caption: "Example of a successful RAG query with retrieved context and cited sources." },
     ],
     category: "AI/ML",
     subCategory: ["RAG"],
@@ -179,7 +194,10 @@ export const allProjects: Project[] = [
       "Transformers",
     ],
     github: "https://github.com/JakeFurtaw/Chat-RAG",
-    dateBuilt: "2023 – 2024",
+    dateInfo: {
+      label: "Built from ",
+      value: "2023 to 2024",
+    },
 
     story: {
       role: "Sole developer — designed the full RAG architecture and built the Gradio interface.",
@@ -198,11 +216,11 @@ export const allProjects: Project[] = [
     longDescription:
       "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model sorts an unlabeled dataset of equivalent and non-equivalent mutants into a labeled dataset automatically. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
     images: [
-      "/projectImages/AEMI/ASTNN_Flow_Chart.png",
-      "/projectImages/AEMI/ASTNN_Flow_Chart_2.png",
-      "/projectImages/AEMI/code2vec_pipeline.png",
-      "/projectImages/AEMI/codeBERT_pipeline.png",
-      "/projectImages/AEMI/modded_astnn_pipeline.png",
+      { src: "/projectImages/AEMI/ASTNN_Flow_Chart.png", caption: "High-level architecture diagram of the Abstract Syntax Tree Neural Network (ASTNN) for mutant classification." },
+      { src: "/projectImages/AEMI/ASTNN_Flow_Chart_2.png", caption: "Detailed flow of the ASTNN pipeline for detecting equivalent mutants in source code." },
+      { src: "/projectImages/AEMI/code2vec_pipeline.png", caption: "code2vec embedding pipeline used as part of the mutant classification research." },
+      { src: "/projectImages/AEMI/codeBERT_pipeline.png", caption: "CodeBERT-based pipeline explored during the equivalent mutant detection study." },
+      { src: "/projectImages/AEMI/modded_astnn_pipeline.png", caption: "Final modified ASTNN architecture developed for the research project." },
     ],
     category: "AI/ML",
     subCategory: ["Research"],
@@ -216,7 +234,10 @@ export const allProjects: Project[] = [
       "Model Training & Optimization",
     ],
     github: "https://gitlab.com/JakeFurtaw/ASTNN-COSC490",
-    dateBuilt: "2023",
+    dateInfo: {
+      label: "Built in",
+      value: "2023",
+    },
   },
   {
     id: 6,
@@ -226,11 +247,11 @@ export const allProjects: Project[] = [
     longDescription:
       "A Gradio web application for AI image generation and editing powered by Stable Diffusion. Supports text-to-image generation and image-to-image transformation using Flux models (FLUX.1-schnell and fine-tuned variants). Features customizable generation parameters, interactive image gallery, and responsive UI. Built with the Diffusers library and PyTorch for GPU-accelerated inference.",
     images: [
-      "/projectImages/ImageAlter/advanced_options.png",
-      "/projectImages/ImageAlter/gen_imgs.png",
-      "/projectImages/ImageAlter/i2i_ss.png",
-      "/projectImages/ImageAlter/img_alt_ss.png",
-      "/projectImages/ImageAlter/out_img_gal.png",
+      { src: "/projectImages/ImageAlter/advanced_options.png", caption: "Advanced generation settings panel in the Stable Diffusion / Flux image editing Gradio app." },
+      { src: "/projectImages/ImageAlter/gen_imgs.png", caption: "Text-to-image generation results using fine-tuned Flux models." },
+      { src: "/projectImages/ImageAlter/i2i_ss.png", caption: "Image-to-image transformation example within the Image Alter application." },
+      { src: "/projectImages/ImageAlter/img_alt_ss.png", caption: "Main interface of the AI-powered image editing tool with prompt input." },
+      { src: "/projectImages/ImageAlter/out_img_gal.png", caption: "Output gallery showing multiple generated and edited images side by side." },
     ],
     category: "AI/ML",
     subCategory: ["Research"],
@@ -243,7 +264,10 @@ export const allProjects: Project[] = [
       "Transformers",
     ],
     github: "https://github.com/JakeFurtaw/ImageAlter",
-    dateBuilt: "2024",
+    dateInfo: {
+      label: "Built in",
+      value: "2024",
+    },
   },
   {
     id: 7,
@@ -253,9 +277,9 @@ export const allProjects: Project[] = [
     longDescription:
       "An AI health assistant with user authentication and persistent per-user chat history. Built using Llama-Index for the retrieval-augmented chat engine, Hugging Face embeddings (stella_en_400M_v5), and Ollama (Mistral-Nemo) as the backend LLM. Features context-aware conversations, memory buffering, and a clean Gradio web interface for interactive health-related guidance on fitness, nutrition, mental health, and wellness.",
     images: [
-      "/projectImages/HealthG-Demo/ChatWindow.png",
-      "/projectImages/HealthG-Demo/ChatbotWMemory.png",
-      "/projectImages/HealthG-Demo/WIthQuestionsAsked.png",
+      { src: "/projectImages/HealthG-Demo/ChatWindow.png", caption: "Main chat window of the personalized Health Bot RAG assistant." },
+      { src: "/projectImages/HealthG-Demo/ChatbotWMemory.png", caption: "Health Bot conversation demonstrating memory and context retention across messages." },
+      { src: "/projectImages/HealthG-Demo/WIthQuestionsAsked.png", caption: "Example interaction showing suggested health-related follow-up questions." },
     ],
     category: "AI/ML",
     subCategory: ["RAG"],
@@ -268,7 +292,10 @@ export const allProjects: Project[] = [
       "PyTorch",
     ],
     github: "https://github.com/JakeFurtaw/HealthReelDemo",
-    dateBuilt: "2024",
+    dateInfo: {
+      label: "Built in",
+      value: "2024",
+    },
   },
   {
     id: 8,
@@ -296,16 +323,19 @@ export const allProjects: Project[] = [
     longDescription:
       "React web app built as a semester long project for my Web Development course at Towson University.",
     images: [
-      "/projectImages/Oceans/Oceans-Landing-Page.png",
-      "/projectImages/Oceans/Oceans-Homepage.png",
-      "/projectImages/Oceans/Oceans-Profile-Page.png",
-      "/projectImages/Oceans/Oceans-WebDev-Ocean-Page.png",
-      "/projectImages/Oceans/Oceans-Create-Account-Page.png",
+      { src: "/projectImages/Oceans/Oceans-Landing-Page.png", caption: "Landing page of the Oceans web application built with React and Node.js." },
+      { src: "/projectImages/Oceans/Oceans-Homepage.png", caption: "Homepage view of the Oceans social platform after login." },
+      { src: "/projectImages/Oceans/Oceans-Profile-Page.png", caption: "User profile page within the Oceans web application." },
+      { src: "/projectImages/Oceans/Oceans-WebDev-Ocean-Page.png", caption: "Ocean detail page showcasing the core feature of the semester project." },
+      { src: "/projectImages/Oceans/Oceans-Create-Account-Page.png", caption: "Account creation / registration screen for the Oceans platform." },
     ],
     category: "Web",
     technologies: ["Node.js", "React", "Express", "MongoDB"],
     github: "https://github.com/JakeFurtaw",
-    dateBuilt: "2023",
+    dateInfo: {
+      label: "Built in",
+      value: "2023",
+    },
   },
   {
     id: 10,
@@ -313,7 +343,7 @@ export const allProjects: Project[] = [
     description: "Modern single page website for Frontier Signal Partners.",
     longDescription:
       "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui.",
-    images: ["/projectImages/FSPSite/FSPHomePage.png"],
+    images: [{ src: "/projectImages/FSPSite/FSPHomePage.png", caption: "Homepage of the Frontier Signal Partners professional website built with Next.js 15." }],
     category: "Web",
     technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
     github: "https://github.com/JakeFurtaw",
