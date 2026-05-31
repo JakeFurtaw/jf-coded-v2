@@ -48,6 +48,7 @@ export const allProjects: Project[] = [
       { src: "/projectImages/Cloak2.0/Attachments.png", caption: "Attachments panel for managing files and images in chat messages." },
       { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing a detailed AI response with the Agent Activity button and Sources panel enabled." },
       { src: "/projectImages/Cloak2.0/Agent_Activity.png", caption: "Agent Activity sidebar expanded, displaying the step-by-step reasoning trace and tool calls in real time." },
+      { src: "/projectImages/Cloak2.0/Inline_Stock_Component.png", caption: "Inline stock component for displaying real-time stock information." },
 
     ],
     category: "AI/ML",
