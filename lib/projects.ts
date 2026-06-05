@@ -83,6 +83,51 @@ export const allProjects: Project[] = [
   },
   
   {
+    id: 11,
+    title: "Cloak AI Image Segmentation",
+    description: "Standalone React + FastAPI interface for prompt-based local image segmentation with a fine-tuned SAM3 model, plus satellite imagery segmentation powered by Google Earth Engine (Sentinel-2) and voice input.",
+    longDescription:
+      "This is the extracted standalone version of the image segmentation capabilities from Cloak AI. It provides a dedicated, full-featured interface for both general photo segmentation and satellite image analysis.\n\n" +
+      "Local mode lets you upload any image and provide a text prompt (e.g. \"person\", \"car\", \"building\") to the fine-tuned SAM3 model, which returns precise mask overlays.\n\n" +
+      "Satellite mode accepts latitude, longitude, and buffer size, fetches recent Sentinel-2 imagery via Google Earth Engine, and runs the same SAM3 model against it for tasks like building or road detection.\n\n" +
+      "Includes voice input via Whisper-large-v3-turbo for hands-free prompting, a clean dark UI with sidebar history, dual-pane original vs segmented results, and mode switching between local and satellite workflows. The backend is a lightweight FastAPI service that handles the model inference and Earth Engine integration.",
+      images: [
+        { src: "/projectImages/SAM3_Img_Seg/Homepage.png", caption: "Initial view of the Cloak AI Image Segmentation tool in Local Image mode with upload area and prompt input." },
+        { src: "/projectImages/SAM3_Img_Seg/Computer_Mouse_Seg.png", caption: "Local image segmentation example: computer mouse detected and masked from a real-world desk photo using SAM3." },
+        { src: "/projectImages/SAM3_Img_Seg/Land_Sat_Seg.png", caption: "Satellite mode segmentation of a mine feature in Sentinel-2 imagery with coordinate inputs and mask overlay." },
+        { src: "/projectImages/SAM3_Img_Seg/Mine_Seg.png", caption: "Prompt-based SAM3 segmentation of a large open-pit mine site from satellite imagery with high-confidence mask." },
+      ],
+    category: "AI/ML",
+    subCategory: ["Computer Vision/Generative AI"],
+    technologies: [
+      "React 19 + TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Python",
+      "FastAPI",
+      "SAM3 (fine-tuned)",
+      "Google Earth Engine",
+      "Sentinel-2 / Landsat",
+      "Whisper Large v3 Turbo",
+      "PyTorch",
+      "Pillow + Matplotlib",
+    ],
+    github: "https://github.com/JakeFurtaw/Sam_3_LandSat_Img_Seg",
+    dateInfo: {
+      label: "Standalone extraction",
+      value: "2026",
+    },
+    story: {
+      role: "Sole developer — extracted, polished, and packaged the segmentation UI and backend as an independent tool.",
+      context: "The image segmentation features inside Cloak AI were powerful but buried inside the main chat agent. I wanted a focused, reusable interface that could be used standalone or re-integrated easily.",
+      challenges: "Ensuring the SAM3 fine-tune and Earth Engine auth worked reliably outside the original monolith, plus making the dual-mode UI (local upload vs lat/lon satellite) intuitive and robust to bad inputs.",
+      approach: "Pulled out only the necessary components (Sidebar, inputs, displays, voice) into a minimal Vite + React shell with a dedicated FastAPI backend. Kept the exact same segmentation and STT endpoints.",
+      learnings: "Modular extraction forces cleaner boundaries. Having a purpose-built UI for one capability makes the feature much more usable and easier to demo or iterate on independently.",
+      impact: "Created a clean, focused tool for SAM3-based segmentation that can run independently of the full agent, useful for research, demos, and quick satellite analysis tasks.",
+    },
+  },
+  
+  {
     id: 4,
     title: "Cloak AI",
     description: "A privacy-first, locally-hosted AI powerhouse designed for secure, sophisticated task automation. Cloak AI leverages Nemotron Nano 3 as the default model via Ollama to provide advanced language processing without data ever leaving the local environment.",
