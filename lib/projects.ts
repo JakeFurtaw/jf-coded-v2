@@ -111,6 +111,7 @@ export const allProjects: Project[] = [
       "Whisper Large v3 Turbo",
       "PyTorch",
       "Pillow + Matplotlib",
+      "Label Studio (for annotation and fine-tuning data preparation)",
     ],
     github: "https://github.com/JakeFurtaw/Sam_3_LandSat_Img_Seg",
     dateInfo: {
@@ -122,7 +123,7 @@ export const allProjects: Project[] = [
       context: "The image segmentation features inside Cloak AI were powerful but buried inside the main chat agent. I wanted a focused, reusable interface that could be used standalone or re-integrated easily.",
       challenges: "Ensuring the SAM3 fine-tune and Earth Engine auth worked reliably outside the original monolith, plus making the dual-mode UI (local upload vs lat/lon satellite) intuitive and robust to bad inputs.",
       approach: "Pulled out only the necessary components (Sidebar, inputs, displays, voice) into a minimal Vite + React shell with a dedicated FastAPI backend. Kept the exact same segmentation and STT endpoints.",
-      learnings: "Modular extraction forces cleaner boundaries. Having a purpose-built UI for one capability makes the feature much more usable and easier to demo or iterate on independently.",
+      learnings: "Modular extraction forces cleaner boundaries. Having a purpose-built UI for one capability makes the feature much more usable and easier to demo or iterate on independently. Label Studio was essential for efficient, high-quality data marking—creating precise point and polygon annotations across diverse natural images and Sentinel-2 satellite scenes—which directly enabled successful SAM3 finetuning. The finetuning process underscored how sensitive promptable segmentation models are to annotation quality, prompt diversity, and hard-negative examples; small improvements in the training set produced outsized gains in mask precision on both everyday objects and remote-sensing targets.",
       impact: "Created a clean, focused tool for SAM3-based segmentation that can run independently of the full agent, useful for research, demos, and quick satellite analysis tasks.",
     },
   },
