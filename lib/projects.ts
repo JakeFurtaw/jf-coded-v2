@@ -41,12 +41,12 @@ export const allProjects: Project[] = [
     "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings, a reranker for better hits, and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases. Text files and Office docs are read locally; scanned PDFs go through NVIDIA Nemotron Parse.\n\n" +
     "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Image segmentation now lives in its own project so Cloak stays focused on the chat agent. Everything runs locally — chats never leave the machine.",
     images: [
-      { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron and other local models." },
-      { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent reasoning steps shown directly inside a chat message during response generation." },
+      { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron 3.5 and other local models." },
+      { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent activity steps shown directly inside the chat interface during response generation." },
       { src: "/projectImages/Cloak2.0/Inline_Image.png", caption: "Inline image display within chat messages." },
       { src: "/projectImages/Cloak2.0/Knowledge_Base_Manager.png", caption: "Knowledge Base Manager interface for creating and managing named knowledge bases." },
       { src: "/projectImages/Cloak2.0/Attachments.png", caption: "Attachments panel for managing files and images in chat messages." },
-      { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing a detailed AI response with the Agent Activity button and Sources panel enabled." },
+      { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing an example Weather tool response with inline forecast animation." },
       { src: "/projectImages/Cloak2.0/Agent_Activity.png", caption: "Agent Activity sidebar expanded, displaying the step-by-step reasoning trace and tool calls in real time." },
       { src: "/projectImages/Cloak2.0/Inline_Stock_Component.png", caption: "Inline stock component for displaying real-time market information." },
 
