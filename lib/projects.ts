@@ -214,6 +214,46 @@ export const allProjects: Project[] = [
     },
   },
   {
+    id: 12,
+    title: "Dossier",
+    description:
+      "A local multi-agent research runtime. A planner fans out parallel researchers, an evaluator retries weak reports, and every cited URL is checked against tool output — no extra model call.",
+    longDescription:
+      "Dossier is a local multi-agent research runtime built around an explicit ReAct loop. A planner decomposes a goal and delegates independent questions in one turn. Each researcher runs its own search-and-browse loop, then an evaluator scores the report PASS / WEAK / FAIL. A FAIL gets one extra pass before the planner synthesizes a final answer.\n\n" +
+      "Researchers share a compact ledger of queries, URLs, and report summaries so later siblings and retries do not repeat work. Search and page fetches are cached per run. After the answer is written, every cited URL is checked against tool output with no extra model call. Unverified sources are flagged in the run report; a strict mode can fail the process if any URL does not trace back to evidence.\n\n" +
+      "The terminal shows a live agent tree plus one-line tool actions. Full traces are saved as markdown under runs/ and can be replayed without calling the model. Everything runs locally through Ollama.",
+    images: [
+      { src: "/projectImages/Dossier/Live_Agents.png", caption: "Live agent tree: a planner with three parallel researchers, each scored PASS by a nested evaluator." },
+      { src: "/projectImages/Dossier/Goal.png", caption: "Run header showing the local Ollama model, host, temperature, and the research goal." },
+      { src: "/projectImages/Dossier/Citation_Audit.png", caption: "Citation audit of the final answer — 4/5 URLs traced to researcher tool output, one flagged as unverified." },
+    ],
+    category: "AI/ML",
+    subCategory: ["Agentic", "Developer Tools"],
+    technologies: [
+      "Python",
+      "LangChain",
+      "Ollama",
+      "Playwright",
+      "Trafilatura",
+      "DDGS",
+      "Rich",
+      "pytest",
+    ],
+    github: "https://github.com/JakeFurtaw/Dossier",
+    dateInfo: {
+      label: "Built in",
+      value: "August 2026",
+    },
+    story: {
+      role: "Sole developer — designed the planner / researcher / evaluator loop, citation checker, and live trace UI.",
+      context: "I wanted a small, inspectable multi-agent system I could run locally — not a chat product, just a supervisor that fans out research and checks its own sources.",
+      challenges: "Getting local models to actually call stop tools, share context across parallel researchers without duplicate searches, and verify citations without a second LLM pass.",
+      approach: "Wrote an explicit ReAct loop instead of hiding the path in a graph runtime. Added a shared ledger, single-flight caches, a deterministic URL audit, and salvage/replay so a failed stop tool still leaves a usable report.",
+      learnings: "Reliability work (evaluator retry, citation matching, fallbacks) mattered more than adding another role. Transparency in the live tree made it obvious when the planner was waiting versus when a researcher was stuck.",
+      impact: "A compact local demo of multi-agent orchestration I can run, replay, and point to without standing up a full product UI.",
+    },
+  },
+  {
     id: 2,
     title: "Chat RAG",
     description:
