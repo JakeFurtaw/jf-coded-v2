@@ -37,18 +37,18 @@ export const allProjects: Project[] = [
     title: "Cloak AI 2.0",
     description: "The second iteration of Cloak AI, a privacy-first, fully local AI agent with genuine tool use, mature RAG, and strong multimodal capabilities. Runs entirely on consumer hardware via Ollama with dynamic model switching, real-time agent transparency, named knowledge bases, and the ability to retrieve and display web images inline.",
     longDescription: "Cloak AI 2.0 is a fully local, privacy-first AI workspace built for real productivity. It runs on Ollama with seamless dynamic model switching and features reliable tool calling with exceptional transparency — every reasoning step and tool invocation is visible in real time through the Agent Activity sidebar, while sources appear in a dedicated panel.\n\n" +
-    "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases.\n\n" +
-    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses.\n\n" +
-    "Additional local capabilities include high-quality document parsing with NVIDIA Nemotron Parse, voice input via Whisper Large v3 Turbo, satellite and general image segmentation with a fine-tuned SAM3 model (integrated with Google Earth Engine), and advanced weather forecasting using Earth2Studio + FuXi with animated GFS visualizations. Everything runs locally with zero data leaving the device.",
+    "The agent can search the web, open a link you paste, pull a YouTube transcript, look up stocks and currency, search your own documents, find images, and produce a weather forecast with an animated visualization. It will take multiple tool steps when a question needs them, and you can watch the plan as it happens.\n\n" +
+    "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings, a reranker for better hits, and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases. Text files and Office docs are read locally; scanned PDFs go through NVIDIA Nemotron Parse.\n\n" +
+    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Image segmentation now lives in its own project so Cloak stays focused on the chat agent. Everything runs locally — chats never leave the machine.",
     images: [
-      { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron Nano 3 Omni and other local models." },
+      { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron and other local models." },
       { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent reasoning steps shown directly inside a chat message during response generation." },
       { src: "/projectImages/Cloak2.0/Inline_Image.png", caption: "Inline image display within chat messages." },
       { src: "/projectImages/Cloak2.0/Knowledge_Base_Manager.png", caption: "Knowledge Base Manager interface for creating and managing named knowledge bases." },
       { src: "/projectImages/Cloak2.0/Attachments.png", caption: "Attachments panel for managing files and images in chat messages." },
       { src: "/projectImages/Cloak2.0/Chat_Interface.png", caption: "Full chat interface showing a detailed AI response with the Agent Activity button and Sources panel enabled." },
       { src: "/projectImages/Cloak2.0/Agent_Activity.png", caption: "Agent Activity sidebar expanded, displaying the step-by-step reasoning trace and tool calls in real time." },
-      { src: "/projectImages/Cloak2.0/Inline_Stock_Component.png", caption: "Inline stock component for displaying real-time stock information." },
+      { src: "/projectImages/Cloak2.0/Inline_Stock_Component.png", caption: "Inline stock component for displaying real-time market information." },
 
     ],
     category: "AI/ML",
@@ -57,17 +57,16 @@ export const allProjects: Project[] = [
       "React 19 + TypeScript",
       "Python + FastAPI",
       "Ollama",
-      "Nemotron Nano 3 Omni",
+      "Nemotron 3.5",
       "NVIDIA Nemotron Parse",
       "Whisper Large v3 Turbo",
-      "SAM3 (fine-tuned)",
-      "Earth2Studio + FuXi",
-      "ChromaDB + bge-m3 (RAG)",
-      "Playwright + Trafilatura",
-      "Google Earth Engine",
+      "Earth2Studio + FuXi + GFS",
+      "ChromaDB + bge-m3 + reranker",
+      "Playwright + Trafilatura + DDGS",
+      "Finnhub",
       "Tailwind CSS",
     ],
-    github: "https://github.com/JakeFurtaw",
+    github: "https://github.com/JakeFurtaw/CloakAI",
     dateInfo: {
       label: "In active development since",
       value: "May 2026",
@@ -75,8 +74,8 @@ export const allProjects: Project[] = [
     story: {
       role: "Sole developer and system architect for the entire platform.",
       context: "After shipping the first version of Cloak AI, I quickly realized the rapid progress in local models and tooling meant the project needed a full evolution rather than incremental updates. The goal for 2.0 was to build something I would actually use daily — with real tool reliability, proper long-term memory via RAG, and excellent observability.",
-      challenges: "Making tool calling reliable and transparent with smaller local models was difficult. Building a usable named-collection RAG system (with proper UI) took significant iteration. Adding first-class multimodal input (mixed images + documents, drag & drop, and multi-turn image referencing) while keeping the experience clean required careful state and prompt engineering.",
-      approach: "I kept the solid FastAPI + Ollama foundation but did a major frontend and capability overhaul. Key additions include dynamic model switching, a full RAG system with named collections and management UI, advanced multimodal input (5 attachments, drag & drop, explicit multi-turn image references), the ability for the agent to search and display web images inline, and significantly improved Agent Activity visualization for live reasoning and tool traces.",
+      challenges: "Making tool calling reliable and transparent with smaller local models was difficult. Building a usable named-collection RAG system (with proper UI) took significant iteration. Adding first-class multimodal input (mixed images + documents, drag & drop, and multi-turn image referencing) while keeping the experience clean required careful state and prompt engineering. Image segmentation was powerful but buried the chat agent, so it moved to its own project.",
+      approach: "I kept the solid FastAPI + Ollama foundation but did a major frontend and capability overhaul. Key additions include dynamic model switching, a full RAG system with named collections and management UI, multi-step tool use (search, browse, YouTube, stocks, weather), better document understanding, and significantly improved Agent Activity visualization for live reasoning and tool traces.",
       learnings: "Local models have improved dramatically in tool use and instruction following over just a few months. The biggest leap in user trust didn't come from model size — it came from radical transparency (showing every step) and giving users real control over memory (named RAG collections).",
       impact: "Cloak AI 2.0 became my primary daily AI tool. It proved that a high-quality, private, multimodal agent with useful tool use and memory is not only possible today on consumer hardware — it's genuinely pleasant to use.",
     },
