@@ -66,7 +66,8 @@ export const allProjects: Project[] = [
       "Finnhub",
       "Tailwind CSS",
     ],
-    github: "https://github.com/JakeFurtaw/CloakAI",
+    github: "https://github.com/JakeFurtaw",
+    live: "https://cloak-ai-one.vercel.app/",
     dateInfo: {
       label: "In active development since",
       value: "May 2026",
@@ -112,7 +113,7 @@ export const allProjects: Project[] = [
       "Pillow + Matplotlib",
       "Label Studio (for annotation and fine-tuning data preparation)",
     ],
-    github: "https://github.com/JakeFurtaw/Sam_3_LandSat_Img_Seg",
+    github: "https://github.com/JakeFurtaw",
     dateInfo: {
       label: "Standalone extraction",
       value: "2026",
