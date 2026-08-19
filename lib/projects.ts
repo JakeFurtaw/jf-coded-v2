@@ -67,7 +67,6 @@ export const allProjects: Project[] = [
       "Tailwind CSS",
     ],
     github: "https://github.com/JakeFurtaw",
-    live: "https://cloak-ai-one.vercel.app/",
     dateInfo: {
       label: "In active development since",
       value: "May 2026",
