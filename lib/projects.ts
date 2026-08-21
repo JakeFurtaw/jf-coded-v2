@@ -115,7 +115,7 @@ export const allProjects: Project[] = [
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
       label: "Built from ",
-      value: "December 2025 - May 2026",
+      value: "Jan 2025 - May 2026",
     },
     story: {
       role: "Sole developer — extracted, polished, and packaged the segmentation UI and backend as an independent tool.",
@@ -163,7 +163,7 @@ export const allProjects: Project[] = [
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
       label: "Built from ",
-      value: "Dec 2025 - March 2026",
+      value: "Feb 2026 - May 2026",
     },
       story: {
       role: "Sole developer and system architect for the entire platform.",

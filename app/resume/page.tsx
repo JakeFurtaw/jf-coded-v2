@@ -13,7 +13,7 @@ export default function ResumePage() {
       company: "Integral Federal",
       location: "McLean, VA",
       period: "Sept 2026 – Present",
-description: "Designing, building, and deploying production autonomous AI agents and LLM-powered applications across AWS, Google Cloud, and Microsoft Azure. ",
+      description: "Designing, building, and deploying production autonomous AI agents and LLM-powered applications across AWS, Google Cloud, and Microsoft Azure. ",
       technologies: [],
     },
     {
