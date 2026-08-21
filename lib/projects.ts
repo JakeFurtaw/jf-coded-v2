@@ -68,8 +68,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
-      label: "In active development since",
-      value: "May 2026",
+      label: "In active development since ",
+      value: "May 2026 - Present",
     },
     story: {
       role: "Sole developer and system architect for the entire platform.",
@@ -114,8 +114,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
-      label: "Standalone extraction",
-      value: "2026",
+      label: "Built from ",
+      value: "December 2025 - May 2026",
     },
     story: {
       role: "Sole developer — extracted, polished, and packaged the segmentation UI and backend as an independent tool.",
@@ -163,7 +163,7 @@ export const allProjects: Project[] = [
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
       label: "Built from ",
-      value: "January to March 2026",
+      value: "Dec 2025 - March 2026",
     },
       story: {
       role: "Sole developer and system architect for the entire platform.",
@@ -201,7 +201,7 @@ export const allProjects: Project[] = [
     live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
     dateInfo: {
       label: "Built from ",
-      value: "2024 to 2025",
+      value: "May 2025 - June 2025",
     },
 
     story: {
@@ -241,8 +241,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/Dossier",
     dateInfo: {
-      label: "Built in",
-      value: "2026",
+      label: "In active development since ",
+      value: "August 2026 - Present",
     },
     story: {
       role: "Sole developer — designed the planner / researcher / evaluator loop, citation checker, and live trace UI.",
@@ -288,7 +288,7 @@ export const allProjects: Project[] = [
     github: "https://github.com/JakeFurtaw/Chat-RAG",
     dateInfo: {
       label: "Built from ",
-      value: "2023 to 2024",
+      value: "Aug 2024 - May 2025",
     },
 
     story: {
@@ -327,8 +327,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://gitlab.com/JakeFurtaw/ASTNN-COSC490",
     dateInfo: {
-      label: "Built in",
-      value: "2023",
+      label: "Built from ",
+      value: "Jan 2023 - May 2023",
     },
   },
   {
@@ -360,8 +360,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/ImageAlter",
     dateInfo: {
-      label: "Built in",
-      value: "2024",
+      label: "Built from ",
+      value: "Sept 2024 - Feb 2025",
     },
   },
   {
@@ -390,8 +390,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/HealthReelDemo",
     dateInfo: {
-      label: "Built in",
-      value: "2024",
+      label: "Built from ",
+      value: "July 2024 - Sept 2024",
     },
   },
   {
@@ -413,8 +413,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/RepoRipper",
     dateInfo: {
-      label: "Built in",
-      value: "2024",
+      label: "Built from ",
+      value: "Aug 2024 - Sept 2024",
     },
   },
   {
@@ -435,8 +435,8 @@ export const allProjects: Project[] = [
     technologies: ["Node.js", "React", "Express", "MongoDB"],
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
-      label: "Built in",
-      value: "2023",
+      label: "Built from ",
+      value: "Jan 2023 - May 2023",
     },
   },
   {
@@ -450,6 +450,49 @@ export const allProjects: Project[] = [
     technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
     github: "https://github.com/JakeFurtaw",
     live: "https://www.fspx.ai",
+        dateInfo: {
+      label: "Built from",
+      value: "Apr 2026 - May 2026",
+    },
+  },
+  {
+    id: 13,
+    title: "My Campus Hubs AI Assistant",
+    description:
+      "Campus RAG assistant for Towson students — answers questions about events, classes, and campus resources from a large scraped university knowledge base.",
+    longDescription:
+      "The AI engine behind My Campus Hubs (SurgePoint) — a retrieval-augmented student assistant serving accurate, on-demand campus information to over 15,000 students. We crawled 200M+ lines of Towson University’s public web and document corpus, curating it into a 13M-line knowledge base parsed via LlamaParse and custom HTML splitters, then indexed in Milvus using gte-large-en-v1.5 embeddings.\n\n" +
+      "The system runs on a LlamaIndex retriever and a ReAct agent framework executing local inference across Mistral Instruct and Llama 3 models, backed by a ChromaDB fallback. To evaluate performance, we engineered a custom Towson QA benchmark to rigorously evaluate retrieval quality and prompt strategies. Awarded $1,000 in the Towson StartUp Cohort.\n\n",
+    category: "AI/ML",
+    subCategory: ["RAG & Retrieval"],
+    technologies: [
+      "Python",
+      "FastAPI",
+      "LlamaIndex",
+      "Ollama",
+      "Mistral",
+      "Llama 3",
+      "Milvus",
+      "ChromaDB",
+      "Hugging Face Embeddings",
+      "gte-large-en-v1.5",
+      "LlamaParse",
+      "ReAct Agent",
+      "Web Scraping",
+    ],
+    github: "https://github.com/JakeFurtaw",
+    dateInfo: {
+      label: "Built from ",
+      value: "Aug 2023 - Jan 2025",
+    },
+    story: {
+      role: "Co-founder and ML engineer — owned the RAG pipeline, data collection, prompt design, and the streaming assistant API.",
+      context: "Students at Towson had no single place to ask natural-language questions about campus life, courses, and resources. Search pages and PDFs existed, but they were scattered. We wanted an assistant that actually knew the university.",
+      challenges: "The raw campus web dump was huge and noisy (200M+ lines). Getting retrieval quality high enough that answers were trustworthy — without hallucinating contact info or inventing events — this took a LOT of parsing and prompt iteration.",
+      approach: "Scraped the Towson sitemap plus HTML and PDFs, parsed documents with LlamaParse, and stored embeddings in Milvus. Wrote Towson-specific system prompts so the model stayed in character, used context only when it was relevant, and refused to invent people or policies.",
+      learnings: "Dataset hygiene mattered more than swapping models. A smaller, well-parsed campus corpus beat throwing the entire scrape at the index. Prompt rules (don't mention staff unless asked, don't prefix answers with 'based on the context') were what made it feel like a campus assistant instead of a RAG demo.",
+      impact: "Served accurate campus information to 15,000+ students and won $1,000 in the Towson StartUp Cohort. This was the project that taught me how to take RAG from a notebook to something people actually used.",
+    },
   },
 ];
 

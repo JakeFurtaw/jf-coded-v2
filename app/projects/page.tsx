@@ -9,6 +9,7 @@ import { FaGithub } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { ProjectTimeline } from "@/components/ui/project-timeline";
 import { allProjects, type Project } from "@/lib/projects";
 
 const projects = allProjects;
@@ -117,7 +118,23 @@ export default function ProjectsPage() {
 
   return (
     <div className="min-h-screen pb-24 bg-space-bg">
-      <div className="max-w-6xl mx-auto px-6 pt-16">
+      <div className="mx-auto flex max-w-[80rem] gap-8 px-6 pt-16 xl:max-w-[96rem]">
+        {/* Left timeline rail */}
+        <aside className="relative z-20 hidden w-56 flex-shrink-0 overflow-visible lg:block">
+          <div className="sticky top-0 flex h-screen items-center overflow-visible">
+            <ProjectTimeline
+              projects={projects}
+              selectedId={selectedProject?.id ?? null}
+              activeIds={filteredProjects.map((p) => p.id)}
+              onSelect={(p) => {
+                setSelectedProject(p);
+                setCurrentImageIndex(0);
+              }}
+            />
+          </div>
+        </aside>
+
+        <main className="min-w-0 flex-1">
         {/* Header & Filter Buttons - unchanged */}
         <div className="text-center mb-16">
           <h1 className="text-6xl font-bold tracking-tighter mb-4">Projects</h1>
@@ -274,6 +291,7 @@ export default function ProjectsPage() {
           ))}
           </AnimatePresence>
         </motion.div>
+        </main>
       </div>
 
       {/* Modern Fullscreen Image Viewer — much lighter and more elegant */}
