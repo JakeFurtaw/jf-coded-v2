@@ -36,10 +36,10 @@ export const allProjects: Project[] = [
     id: 1,
     title: "Cloak AI 2.0",
     description: "The second iteration of Cloak AI, a privacy-first, fully local AI agent with genuine tool use, mature RAG, and strong multimodal capabilities. Runs entirely on consumer hardware via Ollama with dynamic model switching, real-time agent transparency, named knowledge bases, and the ability to retrieve and display web images inline.",
-    longDescription: "Cloak AI 2.0 is a fully local, privacy-first AI workspace built for real productivity. It runs on Ollama with seamless dynamic model switching and features reliable tool calling with exceptional transparency — every reasoning step and tool invocation is visible in real time through the Agent Activity sidebar, while sources appear in a dedicated panel.\n\n" +
-    "The agent can search the web, open a link you paste, pull a YouTube transcript, look up stocks and currency, search your own documents, find images, and produce a weather forecast with an animated visualization. It will take multiple tool steps when a question needs them, and you can watch the plan as it happens.\n\n" +
+    longDescription: "Cloak AI 2.0 is a fully local, privacy-first AI workspace built for real productivity. It runs on Ollama with seamless dynamic model switching and features reliable tool calling with exceptional transparency — every reasoning step and tool invocation is visible in real time inline and through the Agent Activity sidebar, while sources appear in a dedicated panel.\n\n" +
+    "The agent can search the web, open a link you paste, pull a YouTube transcript, look up stocks and currency exchange rates, search your own documents, find images, and produce a weather forecast with an animated visualization. It will craft and plan and take multiple tool steps when a question needs them, and you can watch the plan unfold in realtime.\n\n" +
     "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings, a reranker for better hits, and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases. Text files and Office docs are read locally; scanned PDFs go through NVIDIA Nemotron Parse.\n\n" +
-    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Image segmentation now lives in its own project so Cloak stays focused on the chat agent. Everything runs locally — chats never leave the machine.",
+    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Everything runs locally — chats never leave the machine.",
     images: [
       { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron 3.5 and other local models." },
       { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent activity steps shown directly inside the chat interface during response generation." },
@@ -63,7 +63,7 @@ export const allProjects: Project[] = [
       "Earth2Studio + FuXi + GFS",
       "ChromaDB + bge-m3 + reranker",
       "Playwright + Trafilatura + DDGS",
-      "Finnhub",
+      "Custom tool/skill design",
       "Tailwind CSS",
     ],
     github: "https://github.com/JakeFurtaw",
@@ -99,18 +99,18 @@ export const allProjects: Project[] = [
     category: "AI/ML",
     subCategory: ["Computer Vision/Generative AI"],
     technologies: [
-      "React 19 + TypeScript",
-      "Vite",
-      "Tailwind CSS",
-      "Python",
-      "FastAPI",
       "SAM3 (fine-tuned)",
       "Google Earth Engine",
+      "FastAPI",
+      "Label Studio",
+      "Python",
+      "React 19 + TypeScript",
+      "Tailwind CSS",
+      "Vite",
       "Sentinel-2 / Landsat",
       "Whisper Large v3 Turbo",
       "PyTorch",
       "Pillow + Matplotlib",
-      "Label Studio (for annotation and fine-tuning data preparation)",
     ],
     github: "https://github.com/JakeFurtaw",
     dateInfo: {
@@ -154,7 +154,7 @@ export const allProjects: Project[] = [
       "Yahoo Finance API",
       "Whisper",
       "Nemotron Parse",
-      "SAM3",
+      "SAM3(Fine-tuned)",
       "Tool Use",
       "Web Scraping",
       "Geocoding",
@@ -242,7 +242,7 @@ export const allProjects: Project[] = [
     github: "https://github.com/JakeFurtaw/Dossier",
     dateInfo: {
       label: "Built in",
-      value: "August 2026",
+      value: "2026",
     },
     story: {
       role: "Sole developer — designed the planner / researcher / evaluator loop, citation checker, and live trace UI.",
@@ -306,7 +306,7 @@ export const allProjects: Project[] = [
     description:
       "An Abstract Syntax Tree Neural Network trained to detect equivalent mutants in Java and C++ code.",
     longDescription:
-      "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. The model sorts an unlabeled dataset of equivalent and non-equivalent mutants into a labeled dataset automatically. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
+      "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. We built a custom parser to sort the unlabled train dataset into a fully labeled dataset. The model then classifies the mutant test set as equivalent or non-equivalent mutants. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
     images: [
       { src: "/projectImages/AEMI/ASTNN_Flow_Chart.png", caption: "High-level architecture diagram of the Abstract Syntax Tree Neural Network (ASTNN) for mutant classification." },
       { src: "/projectImages/AEMI/ASTNN_Flow_Chart_2.png", caption: "Detailed flow of the ASTNN pipeline for detecting equivalent mutants in source code." },
@@ -352,9 +352,11 @@ export const allProjects: Project[] = [
       "Python",
       "Gradio",
       "Diffusers",
-      "PyTorch",
-      "FLUX.1",
       "Transformers",
+      "PIL",
+      "PyTorch",
+      "FLUX",
+      "Numpy",
     ],
     github: "https://github.com/JakeFurtaw/ImageAlter",
     dateInfo: {
@@ -410,6 +412,10 @@ export const allProjects: Project[] = [
       "GitHub API",
     ],
     github: "https://github.com/JakeFurtaw/RepoRipper",
+    dateInfo: {
+      label: "Built in",
+      value: "2024",
+    },
   },
   {
     id: 9,
@@ -417,7 +423,7 @@ export const allProjects: Project[] = [
     description:
       "React web app built as a semester long project for my Web Development course.",
     longDescription:
-      "React web app built as a semester long project for my Web Development course at Towson University.",
+      "This project is a web app built using the MERN stack. This was my groups semester long final project for my Web Development course at Towson University. The app is a mock social platform built to mimic Reddit and Facebook. It allows users to share and discuss content in a forum style layout as well as personal updates. It features user authentication, profile management, and content creation.",
     images: [
       { src: "/projectImages/Oceans/Oceans-Landing-Page.png", caption: "Landing page of the Oceans web application built with React and Node.js." },
       { src: "/projectImages/Oceans/Oceans-Homepage.png", caption: "Homepage view of the Oceans social platform after login." },

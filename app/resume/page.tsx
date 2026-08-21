@@ -8,12 +8,20 @@ import { Badge } from "@/components/ui/badge";
 
 export default function ResumePage() {
   const experiences = [
+        {
+      title: "Agentic Engineer",
+      company: "Integral Federal",
+      location: "McLean, VA",
+      period: "Sept 2026 – Present",
+      description: "",
+      technologies: [],
+    },
     {
       title: "GenAI Engineer",
       company: "Stealth AI Startup",
       location: "Baltimore, MD",
-      period: "Jan 2026 – Present",
-      description: "Building advanced generative AI solutions and intelligent systems.",
+      period: "Jan 2026 – Sept 2026",
+      description: "Building advanced generative AI solutions and intelligent systems for family and multi-family offices around the globe.",
       technologies: ["Python", "LLMs", "Generative AI"],
     },
     {
@@ -51,36 +59,59 @@ export default function ResumePage() {
     },
   ];
 
-const skills = [
-  "Python",
-  "JavaScript",
-  "SQL",
-  "C++",
-  "PyTorch",
-  "TensorFlow",
-  "LangChain",
-  "Llama-Index",
-  "Transformers",
-  "Diffusers",
-  "Gradio",
-  "Ollama",
-  "vLLM",
-  "Llama.cpp",
-  "Prompt Engineering",
-  "Retrieval-Augmented Generation (RAG)",
-  "Agentic AI",
-  "Multi-Agent Systems",
-  "Agent Tool/Skill Development & Use",
-  "Model Training & Optimization",
-  "Computer Vision",
-  "Data Mining/Web Scraping",
-  "Data Engineering",
-  "Vector Databases",
-  "Docker",
-  "Git",
-  "Hardware & Software Troubleshooting",
-  "Jupyter Notebooks",
-];
+const skills = {
+  "Programming Languages": [
+    "Python",
+    "JavaScript / TypeScript",
+    "SQL",
+    "C++"
+  ],
+  "Frameworks & ML Libraries": [
+    "PyTorch",
+    "TensorFlow",
+    "Transformers",
+    "Diffusers",
+    "LangChain",
+    "Llama-Index",
+    "Gradio",
+    "Llama Parse",
+    "FastAPI",
+  ],
+  "Inference & Optimization": [
+    "vLLM",
+    "Ollama",
+    "Llama.cpp",
+    "API Inference (SpaceXAI, OpenAI, Anthropic, NVIDIA NIMS)",
+    "Quantization",
+    "Model Training & Fine-tuning"
+  ],
+  "Agents & RAG Systems": [
+    "Multi-Agent Architectures",
+    "Retrieval-Augmented Generation (RAG)",
+    "Agent Tool/Skill Integration",
+    "Vector Databases (ChromaDB, Milvus, Pinecone)",
+    "Document Parsing (LlamaParse, Nemotron Parse)",
+    "OpenClaw",
+    "Pi Coding Agent",
+    "Hermes Agent"
+  ],
+  "Web & Frontend Development": [
+    "React",
+    "Next.js",
+    "Node.js & Express",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Gradio"
+  ],
+  "DevOps, Tools & Data": [
+    "Docker",
+    "Git",
+    "Web Scraping (Playwright, Trafilatura)",
+    "Google Earth Engine",
+    "pytest",
+    "Jupyter Notebooks"
+  ]
+};
 
   return (
     <div className="min-h-screen pb-24 bg-space-bg">
@@ -154,21 +185,127 @@ const skills = [
             <Cpu className="text-cyan-400" /> Skills & Technologies
           </h2>
           <div className="glass p-6 md:p-8 rounded-2xl border border-white/10">
-            <div className="flex flex-wrap gap-2 md:gap-3">
-              {skills.map((skill, index) => (
-                <motion.div
-                  key={skill}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(index * 0.015, 0.4) }}
-                >
-                  <Badge 
-                    className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
-                  >
-                    {skill}
-                  </Badge>
-                </motion.div>
-              ))}
+            <div className="space-y-8">
+              {/* Programming Languages */ }
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-cyan-400 mb-4">Programming Languages</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills["Programming Languages"].map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(index * 0.015, 0.4) }}
+                    >
+                      <Badge
+                        className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                      >
+                        {skill}
+                      </Badge>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              {/* Core Competencies */ }
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-cyan-400 mb-4">Frameworks & ML Libraries</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills["Frameworks & ML Libraries"].map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(index * 0.015, 0.4) }}
+                    >
+                      <Badge
+                        className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                      >
+                        {skill}
+                      </Badge>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              {/* Inference & Optimization */ }
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-cyan-400 mb-4">Inference & Optimization</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills["Inference & Optimization"].map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(index * 0.015, 0.4) }}
+                    >
+                      <Badge
+                        className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                      >
+                        {skill}
+                      </Badge>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              {/* Agents & RAG Systems */ }
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-cyan-400 mb-4">Agents & RAG Systems</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills["Agents & RAG Systems"].map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(index * 0.015, 0.4) }}
+                    >
+                      <Badge
+                        className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                      >
+                        {skill}
+                      </Badge>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              {/* Web & Frontend Development */ }
+              <div>
+                <h3 className="text-lg font-medium text-cyan-400 mb-4">Web & Frontend Development</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills["Web & Frontend Development"].map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(index * 0.015, 0.4) }}
+                    >
+                      <Badge
+                        className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                      >
+                        {skill}
+                      </Badge>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              {/* DevOps, Tools & Data */ }
+              <div className="mt-8">
+                <h3 className="text-lg font-medium text-cyan-400 mb-4">DevOps, Tools & Data</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills["DevOps, Tools & Data"].map((skill, index) => (
+                    <motion.div
+                      key={skill}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(index * 0.015, 0.4) }}
+                    >
+                      <Badge
+                        className="px-3 py-1 md:px-4 md:py-1.5 text-xs md:text-sm bg-white/5 text-cyan-300 border border-white/10 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-200 active:scale-95 touch-manipulation"
+                      >
+                        {skill}
+                      </Badge>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
