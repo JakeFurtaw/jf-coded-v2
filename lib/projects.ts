@@ -126,7 +126,45 @@ export const allProjects: Project[] = [
       impact: "Created a clean, focused tool for SAM3-based segmentation that can run independently of the full agent, useful for research, demos, and quick satellite analysis tasks.",
     },
   },
-  
+  {
+    id: 3,
+    title: "Agent Qwen",
+    description:
+      "Multimodal AI agent designed to emulate a Geek Squad Consultation Agent. Built on Qwen2.5-Omni-7B that can understand and respond with text, images, audio, and video. Designed as a Geek Squad-style troubleshooting assistant with voice output.",
+    longDescription:
+      "Agent Qwen is a multimodal interface built around Alibaba's Qwen2.5-Omni-7B model, which natively handles text, image, audio, and video inputs while generating both text responses and spoken audio output. The agent is role-played as a professional Geek Squad consultant through a carefully engineered system prompt that guides it to gather device issues, ask clarifying questions, and produce structured troubleshooting reports.\n\n" +
+      "User voice input is captured through Gradio and transcribed with Whisper-large-v3-turbo when needed. The Qwen-Omni model then generates responses that can be spoken back to the user using one of its built-in voices (currently 'Ethan'). The entire experience runs locally with a clean black-and-orange Geek Squad themed Gradio interface.",
+    images: [
+      { src: "/projectImages/AgentQwen/StartScreen.png", caption: "Starting screen of the Multimodal Agent Qwen Gradio interface for device troubleshooting." },
+      { src: "/projectImages/AgentQwen/ActivateChat.png", caption: "Active Multimodal conversation with the Qwen 2.5-Omni agent processing user input." },
+    ],
+    category: "AI/ML",
+    subCategory: ["Multimodal"],
+    technologies: [
+      "Python",
+      "Qwen2.5-Omni-7B",
+      "Gradio",
+      "Whisper Large v3 Turbo",
+      "PyTorch",
+      "Transformers",
+      "Hugging Face",
+    ],
+    github: "https://github.com/JakeFurtaw/Agent-Qwen",
+    live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
+    dateInfo: {
+      label: "Built from ",
+      value: "May 2025 - June 2025",
+    },
+
+    story: {
+      role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
+      context: "I wanted to explore what a local Multimodal could feel like in a real-world support scenario.",
+      challenges: "This was my first time working with an Omni model. At the time documentation was limited, and coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
+      approach: "Used Qwen 2.5-Omni with custom tooling around Whisper and FastRTC, plus a carefully engineered system prompt for professional troubleshooting.",
+      learnings: "Multimodal systems are extremely powerful,but the technology is still evolving and needs more research.",
+      impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about Multimodal models.",
+    },
+  },
   {
     id: 4,
     title: "Cloak AI",
@@ -174,45 +212,7 @@ export const allProjects: Project[] = [
       impact: "Became a core part of my daily workflow and proved that high-quality, private AI agents are very achievable today.",
     },
   },
-  {
-    id: 3,
-    title: "Agent Qwen",
-    description:
-      "Multimodal AI agent designed to emulate a Geek Squad Consultation Agent. Built on Qwen2.5-Omni-7B that can understand and respond with text, images, audio, and video. Designed as a Geek Squad-style troubleshooting assistant with voice output.",
-    longDescription:
-      "Agent Qwen is a multimodal interface built around Alibaba's Qwen2.5-Omni-7B model, which natively handles text, image, audio, and video inputs while generating both text responses and spoken audio output. The agent is role-played as a professional Geek Squad consultant through a carefully engineered system prompt that guides it to gather device issues, ask clarifying questions, and produce structured troubleshooting reports.\n\n" +
-      "User voice input is captured through Gradio and transcribed with Whisper-large-v3-turbo when needed. The Qwen-Omni model then generates responses that can be spoken back to the user using one of its built-in voices (currently 'Ethan'). The entire experience runs locally with a clean black-and-orange Geek Squad themed Gradio interface.",
-    images: [
-      { src: "/projectImages/AgentQwen/StartScreen.png", caption: "Starting screen of the Multimodal Agent Qwen Gradio interface for device troubleshooting." },
-      { src: "/projectImages/AgentQwen/ActivateChat.png", caption: "Active Multimodal conversation with the Qwen 2.5-Omni agent processing user input." },
-    ],
-    category: "AI/ML",
-    subCategory: ["Multimodal"],
-    technologies: [
-      "Python",
-      "Qwen2.5-Omni-7B",
-      "Gradio",
-      "Whisper Large v3 Turbo",
-      "PyTorch",
-      "Transformers",
-      "Hugging Face",
-    ],
-    github: "https://github.com/JakeFurtaw/Agent-Qwen",
-    live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
-    dateInfo: {
-      label: "Built from ",
-      value: "May 2025 - June 2025",
-    },
 
-    story: {
-      role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
-      context: "I wanted to explore what a local Multimodal could feel like in a real-world support scenario.",
-      challenges: "This was my first time working with an Omni model. At the time documentation was limited, and coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
-      approach: "Used Qwen 2.5-Omni with custom tooling around Whisper and FastRTC, plus a carefully engineered system prompt for professional troubleshooting.",
-      learnings: "Multimodal systems are extremely powerful,but the technology is still evolving and needs more research.",
-      impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about Multimodal models.",
-    },
-  },
   {
     id: 12,
     title: "Dossier",
