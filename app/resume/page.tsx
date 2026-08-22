@@ -92,9 +92,8 @@ const skills = {
   "Agents & RAG Systems": [
     "Multi-Agent Architectures",
     "Retrieval-Augmented Generation (RAG)",
-    "Agent Tool/Skill Integration",
+    "Agent Tool/Skill Development & Integration",
     "Vector Databases (ChromaDB, Milvus, Pinecone)",
-    "Document Parsing (LlamaParse, Nemotron Parse)",
     "OpenClaw",
     "Pi Coding Agent",
     "Hermes Agent"
@@ -105,7 +104,6 @@ const skills = {
     "Node.js & Express",
     "Tailwind CSS",
     "Framer Motion",
-    "Gradio"
   ],
   "DevOps, Tools & Data": [
     "Docker",
