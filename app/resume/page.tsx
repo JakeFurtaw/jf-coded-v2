@@ -73,9 +73,13 @@ const skills = {
     "Diffusers",
     "LangChain",
     "Llama-Index",
-    "Gradio",
     "Llama Parse",
     "FastAPI",
+    "NumPy",
+    "Pandas",
+    "Scikit-learn",
+    "Matplotlib",
+    "PIL"
   ],
   "Inference & Optimization": [
     "vLLM",
