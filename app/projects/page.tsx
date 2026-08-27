@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -67,23 +67,17 @@ export default function ProjectsPage() {
     }
   }, [selectedProject?.id]);
 
-  useEffect(() => {
-    if (activeFilter !== "AI/ML") {
-      setActiveSubFilter("All");
-    }
-  }, [activeFilter]);
-
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     if (selectedProject?.images) {
       setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images!.length);
     }
-  };
+  }, [selectedProject]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     if (selectedProject?.images) {
       setCurrentImageIndex((prev) => (prev - 1 + selectedProject.images!.length) % selectedProject.images!.length);
     }
-  };
+  }, [selectedProject]);
 
   // Keyboard navigation for the in-modal gallery
   useEffect(() => {
@@ -105,7 +99,7 @@ export default function ProjectsPage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedProject, isLightboxOpen]);
+  }, [selectedProject, isLightboxOpen, nextImage, prevImage]);
 
   useEffect(() => {
   if (selectedProject) {
@@ -150,7 +144,12 @@ export default function ProjectsPage() {
               <Button
                 key={category}
                 variant={activeFilter === category ? "default" : "outline"}
-                onClick={() => setActiveFilter(category)}
+                onClick={() => {
+                  setActiveFilter(category);
+                  if (category !== "AI/ML") {
+                    setActiveSubFilter("All");
+                  }
+                }}
                 className={`px-6 md:px-8 py-2 rounded-full transition-all active:scale-95 touch-manipulation ${
                   activeFilter === category 
                     ? "bg-cyan-400 text-black" 

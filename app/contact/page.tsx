@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Mail, MapPin, Calendar, PhoneCall } from "lucide-react";
 import { FaGithub, FaLinkedin, FaDiscord, FaXTwitter } from 'react-icons/fa6';
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ export default function ContactPage() {
       <div className="max-w-4xl mx-auto px-6 pt-20">
         {/* Header */}
         <div className="text-center mb-14">
-          <h1 className="text-6xl font-bold tracking-tighter mb-3">Let's Connect</h1>
+          <h1 className="text-6xl font-bold tracking-tighter mb-3">Let&apos;s Connect</h1>
           <p className="text-lg md:text-xl text-white/70 max-w-[460px] mx-auto">
             Open to opportunities, collaborations, or just chatting about AI.
           </p>

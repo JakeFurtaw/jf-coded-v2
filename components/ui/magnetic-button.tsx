@@ -1,16 +1,12 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion, useSpring, useMotionValue, useTransform } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useSpring, useMotionValue } from "framer-motion";
 import { Button } from "./button";
 
-interface MagneticButtonProps {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
-}
+type MagneticButtonProps = React.ComponentPropsWithoutRef<typeof Button>;
 
-export default function MagneticButton({ children, className, ...props }: any) {
+export default function MagneticButton({ children, className, ...props }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   
   const x = useMotionValue(0);

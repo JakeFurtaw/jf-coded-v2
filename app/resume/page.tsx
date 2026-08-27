@@ -37,7 +37,7 @@ export default function ResumePage() {
       company: "Geek Squad / Best Buy",
       location: "Towson & Owings Mills, MD",
       period: "Mar 2022 – Apr 2026",
-      description: "Provided advanced technical support and repairs for computers, laptops, smartphones, and other consumer electronics. Specialized in complex diagnostics, data recovery, malware removal, and OS troubleshooting across Windows and macOS platforms. Handled escalated repairs with a focus on first-time fix rates and excellent customer service. Consistently the top preforming ARA in the micromarket averging 1.2+ tags per hour and 150%+ utilization.",
+      description: "Provided advanced technical support and repairs for computers, laptops, smartphones, and other consumer electronics. Specialized in complex diagnostics, data recovery, malware removal, and OS troubleshooting across Windows and macOS platforms. Handled escalated repairs with a focus on first-time fix rates and excellent customer service. Consistently the top performing ARA in the micromarket averaging 1.2+ tags per hour and 150%+ utilization.",
       technologies: ["Hardware Repair", "Software Troubleshooting", "Data Recovery", "Malware Removal", "Windows", "macOS", "Technical Diagnostics"],
     },
   ];
