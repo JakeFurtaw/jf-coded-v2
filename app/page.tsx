@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
@@ -49,12 +50,15 @@ export default function Home() {
         </motion.p>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <MagneticButton 
-            size="lg" 
+          <MagneticButton
+            size="lg"
+            asChild
             className="group bg-cyan-400 hover:bg-cyan-300 text-black text-lg px-10 py-7 rounded-xl font-medium tracking-tight"
           >
-            <a href="/projects">View My Projects</a>
-            <ArrowRight className="ml-3 transition-transform group-hover:translate-x-1 group-active:translate-x-2" />
+            <Link href="/projects">
+              View My Projects
+              <ArrowRight className="ml-3 transition-transform group-hover:translate-x-1 group-active:translate-x-2" />
+            </Link>
           </MagneticButton>
 
           <MagneticButton 
@@ -104,7 +108,7 @@ export default function Home() {
             variant="outline" 
             className="border-cyan-400/50 hover:border-cyan-400 hover:bg-cyan-400 hover:text-black whitespace-nowrap font-medium tracking-tight active:scale-[0.985] transition-all"
           >
-            <a href="/projects">View All Projects →</a>
+            <Link href="/projects">View All Projects →</Link>
           </Button>
         </div>
 
@@ -116,7 +120,8 @@ export default function Home() {
               desc: isLarge ? p.longDescription : p.description,
               tech: p.technologies,
               image: p.images?.[0]?.src ?? null,
-              link: "/projects",
+              link: p.caseStudy ? `/projects/${p.id}` : "/projects",
+              label: p.caseStudy ? "Read Case Study" : "View Project",
               size: isLarge ? "large" : "small",
             } as const;
 
@@ -178,7 +183,7 @@ export default function Home() {
                           ${project.size === 'large' ? 'py-5 md:py-7 text-lg md:text-xl font-bold' : ''}`}
                         asChild
                       >
-                        <a href={project.link}>View Project</a>
+                        <a href={project.link}>{project.label}</a>
                       </Button>
                     </div>
                   </div>

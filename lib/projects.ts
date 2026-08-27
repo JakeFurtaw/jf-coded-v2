@@ -9,9 +9,12 @@ export interface Project {
   }>;
   github?: string;
   live?: string;
+  caseStudy?: boolean; // Has a dedicated case study page at /projects/[id]
   category: "AI/ML" | "Web";
   subCategory?: string[];
   technologies: string[];
+  tools?: { name: string; usedFor: string; notes?: string }[];
+  skills?: { name: string; usedFor: string; workflow?: string }[];
 
   // Timeline / status info shown in the project modal
   dateInfo?: {
@@ -35,9 +38,9 @@ export const allProjects: Project[] = [
   {
     id: 1,
     title: "Cloak AI 2.0",
-    description: "The second iteration of Cloak AI, a privacy-first, fully local AI agent with genuine tool use, mature RAG, and strong multimodal capabilities. Runs entirely on consumer hardware via Ollama with dynamic model switching, real-time agent transparency, named knowledge bases, and the ability to retrieve and display web images inline.",
+    description: "The second iteration of Cloak AI, a privacy-first, fully local AI agent with genuine tool use, mature RAG, and strong multimodal capabilities. Runs entirely on your own hardware via Ollama with dynamic model switching, real-time agent transparency, named knowledge bases, and the ability to retrieve and display web images inline.",
     longDescription: "Cloak AI 2.0 is a fully local, privacy-first AI workspace built for real productivity. It runs on Ollama with seamless dynamic model switching and features reliable tool calling with exceptional transparency — every reasoning step and tool invocation is visible in real time inline and through the Agent Activity sidebar, while sources appear in a dedicated panel.\n\n" +
-    "The agent can search the web, open a link you paste, pull a YouTube transcript, look up stocks and currency exchange rates, search your own documents, find images, and produce a weather forecast with an animated visualization. It will craft and plan and take multiple tool steps when a question needs them, and you can watch the plan unfold in realtime.\n\n" +
+    "The agent can search the web, open a link you paste, pull a YouTube transcript, look up stocks and currency exchange rates, search your own documents, find images, and produce a weather forecast with an animated visualization. It can also run sandboxed Python and TypeScript, build interactive web pages with live inline previews, remember facts across sessions, and load specialist skill playbooks when a task calls for them. It will craft and plan and take multiple tool steps when a question needs them, and you can watch the plan unfold in realtime.\n\n" +
     "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings, a reranker for better hits, and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases. Text files and Office docs are read locally; scanned PDFs go through NVIDIA Nemotron Parse.\n\n" +
     "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Everything runs locally — chats never leave the machine.",
     images: [
@@ -57,6 +60,7 @@ export const allProjects: Project[] = [
       "React 19 + TypeScript",
       "Python + FastAPI",
       "Ollama",
+      "Qwen 3.8",
       "Nemotron 3.5",
       "NVIDIA Nemotron Parse",
       "Whisper Large v3 Turbo",
@@ -66,7 +70,37 @@ export const allProjects: Project[] = [
       "Custom tool/skill design",
       "Tailwind CSS",
     ],
+    tools: [
+      { name: "web_search", usedFor: "Current events, news, sports, and recent facts", notes: "Hybrid httpx / Playwright extraction" },
+      { name: "browse_page", usedFor: "A specific URL the user pasted", notes: "Also pre-fetched when a link appears in the message" },
+      { name: "get_youtube_transcript", usedFor: "YouTube video URLs", notes: "Captions via youtube-transcript-api, no browser required" },
+      { name: "get_weather_forecast", usedFor: "Explicit weather and forecast questions", notes: "Can return an animated forecast video" },
+      { name: "get_stock_data", usedFor: "Stock prices, crypto, indices, and historical data", notes: "Finnhub — rich inline cards and a comparison layout" },
+      { name: "exchange_currency", usedFor: "Currency conversion requests", notes: "Real-time exchange rates" },
+      { name: "get_market_context", usedFor: "Macro backdrop: VIX, 10Y yield, dollar index", notes: "FRED — 7/30/90-day window with % change" },
+      { name: "get_options_flow", usedFor: "Speculative positioning and unusual option prints", notes: "Unusual Whales — top premium prints with side, strike, expiry, and IV" },
+      { name: "search_knowledge_base", usedFor: "Questions about uploaded documents", notes: "Critical — strongly prompted to prefer it over guessing" },
+      { name: "search_images", usedFor: "Visual examples and 'what does X look like' questions", notes: "Returns direct image URLs for inline markdown display" },
+      { name: "get_current_datetime", usedFor: "Time-sensitive and 'current' questions", notes: "Always called first to establish date context" },
+      { name: "list_files", usedFor: "Inspecting the chat workspace", notes: "Sorted entries with sizes, capped at 200" },
+      { name: "read_file", usedFor: "Reading back a workspace file", notes: "Text types only, 2 MB cap" },
+      { name: "write_file", usedFor: "Creating scripts, data files, notes, and web pages", notes: ".html returns a rendered preview PNG for inline display" },
+      { name: "run_python", usedFor: "Computation, data analysis, and charts", notes: "numpy / pandas / matplotlib — output returned as inline images" },
+      { name: "run_typescript", usedFor: "JS/TS logic or generating web apps", notes: "Runs via tsx — new pages listed with a screenshot preview" },
+      { name: "load_skill", usedFor: "Multi-step specialist tasks", notes: "Pulls the full body of a bundled skill into context" },
+      { name: "remember", usedFor: "User facts and preferences worth persisting across chats", notes: "Appends to a single profile document, surfaced by recall" },
+      { name: "recall", usedFor: "Questions about previously remembered user info", notes: "Relevance-ranked search over stored memories" },
+    ],
+    skills: [
+      { name: "csv-analysis", usedFor: "Summarizing, filtering, or plotting a workspace CSV", workflow: "list_files → read_file sample → write_file a pandas script → run_python → save charts as PNGs" },
+      { name: "meeting-notes", usedFor: "Turning transcripts or pasted notes into structure", workflow: "get transcript or read_file → decisions + action items (owner/date) + open questions" },
+      { name: "research-brief", usedFor: "Multi-source reports with citations in prose", workflow: "get_current_datetime → web_search → browse_page the best hits → recall → cited report" },
+      { name: "webpage-builder", usedFor: "Interactive pages: chart dashboards, landing pages, data visualizations", workflow: "plan assets → write assets before index.html → keep it static and self-contained → preview image in the answer" },
+      { name: "market-brief", usedFor: "Stock and market briefs with computed figures", workflow: "get_current_datetime → get_stock_data → arithmetic in run_python, FX via exchange_currency → headline + bullets" },
+      { name: "code-review", usedFor: "Bugs, security, and nits on pasted, attached, or workspace code", workflow: "attach or read code → optional ast.parse / run_typescript → High/Medium/Low findings → save a review note" },
+    ],
     github: "https://github.com/JakeFurtaw",
+    caseStudy: true,
     dateInfo: {
       label: "In active development since ",
       value: "May 2026 - Present",

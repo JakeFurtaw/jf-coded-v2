@@ -258,6 +258,17 @@ export default function ProjectsPage() {
                     ))}
                   </div>
 
+                  {project.caseStudy && (
+                    <Button
+                      size="sm"
+                      className="w-full mb-2.5 bg-cyan-400 text-black hover:bg-cyan-300 transition-all"
+                      asChild
+                    >
+                      <a href={`/projects/${project.id}`} onClick={(e) => e.stopPropagation()}>
+                        Read Full Case Study →
+                      </a>
+                    </Button>
+                  )}
                   <div className="flex gap-3">
                     {project.github && (
                       <Button 
