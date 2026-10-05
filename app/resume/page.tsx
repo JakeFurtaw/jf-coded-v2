@@ -17,7 +17,7 @@ export default function ResumePage() {
       technologies: [],
     },
     {
-      title: "GenAI Engineer",
+      title: "Gen AI Engineer",
       company: "Stealth AI Startup",
       location: "Baltimore, MD",
       period: "Jan 2026 – Sept 2026",
