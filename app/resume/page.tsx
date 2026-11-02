@@ -29,7 +29,7 @@ export default function ResumePage() {
       company: "SurgePoint Software LLC",
       location: "Towson, MD",
       period: "Aug 2023 – Jan 2025",
-      description: "Co-founded SurgePoint and led the development of an AI-powered student information assistant using Llama 3.1 and Mistral models. Built a custom RAG pipeline and curated a 13M-line dataset from 200M+ raw web-scraped data and documents. Implemented advanced prompt engineering to serve accurate information to over 15,000 students. Won $1,000 in the Towson StartUp Cohort.",
+      description: "Co-founded SurgePoint and led the development of an AI-powered student information assistant using Llama 3.1 and Mistral models. Built a custom RAG pipeline and curated a 13M-line dataset from 200M+ raw web-scraped data and documents. Implemented advanced prompt engineering to serve accurate information to over 15,000 students. Won $1,000 in the Towson StartUp Pitch Competition and earned a spot in the Towson StartUp summer accelerator program.",
       technologies: ["Python", "RAG", "Llama 3.1", "Mistral", "Prompt Engineering", "LLMs", "Data Engineering"],
     },
     {

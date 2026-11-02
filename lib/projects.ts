@@ -42,8 +42,9 @@ export const allProjects: Project[] = [
     description: "The second iteration of Cloak AI, a privacy-first, fully local AI agent with genuine tool use, mature RAG, and strong multimodal capabilities. Runs entirely on your own hardware via Ollama with dynamic model switching, real-time agent transparency, named knowledge bases, and the ability to retrieve and display web images inline.",
     longDescription: "Cloak AI 2.0 is a fully local, privacy-first AI workspace built for real productivity. It runs on Ollama with seamless dynamic model switching and features reliable tool calling with exceptional transparency — every reasoning step and tool invocation is visible in real time inline and through the Agent Activity sidebar, while sources appear in a dedicated panel.\n\n" +
     "The agent can search the web, open a link you paste, pull a YouTube transcript, look up stocks and currency exchange rates, search your own documents, find images, and produce a weather forecast with an animated visualization. It can also run sandboxed Python and TypeScript, build interactive web pages with live inline previews, remember facts across sessions, and load specialist skill playbooks when a task calls for them. It will craft and plan and take multiple tool steps when a question needs them, and you can watch the plan unfold in realtime.\n\n" +
-    "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings, a reranker for better hits, and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases. Text files and Office docs are read locally; scanned PDFs go through NVIDIA Nemotron Parse.\n\n" +
-    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Everything runs locally — chats never leave the machine.",
+    "The system includes a proper RAG implementation using ChromaDB with bge-m3 embeddings, a bge-reranker-v2-m3 cross-encoder reranker for better hits, and named collections that users can create, switch between, and manage directly from the UI. Documents can be added as one-shot context or ingested into persistent knowledge bases. Text, Markdown, CSV, HTML, Word (.docx), and source files are parsed locally; scanned PDFs go through NVIDIA Nemotron Parse.\n\n" +
+    "Multimodal input is first-class: users can attach up to 5 images and documents in a single message (with drag & drop support), and the agent can reference previous images across turns using explicit labels. The agent can also search the web for images and display them inline in responses. Voice input uses Whisper Large v3 Turbo. Everything runs locally — chats never leave the machine.\n\n" +
+    "Under the hood, Cloak ships as a three-container Docker Compose stack: the React frontend, a GPU-backed FastAPI service, and an isolated sandbox container for agent-generated code. Every outbound fetch passes through an SSRF guard, per-chat workspaces are path-contained, and generated pages render in a locked-down iframe. The agent works with a 256k-token context window, and the codebase is covered by 460+ automated tests across the Python backend and TypeScript frontend.",
     images: [
       { src: "/projectImages/Cloak2.0/Cloak_Welcome.png", caption: "Main welcome screen featuring the dynamic model selector with support for Nemotron 3.5 and other local models." },
       { src: "/projectImages/Cloak2.0/Inline_Agent_Activity.png", caption: "Inline agent activity steps shown directly inside the chat interface during response generation." },
@@ -69,6 +70,7 @@ export const allProjects: Project[] = [
       "ChromaDB + bge-m3 + reranker",
       "Playwright + Trafilatura + DDGS",
       "Custom tool/skill design",
+      "Docker Compose",
       "Tailwind CSS",
     ],
     tools: [
@@ -125,6 +127,7 @@ export const allProjects: Project[] = [
       "This is the extracted standalone version of the image segmentation capabilities from Cloak AI. It provides a dedicated, full-featured interface for both general photo segmentation and satellite image analysis.\n\n" +
       "Local mode lets you upload any image and provide a text prompt (e.g. \"person\", \"car\", \"building\") to the fine-tuned SAM3 model, which returns precise mask overlays.\n\n" +
       "Satellite mode accepts latitude, longitude, and buffer size, fetches recent Sentinel-2 imagery via Google Earth Engine, and runs the same SAM3 model against it for tasks like building or road detection.\n\n" +
+      "The SAM3 model was fine-tuned on a custom six-class aerial mining dataset (buildings, roads, mines, vehicles, rock formations, and prospective mining sites; 240 polygon masks across 33 high-resolution satellite images) annotated in Label Studio, trained with two-GPU distributed data parallel (DDP) in bf16.\n\n" +
       "Includes voice input via Whisper-large-v3-turbo for hands-free prompting, a clean dark UI with sidebar history, dual-pane original vs segmented results, and mode switching between local and satellite workflows. The backend is a lightweight FastAPI service that handles the model inference and Earth Engine integration.",
       images: [
         { src: "/projectImages/SAM3_Img_Seg/Homepage.png", caption: "Initial view of the Cloak AI Image Segmentation tool in Local Image mode with upload area and prompt input." },
@@ -143,7 +146,7 @@ export const allProjects: Project[] = [
       "React 19 + TypeScript",
       "Tailwind CSS",
       "Vite",
-      "Sentinel-2 / Landsat",
+      "Sentinel-2",
       "Whisper Large v3 Turbo",
       "PyTorch",
       "Pillow + Matplotlib",
@@ -158,7 +161,7 @@ export const allProjects: Project[] = [
       context: "The image segmentation features inside Cloak AI were powerful but buried inside the main chat agent. I wanted a focused, reusable interface that could be used standalone or re-integrated easily.",
       challenges: "Ensuring the SAM3 fine-tune and Earth Engine auth worked reliably outside the original monolith, plus making the dual-mode UI (local upload vs lat/lon satellite) intuitive and robust to bad inputs.",
       approach: "Pulled out only the necessary components (Sidebar, inputs, displays, voice) into a minimal Vite + React shell with a dedicated FastAPI backend. Kept the exact same segmentation and STT endpoints.",
-      learnings: "Modular extraction forces cleaner boundaries. Having a purpose-built UI for one capability makes the feature much more usable and easier to demo or iterate on independently. Label Studio was essential for efficient, high-quality data marking—creating precise point and polygon annotations across diverse natural images and Sentinel-2 satellite scenes—which directly enabled successful SAM3 finetuning. The finetuning process underscored how sensitive promptable segmentation models are to annotation quality, prompt diversity, and hard-negative examples; small improvements in the training set produced outsized gains in mask precision on both everyday objects and remote-sensing targets.",
+      learnings: "Modular extraction forces cleaner boundaries. Having a purpose-built UI for one capability makes the feature much more usable and easier to demo or iterate on independently. Label Studio was essential for efficient, high-quality data marking—creating precise polygon annotations across high-resolution satellite imagery of open-pit mines and small village mining sites, plus hard-negative scenes such as forests, lakes, and towns—which directly enabled successful SAM3 finetuning. The finetuning process underscored how sensitive promptable segmentation models are to annotation quality, prompt diversity, and hard-negative examples; small improvements in the training set produced outsized gains in mask precision on both everyday objects and remote-sensing targets.",
       impact: "Created a clean, focused tool for SAM3-based segmentation that can run independently of the full agent, useful for research, demos, and quick satellite analysis tasks.",
     },
   },
@@ -196,7 +199,7 @@ export const allProjects: Project[] = [
       role: "Sole developer — designed and built both the model pipeline and the Gradio interface.",
       context: "I wanted to explore what a local Multimodal could feel like in a real-world support scenario.",
       challenges: "This was my first time working with an Omni model. At the time documentation was limited, and coordinating audio, vision, and text in one agent while keeping latency acceptable and the system prompt effective was complex.",
-      approach: "Used Qwen 2.5-Omni with custom tooling around Whisper and FastRTC, plus a carefully engineered system prompt for professional troubleshooting.",
+      approach: "Used Qwen2.5-Omni for native multimodal understanding and spoken responses, Whisper Large v3 Turbo for speech transcription, and a Gradio interface, plus a carefully engineered system prompt for professional troubleshooting.",
       learnings: "Multimodal systems are extremely powerful,but the technology is still evolving and needs more research.",
       impact: "Created one of the most impressive local demos I’ve built and gained deep intuition about Multimodal models.",
     },
@@ -257,7 +260,7 @@ export const allProjects: Project[] = [
     longDescription:
       "Dossier is a local multi-agent research runtime built around an explicit ReAct loop. A planner decomposes a goal and delegates independent questions in one turn. Each researcher runs its own search-and-browse loop, then an evaluator scores the report PASS / WEAK / FAIL. A FAIL gets one extra pass before the planner synthesizes a final answer.\n\n" +
       "Researchers share a compact ledger of queries, URLs, and report summaries so later siblings and retries do not repeat work. Search and page fetches are cached per run. After the answer is written, every cited URL is checked against tool output with no extra model call. Unverified sources are flagged in the run report; a strict mode can fail the process if any URL does not trace back to evidence.\n\n" +
-      "The terminal shows a live agent tree plus one-line tool actions. Full traces are saved as markdown under runs/ and can be replayed without calling the model. Everything runs locally through Ollama.",
+      "The terminal shows a live agent tree plus one-line tool actions. Full traces are saved as markdown under runs/ and can be replayed without calling the model. Everything runs locally through Ollama, and the runtime is covered by 85 pytest tests spanning the ReAct parser, evaluator, citation audit, ledger, recovery, and replay.",
     images: [
       { src: "/projectImages/Dossier/Live_Agents.png", caption: "Live agent tree: a planner with three parallel researchers, each scored PASS by a nested evaluator." },
       { src: "/projectImages/Dossier/Goal.png", caption: "Run header showing the local Ollama model, host, temperature, and the research goal." },
@@ -295,8 +298,8 @@ export const allProjects: Project[] = [
     description:
       "Advanced Retrieval-Augmented Generation (RAG) coding assistant with support for multiple LLMs, documents, and GitHub repositories.",
     longDescription:
-      "Chat RAG is a Gradio-based RAG coding assistant built on Llama-Index. It supports dynamic model switching across Ollama (local), Hugging Face (with 2/4/8-bit quantization), NVIDIA NIM, OpenAI, and Anthropic, with per-provider model lists and extensive parameter controls (temperature, top-p, max tokens, context window, and custom system prompts).\n\n" +
-      "Users can upload documents (PDF, DOCX, XLSX, code files, etc.) for context, with advanced parsing via LlamaParse when available. It also supports ingesting entire GitHub repositories using a personal access token. The system uses a local Hugging Face embedding model and implements streaming responses with model-aware chat memory.",
+      "Chat RAG is a Gradio-based RAG coding assistant built on Llama-Index. It supports dynamic model switching across Ollama (local), Hugging Face (with 4- and 8-bit quantization, including NF4 double quantization), NVIDIA NIM, OpenAI, and Anthropic, with per-provider model lists and extensive parameter controls (temperature, top-p, max tokens, context window, and custom system prompts).\n\n" +
+      "Users can upload documents (PDF, DOCX, XLSX, code files, etc.) for context, with advanced parsing via LlamaParse when available. It also supports ingesting entire GitHub repositories using a personal access token. The system uses a local Hugging Face embedding model and implements streaming responses with model-aware chat memory. A Dockerfile is included for containerized deployment, and the repository has earned 25+ stars on GitHub.",
     images: [
       { src: "/projectImages/Chat-RAG/start_state.png", caption: "Initial state of the advanced RAG chat interface before any queries." },
       { src: "/projectImages/Chat-RAG/model_dropdown.png", caption: "Model selection dropdown showing support for multiple LLM providers (Ollama, OpenAI, Anthropic, etc.)." },
@@ -319,7 +322,7 @@ export const allProjects: Project[] = [
       "NVIDIA NIM",
       "Milvus",
       "Neo4j",
-      "Transformers",
+      "Docker",
     ],
     github: "https://github.com/JakeFurtaw/Chat-RAG",
     dateInfo: {
@@ -331,7 +334,7 @@ export const allProjects: Project[] = [
       role: "Sole developer — designed the full RAG architecture and built the Gradio interface.",
       context: "I needed a flexible local + cloud RAG system that could handle codebases, PDFs, and multiple vector stores without vendor lock-in.",
       challenges: "Managing multiple vector stores, dynamic model switching, and maintaining good retrieval quality across very different data types was non-trivial.",
-      approach: "Built a highly modular pipeline using LlamaIndex + LangChain with support for Chroma, Milvus, Neo4j, and multiple LLM providers through a unified interface.",
+      approach: "Built a highly modular pipeline on LlamaIndex with support for Chroma, Milvus, Neo4j, and multiple LLM providers through a unified interface.",
       learnings: "The quality of retrieval and chunking strategy often matters more than the LLM itself. Good RAG is mostly an engineering problem.",
       impact: "This system became my primary research and coding assistant and significantly accelerated how I work with large codebases and documents.",
     },
@@ -345,7 +348,7 @@ export const allProjects: Project[] = [
     longDescription:
       "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. We built a custom parser to sort the unlabeled train dataset into a fully labeled dataset. The model then classifies the mutant test set as equivalent or non-equivalent mutants.\n\n" +
       "Alongside the ASTNN, we evaluated code2vec and a transformer-based CodeBERT binary classifier. Through hyperparameter optimization (grid and random search) and over/undersampling to correct class imbalance, we improved the CodeBERT model's F1 score and accuracy from 79% to 92%.\n\n" +
-      "This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
+      "This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection. It was built by a five-person Scrum team (sprint planning, daily standups, and sprint reviews) in Towson's software engineering practicum, and I presented our findings as a formal report and poster at a campus research fair.",
     images: [
       { src: "/projectImages/AEMI/ASTNN_Flow_Chart.png", caption: "High-level architecture diagram of the Abstract Syntax Tree Neural Network (ASTNN) for mutant classification." },
       { src: "/projectImages/AEMI/ASTNN_Flow_Chart_2.png", caption: "Detailed flow of the ASTNN pipeline for detecting equivalent mutants in source code." },
@@ -378,14 +381,13 @@ export const allProjects: Project[] = [
     description:
       "Gradio interface for local text-to-image generation using FLUX models, with extensive parameter controls and gallery management.",
     longDescription:
-      "Image Alter is a Gradio-based local image generation tool built around Black Forest Labs' FLUX diffusion models. It provides a clean interface for text-to-image generation with fine-grained control over inference steps, guidance scale, resolution, seed, and number of outputs.\n\n" +
+      "Image Alter is a Gradio-based local image generation tool built around Black Forest Labs' FLUX diffusion models, with a choice of FLUX.1-schnell, FLUX.1-dev, and AWPortrait-FL (a portrait fine-tune of FLUX.1-dev). It provides a clean interface for text-to-image generation with fine-grained control over inference steps, guidance scale, resolution, seed, and number of outputs.\n\n" +
       "The app features a responsive dark UI with tabbed navigation, an advanced settings accordion, example prompts, live output gallery, and an accumulating output history with download/fullscreen support. Generation runs on GPU via the Diffusers library with proper memory management between runs.",
     images: [
-      { src: "/projectImages/ImageAlter/advanced_options.png", caption: "Advanced generation settings panel in the Stable Diffusion / Flux image editing Gradio app." },
-      { src: "/projectImages/ImageAlter/gen_imgs.png", caption: "Text-to-image generation results using fine-tuned Flux models." },
-      { src: "/projectImages/ImageAlter/i2i_ss.png", caption: "Image-to-image transformation example within the Image Alter application." },
-      { src: "/projectImages/ImageAlter/img_alt_ss.png", caption: "Main interface of the AI-powered image editing tool with prompt input." },
-      { src: "/projectImages/ImageAlter/out_img_gal.png", caption: "Output gallery showing multiple generated and edited images side by side." },
+      { src: "/projectImages/ImageAlter/advanced_options.png", caption: "Advanced generation settings panel in the FLUX image generation Gradio app." },
+      { src: "/projectImages/ImageAlter/gen_imgs.png", caption: "Text-to-image generation results using FLUX models." },
+      { src: "/projectImages/ImageAlter/img_alt_ss.png", caption: "Main text-to-image interface with prompt input and example prompts." },
+      { src: "/projectImages/ImageAlter/out_img_gal.png", caption: "Output gallery showing multiple generated images side by side." },
     ],
     category: "AI/ML",
     subCategory: ["Computer Vision/Generative AI"],
@@ -454,8 +456,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/RepoRipper",
     dateInfo: {
-      label: "Built from ",
-      value: "Aug 2024 - Sept 2024",
+      label: "Built in ",
+      value: "Aug 2024",
     },
   },
   {
@@ -464,7 +466,7 @@ export const allProjects: Project[] = [
     description:
       "React web app built as a semester long project for my Web Development course.",
     longDescription:
-      "This project is a web app built using the MERN stack. This was my groups semester long final project for my Web Development course at Towson University. The app is a mock social platform built to mimic Reddit and Facebook. It allows users to share and discuss content in a forum style layout as well as personal updates. It features user authentication, profile management, and content creation.",
+      "This project is a web app built using the MERN stack. This was my group's semester-long final project for my Web Development course at Towson University, built by a team of four. The app is a mock social platform built to mimic Reddit and Facebook. It allows users to share and discuss content in a forum style layout as well as personal updates. It features user authentication, profile management, user search, and post creation with a custom post-display algorithm. We ran the project in weekly sprints tracked on Trello.",
     images: [
       { src: "/projectImages/Oceans/Oceans-Landing-Page.png", caption: "Landing page of the Oceans web application built with React and Node.js." },
       { src: "/projectImages/Oceans/Oceans-Homepage.png", caption: "Homepage view of the Oceans social platform after login." },
@@ -505,7 +507,7 @@ export const allProjects: Project[] = [
       "Campus RAG assistant for Towson students — answers questions about events, classes, and campus resources from a large scraped university knowledge base.",
     longDescription:
       "The AI engine behind My Campus Hubs (SurgePoint) — a retrieval-augmented student assistant serving accurate, on-demand campus information to over 15,000 students. We crawled 200M+ lines of Towson University’s public web and document corpus, curating it into a 13M-line knowledge base parsed via LlamaParse and custom HTML splitters, then indexed in Milvus using gte-large-en-v1.5 embeddings.\n\n" +
-      "The system runs on a LlamaIndex retriever and a ReAct agent framework executing local inference across Mistral Instruct and Llama 3 models, backed by a ChromaDB fallback. To evaluate performance, we engineered a custom Towson QA benchmark to rigorously evaluate retrieval quality and prompt strategies. Awarded $1,000 in the Towson StartUp Cohort.\n\n",
+      "The system runs on a LlamaIndex retriever and a ReAct agent framework executing local inference across Mistral Instruct and Llama 3.1 models, backed by a ChromaDB fallback. To evaluate performance, we engineered a custom Towson QA benchmark to rigorously evaluate retrieval quality and prompt strategies. Won $1,000 in the Towson StartUp Pitch Competition and earned a spot in the Towson StartUp summer accelerator program.\n\n",
     category: "AI/ML",
     subCategory: ["RAG & Retrieval"],
     technologies: [
@@ -515,7 +517,7 @@ export const allProjects: Project[] = [
       "LlamaParse",
       "Ollama",
       "Mistral",
-      "Llama 3",
+      "Llama 3.1",
       "ChromaDB",
       "Hugging Face Embeddings",
       "gte-large-en-v1.5",
@@ -533,7 +535,7 @@ export const allProjects: Project[] = [
       challenges: "The raw campus web dump was huge and noisy (200M+ lines). Getting retrieval quality high enough that answers were trustworthy — without hallucinating contact info or inventing events — this took a LOT of parsing and prompt iteration.",
       approach: "Scraped the Towson sitemap plus HTML and PDFs, parsed documents with LlamaParse, and stored embeddings in Milvus. Wrote Towson-specific system prompts so the model stayed in character, used context only when it was relevant, and refused to invent people or policies.",
       learnings: "Dataset hygiene mattered more than swapping models. A smaller, well-parsed campus corpus beat throwing the entire scrape at the index. Prompt rules (don't mention staff unless asked, don't prefix answers with 'based on the context') were what made it feel like a campus assistant instead of a RAG demo.",
-      impact: "Served accurate campus information to 15,000+ students and won $1,000 in the Towson StartUp Cohort. This was the project that taught me how to take RAG from a notebook to something people actually used.",
+      impact: "Served accurate campus information to 15,000+ students, won $1,000 in the Towson StartUp Pitch Competition, and earned our team a spot in the Towson StartUp summer accelerator program. This was the project that taught me how to take RAG from a notebook to something people actually used.",
     },
   },
 ];
