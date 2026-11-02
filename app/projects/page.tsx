@@ -157,7 +157,7 @@ export default function ProjectsPage() {
         <div className="text-center mb-16">
           <h1 className="text-6xl font-bold tracking-tighter mb-4">Projects</h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            A collection of some of my Machine Learning and Web Development projects
+            A collection of some of my AI and Web Development projects
           </p>
         </div>
 

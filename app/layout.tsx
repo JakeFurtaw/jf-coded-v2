@@ -20,11 +20,31 @@ const geistMono = Geist_Mono({
   weight: ["400", "500", "700"],
 });
 
+const SITE_URL = "https://www.jfcoded.com";
+const SITE_TITLE = "Jacob Furtaw | Agentic AI Engineer";
+const SITE_TAGLINE =
+  "I build privacy-first AI agents — transparent, local, and reliable enough to use every day.";
+
 export const metadata: Metadata = {
-  title: "Jacob Furtaw | ML Engineer",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
   description: "Agentic AI Engineer | Building intelligent systems that explore the unknown",
   icons: {
     icon: "/favicon.ico",
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "JFCoded",
+    title: SITE_TITLE,
+    description: SITE_TAGLINE,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@JFurtaw97",
+    title: SITE_TITLE,
+    description: SITE_TAGLINE,
   },
 };
 

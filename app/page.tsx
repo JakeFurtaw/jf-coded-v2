@@ -76,6 +76,8 @@ export default function Home() {
           <a 
             href="https://github.com/JakeFurtaw" 
             target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="GitHub"
             className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
           >
             <FaGithub size={26} />
@@ -83,12 +85,15 @@ export default function Home() {
           <a 
             href="https://linkedin.com/in/jacob-furtaw" 
             target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
             className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
           >
             <FaLinkedin size={26} />
           </a>
           <a 
             href="/contact" 
+            aria-label="Contact me"
             className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
           >
             <Mail size={26} />
@@ -142,8 +147,8 @@ export default function Home() {
                           src={project.image}
                           alt={project.title}
                           fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          unoptimized
+                          sizes={project.size === 'large' ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+                          preload={index === 0}
                           className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

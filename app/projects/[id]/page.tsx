@@ -15,9 +15,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Project Not Found | Jacob Furtaw" };
   }
 
+  const title = `${project.title} | Jacob Furtaw`;
   return {
-    title: `${project.title} | Jacob Furtaw`,
+    title,
     description: project.description,
+    alternates: { canonical: `/projects/${project.id}` },
+    openGraph: {
+      type: "article",
+      siteName: "JFCoded",
+      url: `/projects/${project.id}`,
+      title,
+      description: project.description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: "@JFurtaw97",
+      title,
+      description: project.description,
+    },
   };
 }
 
