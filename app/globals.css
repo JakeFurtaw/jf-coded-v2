@@ -59,7 +59,7 @@
   --card-foreground: #e0f2fe;
   --popover: #12121a;
   --popover-foreground: #e0f2fe;
-  --primary: #00f5ff;           /* Cyan neon accent */
+  --primary: #22d3ee;           /* Cyan accent (Tailwind cyan-400; the brand cyan used site-wide) */
   --primary-foreground: #0a0a0f;
   --secondary: #1a1a2e;
   --secondary-foreground: #e0f2fe;
@@ -70,7 +70,7 @@
   --destructive: #ef4444;
   --border: rgba(0, 245, 255, 0.1);
   --input: rgba(0, 245, 255, 0.1);
-  --ring: #00f5ff;
+  --ring: #22d3ee;
   --radius: 0.625rem;
 
   /* Space theme semantic colors (for bg-space-bg / bg-space-card) */

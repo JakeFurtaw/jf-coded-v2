@@ -1,831 +1,164 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
-import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { ExternalLink, X, ChevronLeft, ChevronRight, ChevronDown, Maximize2 } from "lucide-react";
-import { FaGithub } from 'react-icons/fa';
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { ProjectTimeline } from "@/components/ui/project-timeline";
-import { Paragraphs } from "@/components/ui/paragraphs";
+import { ProjectCard } from "@/components/projects/project-card";
+import { ProjectDetailModal } from "@/components/projects/project-detail-modal";
+import { ProjectFilters, type CategoryFilter, type SubCategoryFilter } from "@/components/projects/project-filters";
 import { allProjects, type Project } from "@/lib/projects";
 
-const projects = allProjects;
-
-const categories = ["All", "AI/ML", "Web"] as const;
-const aiMlSubCategories = [
-  "All",
-  "Agentic",
-  "RAG & Retrieval",
-  "Multimodal",
-  "Computer Vision/Generative AI",
-  "Research",
-  "Developer Tools"
-] as const;
+const FLASH_MS = 1600;
 
 export default function ProjectsClient() {
-  const [activeFilter, setActiveFilter] = useState<"All" | "AI/ML" | "Web">("All");
-  const [activeSubFilter, setActiveSubFilter] = useState<typeof aiMlSubCategories[number]>("All");
+  const [category, setCategory] = useState<CategoryFilter>("All");
+  const [subCategory, setSubCategory] = useState<SubCategoryFilter>("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   // Timeline <-> card linking
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [flashId, setFlashId] = useState<number | null>(null);
   const [isTimelineOpen, setIsTimelineOpen] = useState(false);
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => {
-    if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    },
+    [],
+  );
 
-  // Track recent drag to prevent lightbox from opening after swipe
-  const dragJustEndedRef = useRef(false);
-
-  // Ref for the scrollable area inside the project modal
-  const modalScrollRef = useRef<HTMLDivElement>(null);
-
-  const filteredProjects = projects.filter(p => {
-    const categoryMatch = activeFilter === "All" || p.category === activeFilter;
-    const subCategoryMatch = activeFilter === "AI/ML" && activeSubFilter !== "All" 
-      ? p.subCategory?.includes(activeSubFilter) 
-      : true;
-    return categoryMatch && subCategoryMatch;
+  const filteredProjects = allProjects.filter((p) => {
+    if (category !== "All" && p.category !== category) return false;
+    if (category === "AI/ML" && subCategory !== "All") return p.subCategory?.includes(subCategory) ?? false;
+    return true;
   });
+  const filteredIds = filteredProjects.map((p) => p.id);
 
-  // Project-to-project navigation inside the modal
-  const currentIndexInFiltered = selectedProject 
-    ? filteredProjects.findIndex(p => p.id === selectedProject.id) 
-    : -1;
+  // Previous/next within the current filter. A project opened from the timeline that the
+  // filter hides has no neighbours here.
+  const selectedIndex = selectedProject ? filteredProjects.findIndex((p) => p.id === selectedProject.id) : -1;
+  const previousProject = selectedIndex > 0 ? filteredProjects[selectedIndex - 1] : null;
+  const nextProject =
+    selectedIndex !== -1 && selectedIndex < filteredProjects.length - 1 ? filteredProjects[selectedIndex + 1] : null;
 
-  const previousProject = currentIndexInFiltered > 0 ? filteredProjects[currentIndexInFiltered - 1] : null;
-  const nextProject = currentIndexInFiltered < filteredProjects.length - 1 ? filteredProjects[currentIndexInFiltered + 1] : null;
+  const changeCategory = (next: CategoryFilter) => {
+    setCategory(next);
+    if (next !== "AI/ML") setSubCategory("All");
+  };
 
-  // Timeline row click: scroll to the card and flash it; open the modal if the card is filtered out.
+  // Timeline row click: scroll to the card and flash it; open the modal if the filter hides the card.
   const handleTimelineSelect = (project: Project) => {
     const card = document.getElementById(`project-card-${project.id}`);
-    if (!card || !filteredProjects.some((p) => p.id === project.id)) {
+    if (!card || !filteredIds.includes(project.id)) {
       setSelectedProject(project);
-      setCurrentImageIndex(0);
       return;
     }
     card.scrollIntoView({ behavior: "smooth", block: "center" });
     setFlashId(project.id);
     if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
-    flashTimerRef.current = setTimeout(() => setFlashId(null), 1600);
+    flashTimerRef.current = setTimeout(() => setFlashId(null), FLASH_MS);
   };
 
-  const goToProject = (project: Project) => {
-    setSelectedProject(project);
-    setCurrentImageIndex(0);
-    setIsLightboxOpen(false);
+  const timelineProps = {
+    projects: allProjects,
+    highlightedId: hoveredId ?? flashId,
+    activeIds: filteredIds,
+    onHighlight: setHoveredId,
+    onSelect: handleTimelineSelect,
   };
-
-  // Scroll to top when switching projects inside the modal
-  useEffect(() => {
-    if (modalScrollRef.current) {
-      modalScrollRef.current.scrollTo({ top: 0, behavior: 'auto' });
-    }
-  }, [selectedProject?.id]);
-
-  const nextImage = useCallback(() => {
-    if (selectedProject?.images) {
-      setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images!.length);
-    }
-  }, [selectedProject]);
-
-  const prevImage = useCallback(() => {
-    if (selectedProject?.images) {
-      setCurrentImageIndex((prev) => (prev - 1 + selectedProject.images!.length) % selectedProject.images!.length);
-    }
-  }, [selectedProject]);
-
-  // Keyboard navigation for the in-modal gallery
-  useEffect(() => {
-    if (!selectedProject) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') {
-        nextImage();
-      } else if (e.key === 'ArrowLeft') {
-        prevImage();
-      } else if (e.key === 'Escape') {
-        if (isLightboxOpen) {
-          setIsLightboxOpen(false);
-        } else {
-          setSelectedProject(null);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedProject, isLightboxOpen, nextImage, prevImage]);
-
-  useEffect(() => {
-  if (selectedProject) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'unset';
-  }
-  return () => { document.body.style.overflow = 'unset'; };
-  }, [selectedProject]);
 
   return (
-    <div className="min-h-screen pb-24 bg-space-bg">
+    <div className="min-h-screen bg-space-bg pb-24">
       <div className="mx-auto flex max-w-[80rem] gap-8 px-6 pt-16 xl:max-w-[96rem]">
-        {/* Left timeline rail */}
+        {/* Sticky timeline rail (lg+) */}
         <aside className="relative z-20 hidden w-60 flex-shrink-0 overflow-visible lg:block xl:w-72 2xl:w-80">
           <div className="sticky top-0 flex h-screen items-center overflow-visible">
             <ProjectTimeline
               variant="rail"
               className="glass rounded-2xl border border-white/10 p-3"
-              projects={projects}
               selectedId={selectedProject?.id ?? null}
-              highlightedId={hoveredId ?? flashId}
-              activeIds={filteredProjects.map((p) => p.id)}
-              onHighlight={setHoveredId}
-              onSelect={handleTimelineSelect}
+              {...timelineProps}
             />
           </div>
         </aside>
 
-        <main className="min-w-0 flex-1">
-        {/* Header & Filter Buttons - unchanged */}
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold tracking-tighter mb-4">Projects</h1>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            A collection of some of my AI and Web Development projects
-          </p>
-        </div>
+        <div className="min-w-0 flex-1">
+          <header className="mb-16 text-center">
+            <h1 className="mb-4 text-6xl font-bold tracking-tighter">Projects</h1>
+            <p className="mx-auto max-w-2xl text-xl text-white/70">A collection of some of my AI and Web Development projects</p>
+          </header>
 
-        {/* Filter Buttons */}
-        <div className="flex flex-col items-center gap-6 mb-12">
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={activeFilter === category ? "default" : "outline"}
-                onClick={() => {
-                  setActiveFilter(category);
-                  if (category !== "AI/ML") {
-                    setActiveSubFilter("All");
-                  }
-                }}
-                className={`px-6 md:px-8 py-2 rounded-full transition-all active:scale-95 touch-manipulation ${
-                  activeFilter === category 
-                    ? "bg-cyan-400 text-black" 
-                    : "border-cyan-400/50 active:border-cyan-400 active:text-cyan-400"
-                }`}
-              >
-                {category}
-              </Button>
-            ))}
+          <ProjectFilters
+            category={category}
+            subCategory={subCategory}
+            onCategoryChange={changeCategory}
+            onSubCategoryChange={setSubCategory}
+          />
+
+          {/* Collapsible timeline (below lg) */}
+          <div className="mx-auto mb-10 max-w-2xl lg:hidden">
+            <button
+              type="button"
+              onClick={() => setIsTimelineOpen((open) => !open)}
+              aria-expanded={isTimelineOpen}
+              aria-controls="mobile-project-timeline"
+              className="glass flex w-full items-center justify-between rounded-2xl border border-white/10 px-5 py-3.5 text-left transition-colors active:border-cyan-400/40 touch-manipulation"
+            >
+              <span className="font-medium tracking-tight">
+                Project timeline
+                <span className="ml-2 text-sm text-white/45">{allProjects.length} projects</span>
+              </span>
+              <ChevronDown
+                size={18}
+                className={`text-cyan-400 transition-transform duration-200 ${isTimelineOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {isTimelineOpen && (
+                <motion.div
+                  id="mobile-project-timeline"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="overflow-hidden"
+                >
+                  <ProjectTimeline
+                    variant="inline"
+                    className="glass mt-3 rounded-2xl border border-white/10 p-3 sm:p-4"
+                    {...timelineProps}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          <AnimatePresence>
-            {activeFilter === "AI/ML" && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="flex flex-wrap justify-center gap-2"
-              >
-                {aiMlSubCategories.map((sub) => (
-                  <Button
-                    key={sub}
-                    variant={activeSubFilter === sub ? "default" : "outline"}
-                    onClick={() => setActiveSubFilter(sub)}
-                    className={`px-4 py-1 rounded-full text-xs transition-all active:scale-95 touch-manipulation ${
-                      activeSubFilter === sub 
-                        ? "bg-cyan-400 text-black" 
-                        : "border-cyan-400/30 active:border-cyan-400 active:text-cyan-400 text-white/60"
-                    }`}
-                  >
-                    {sub}
-                  </Button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Timeline (below lg; the sticky rail takes over on large screens) */}
-        <div className="mx-auto mb-10 max-w-2xl lg:hidden">
-          <button
-            type="button"
-            onClick={() => setIsTimelineOpen((open) => !open)}
-            aria-expanded={isTimelineOpen}
-            aria-controls="mobile-project-timeline"
-            className="glass flex w-full items-center justify-between rounded-2xl border border-white/10 px-5 py-3.5 text-left transition-colors active:border-cyan-400/40 touch-manipulation"
-          >
-            <span className="font-medium tracking-tight">
-              Project timeline
-              <span className="ml-2 text-sm text-white/45">{projects.length} projects</span>
-            </span>
-            <ChevronDown
-              size={18}
-              className={`text-cyan-400 transition-transform duration-200 ${isTimelineOpen ? "rotate-180" : ""}`}
-            />
-          </button>
-          <AnimatePresence initial={false}>
-            {isTimelineOpen && (
-              <motion.div
-                id="mobile-project-timeline"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="overflow-hidden"
-              >
-                <ProjectTimeline
-                  variant="inline"
-                  className="glass mt-3 rounded-2xl border border-white/10 p-3 sm:p-4"
-                  projects={projects}
-                  highlightedId={hoveredId ?? flashId}
-                  activeIds={filteredProjects.map((p) => p.id)}
-                  onHighlight={setHoveredId}
-                  onSelect={handleTimelineSelect}
+          <motion.div layout className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+            <AnimatePresence mode="popLayout">
+              {filteredProjects.map((project, index) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  priority={index === 0}
+                  highlighted={hoveredId === project.id}
+                  flashing={flashId === project.id}
+                  onOpen={setSelectedProject}
+                  onHover={setHoveredId}
                 />
-              </motion.div>
-            )}
-          </AnimatePresence>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         </div>
-
-        {/* Projects Grid - unchanged except for image placeholder */}
-        <motion.div 
-          layout 
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                whileHover={{ 
-                  y: -12, 
-                  scale: 1.01,
-                  transition: { duration: 0.2, ease: "easeOut" }
-                }}
-                id={`project-card-${project.id}`}
-                onMouseEnter={() => setHoveredId(project.id)}
-                onMouseLeave={() => setHoveredId(null)}
-                className="group scroll-mt-24"
-              >
-              <Card
-                className={`glass h-full overflow-hidden border cursor-pointer transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 touch-manipulation ${
-                  flashId === project.id
-                    ? "border-cyan-400/70 ring-2 ring-cyan-400/40"
-                    : hoveredId === project.id
-                      ? "border-cyan-400/40"
-                      : "border-white/10"
-                }`}
-                onClick={() => {
-                  setSelectedProject(project);
-                  setCurrentImageIndex(0);
-                }}
-              >
-                {/* Image Area - Shows first image or placeholder */}
-                <div className="h-48 relative bg-gradient-to-br from-cyan-900/50 to-purple-900/50 flex items-center justify-center border-b border-white/10 overflow-hidden">
-                  {project.images && project.images.length > 0 ? (
-                    <>
-                      <Image 
-                        src={project.images[0].src} 
-                        alt={project.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        quality={82}
-                        priority={index === 0}
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      {/* Subtle gradient overlay on hover for depth */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </>
-                  ) : (
-                    <div className="text-cyan-400/30 text-6xl transition-transform duration-300 group-hover:scale-110">
-                      {project.category === "AI/ML" ? "🤖" : "💻"}
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-8">
-                  <h3 className="text-2xl font-semibold mb-3 text-white transition-all duration-200 group-hover:text-cyan-400 group-hover:tracking-[-0.02em]">
-                    {project.title}
-                  </h3>
-                  <p className="text-white/70 mb-6 line-clamp-3 transition-colors duration-200 group-hover:text-white/80">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.technologies.slice(0, 5).map((tech) => (
-                      <Badge 
-                        key={tech} 
-                        className="bg-white/10 text-cyan-300 border border-white/10 px-4 py-1 text-sm transition-all duration-200 group-hover:border-cyan-400/30 group-hover:bg-white/15 group-hover:text-cyan-200"
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  {project.caseStudy && (
-                    <Button
-                      size="sm"
-                      className="w-full mb-2.5 bg-cyan-400 text-black hover:bg-cyan-300 transition-all"
-                      asChild
-                    >
-                      <a href={`/projects/${project.id}`} onClick={(e) => e.stopPropagation()}>
-                        Read Full Case Study →
-                      </a>
-                    </Button>
-                  )}
-                  <div className="flex gap-3">
-                    {project.github && (
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="flex-1 border-white/20 group-hover:border-white/30 transition-all" 
-                        asChild
-                      >
-                        <a href={project.github} target="_blank" onClick={(e) => e.stopPropagation()}>
-                          <FaGithub className="w-4 h-4 mr-2" /> Code
-                        </a>
-                      </Button>
-                    )}
-                    {project.live && (
-                      <Button 
-                        size="sm" 
-                        className="flex-1 bg-cyan-400 text-black transition-all group-hover:bg-cyan-300" 
-                        asChild
-                      >
-                        <a href={project.live} target="_blank" onClick={(e) => e.stopPropagation()}>
-                          <ExternalLink className="w-4 h-4 mr-2" /> Live
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-            
-          ))}
-          </AnimatePresence>
-        </motion.div>
-        </main>
       </div>
 
-      {/* Modern Fullscreen Image Viewer — much lighter and more elegant */}
-      {isLightboxOpen && selectedProject && typeof window !== "undefined" && createPortal(
-        <AnimatePresence>
-          <div 
-            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/95 backdrop-blur-2xl"
-            onClick={() => setIsLightboxOpen(false)}
-          >
-
-
-            <div 
-              className="relative w-full h-[94vh] flex items-center justify-center px-2 md:px-4 lg:px-6"
-              onClick={e => e.stopPropagation()}
-              style={{ height: 'calc(min(94vh, 100vh) * var(--modal-scale))' }}
-            >
-              {/* Gray modal-like frame matching the project modal */}
-              <div 
-                className="bg-[#111114] border border-white/10 rounded-2xl overflow-hidden w-full max-w-[min(99vw,1800px)] h-[85vh] max-h-[93vh] flex flex-col shadow-2xl"
-                style={{ maxHeight: 'calc(min(93vh, 900px) * var(--modal-scale))' }}
-              >
-                
-                {/* Image section - takes most of the space */}
-                <div className="relative flex-1 min-h-0 bg-black/5 px-3 md:px-5 lg:px-8 flex flex-col">
-                  <div className="flex-1 flex items-center justify-center">
-                    <motion.div 
-                      key={currentImageIndex}
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="relative w-full h-full"
-                      drag="x"
-                      dragConstraints={{ left: 0, right: 0 }}
-                      dragElastic={0.25}
-                      style={{ touchAction: 'pan-y pinch-zoom' }}
-                      onDragEnd={(event, info) => {
-                        const horizontalThreshold = 60;
-                        const verticalDismissThreshold = 140;
-
-                        if (info.offset.y > verticalDismissThreshold && Math.abs(info.offset.y) > Math.abs(info.offset.x)) {
-                          setIsLightboxOpen(false);
-                        } 
-                        else if (info.offset.x < -horizontalThreshold) {
-                          nextImage();
-                        } else if (info.offset.x > horizontalThreshold) {
-                          prevImage();
-                        }
-                      }}
-                      whileDrag={{ scale: 0.985 }}
-                    >
-                      {selectedProject.images && selectedProject.images[currentImageIndex] && (
-                        <div className="relative w-full h-full overflow-hidden rounded-t-2xl">
-                          <Image 
-                            src={selectedProject.images[currentImageIndex].src} 
-                            alt={selectedProject.images[currentImageIndex].caption || selectedProject.title}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1400px) 90vw, 1200px"
-                            unoptimized
-                            className="object-contain"
-                          />
-                        </div>
-                      )}
-                    </motion.div>
-                  </div>
-
-                  {/* Image counter directly below the image */}
-                  {selectedProject.images && selectedProject.images.length > 1 && (
-                    <div className="text-white text-xs md:text-sm font-mono tracking-[2px] text-center py-1.5 mb-1">
-                      {currentImageIndex + 1} / {selectedProject.images.length}
-                    </div>
-                  )}
-                </div>
-
-
-
-              {/* Caption section inside the gray frame */}
-              {selectedProject.images?.[currentImageIndex]?.caption && (
-                <div className="border-t border-white/10 px-6 md:px-8 py-5">
-                  <div className="max-w-5xl mx-auto">
-                    <p className="font-bold tracking-tighter text-white text-lg md:text-xl leading-tight">
-                      {selectedProject.images[currentImageIndex].caption}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div> {/* close gray frame */}
-          </div> {/* close relative wrapper */}
-
-            {/* Navigation arrows */}
-            {selectedProject.images && selectedProject.images.length > 1 && (
-              <>
-                <button
-                  onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                  className="absolute left-[calc(1rem+env(safe-area-inset-left))] md:left-8 top-[42%] -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation z-10"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft size={26} />
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                  className="absolute right-[calc(1rem+env(safe-area-inset-right))] md:right-8 top-[42%] -translate-y-1/2 bg-white/10 active:bg-white/25 backdrop-blur-md p-4 rounded-full text-white transition-all border border-white/10 touch-manipulation z-10"
-                  aria-label="Next image"
-                >
-                  <ChevronRight size={26} />
-                </button>
-              </>
-            )}
-
-            {/* Close button - last in DOM so it has highest stacking order */}
-            <button
-              onClick={() => setIsLightboxOpen(false)}
-              className="group absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 right-6 touch-manipulation z-[60]"
-              style={{ top: 'calc(1.5rem + env(safe-area-inset-top))' }}
-            >
-              <X className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
-            </button>
-          </div> {/* close fixed backdrop */}
-        </AnimatePresence>
-      , document.body)}
-
-      {/* Project Detail Modal — rendered in a portal so fixed positioning is relative to the viewport */}
-      {typeof window !== "undefined" && createPortal(
-      <AnimatePresence>
-        {selectedProject && (
-          /* Wrapper remains fixed to viewport for perfect centering */
-          <div 
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-6 md:p-8 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]"
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 40, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 30, scale: 0.97 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-[min(90vw,1400px)] max-h-[min(90dvh,92vh)] flex flex-col bg-[#111114] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Scrollable Content */}
-              <div 
-                ref={modalScrollRef}
-                className="flex-1 overflow-y-auto overscroll-contain pt-8 md:pt-10"
-              >
-                <div className="p-6 md:p-10 relative bg-[#0f0f12]">
-                  <div className="flex flex-col gap-10">
-                  {/* 1. MODERN IMAGE GALLERY */}
-                  <div className="w-full">
-                    {selectedProject.images && selectedProject.images.length > 0 && (
-                      <div className="group relative">
-                        <div 
-                          className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-950 border border-white/10 shadow-2xl cursor-zoom-in active:opacity-95 transition-opacity touch-manipulation"
-                          onClick={() => {
-                            // Don't open lightbox if the user just finished a swipe
-                            if (dragJustEndedRef.current) return;
-                            setIsLightboxOpen(true);
-                          }}
-                        >
-                          <AnimatePresence mode="wait">
-                            <motion.div 
-                              key={currentImageIndex}
-                              initial={{ opacity: 0.6 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0.6 }}
-                              transition={{ duration: 0.25 }}
-                              className="relative w-full h-full"
-                              drag="x"
-                              dragConstraints={{ left: 0, right: 0 }}
-                              dragElastic={0.25}
-                              style={{ touchAction: 'pan-y pinch-zoom' }}
-                              onDragStart={() => {
-                                dragJustEndedRef.current = true;
-                              }}
-                              onDragEnd={(event, info) => {
-                                const swipeThreshold = 80;
-                                if (info.offset.x < -swipeThreshold) {
-                                  nextImage();
-                                } else if (info.offset.x > swipeThreshold) {
-                                  prevImage();
-                                }
-                                // Reset the flag after a short delay
-                                setTimeout(() => {
-                                  dragJustEndedRef.current = false;
-                                }, 150);
-                              }}
-                              whileDrag={{ scale: 0.985 }}
-                            >
-                              {selectedProject.images && selectedProject.images[currentImageIndex] && (
-                                <Image 
-                                  src={selectedProject.images[currentImageIndex].src} 
-                                  alt={selectedProject.images[currentImageIndex].caption || selectedProject.title}
-                                  fill
-                                  sizes="(max-width: 768px) 95vw, (max-width: 1280px) 80vw, 1024px"
-                                  quality={100}
-                                  className="object-contain"
-                                />
-                              )}
-                            </motion.div>
-                          </AnimatePresence>
-
-                          {/* Expand hint - always visible on mobile, hover on desktop */}
-                          <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-white/90 text-xs tracking-widest flex items-center gap-2 border border-white/10 
-                            md:opacity-0 md:group-hover:opacity-100 transition-all active:bg-black/70">
-                            <Maximize2 size={14} />
-                            <span className="hidden md:inline">VIEW FULL</span>
-                            <span className="md:hidden">FULL</span>
-                          </div>
-                        </div>
-
-                        {/* Gallery Navigation + Thumbnails (Premium touch) */}
-                        {selectedProject.images.length > 1 && (
-                          <>
-                            {/* Dot + Arrow Navigation - Mobile optimized */}
-                            <div className="flex items-center justify-between mt-4">
-                              <div className="flex gap-2">
-                                {selectedProject.images.map((_, idx) => (
-                                  <button
-                                    key={`dot-${idx}`}
-                                    onClick={() => setCurrentImageIndex(idx)}
-                                    className={`h-2 md:h-1.5 rounded-full transition-all duration-200 touch-manipulation ${
-                                      idx === currentImageIndex 
-                                        ? 'bg-cyan-400 w-8' 
-                                        : 'bg-white/20 active:bg-white/40 w-6 md:w-4'
-                                    }`}
-                                    aria-label={`Go to image ${idx + 1}`}
-                                  />
-                                ))}
-                              </div>
-
-                              <div className="flex gap-2">
-                                <button
-                                  onClick={prevImage}
-                                  disabled={currentImageIndex === 0}
-                                  className="p-3 md:p-2 rounded-full bg-white/5 active:bg-white/15 text-white/80 disabled:opacity-30 transition-all border border-white/10 touch-manipulation"
-                                  aria-label="Previous image"
-                                >
-                                  <ChevronLeft size={20} />
-                                </button>
-                                <button
-                                  onClick={nextImage}
-                                  disabled={currentImageIndex === selectedProject.images.length - 1}
-                                  className="p-3 md:p-2 rounded-full bg-white/5 active:bg-white/15 text-white/80 disabled:opacity-30 transition-all border border-white/10 touch-manipulation"
-                                  aria-label="Next image"
-                                >
-                                  <ChevronRight size={20} />
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Thumbnail Strip - Mobile optimized */}
-                            <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/20 -mx-1 px-1">
-                              {selectedProject.images.map((img, idx) => (
-                                <button
-                                  key={`thumb-${idx}`}
-                                  onClick={() => setCurrentImageIndex(idx)}
-                                  className={`relative flex-shrink-0 w-20 h-12 md:w-16 md:h-10 rounded-lg overflow-hidden border transition-all touch-manipulation ${
-                                    idx === currentImageIndex 
-                                      ? 'border-cyan-400 ring-1 ring-cyan-400/30' 
-                                      : 'border-white/10 active:border-white/40 opacity-70 active:opacity-100'
-                                  }`}
-                                  aria-label={`View image ${idx + 1}`}
-                                >
-                                  <Image 
-                                    src={img.src} 
-                                    alt={`Thumbnail ${idx + 1}`}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                </button>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 2. REFINED CONTENT LAYOUT */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-10">
-                    {/* Main Story */}
-                    <div className="lg:col-span-7 xl:col-span-8">
-                      <div className="flex items-center gap-3 mb-5">
-                        <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1 font-medium">
-                          {selectedProject.category}
-                        </Badge>
-                        <div className="h-px flex-1 bg-white/10" />
-                      </div>
-
-                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter text-white mb-2 leading-none">
-                        {selectedProject.title}
-                      </h2>
-
-                      {selectedProject.dateInfo && (
-                        <p className="text-white/50 text-sm tracking-wide mb-6">
-                          {selectedProject.dateInfo.label} {selectedProject.dateInfo.value}
-                        </p>
-                      )}
-                      
-                      <Paragraphs
-                        text={selectedProject.longDescription}
-                        className="text-[15px] md:text-base leading-relaxed text-white/80"
-                      />
-
-                      {/* Rich Storytelling Sections - Mobile optimized */}
-                      {selectedProject.story && (
-                        <div className="mt-8 md:mt-10 space-y-6 md:space-y-8 border-t border-white/10 pt-6 md:pt-8">
-                          {selectedProject.story.role && (
-                            <div>
-                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">My Role</h4>
-                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.role}</p>
-                            </div>
-                          )}
-                          {selectedProject.story.context && (
-                            <div>
-                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Context & Problem</h4>
-                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.context}</p>
-                            </div>
-                          )}
-                          {selectedProject.story.challenges && (
-                            <div>
-                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Challenges</h4>
-                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.challenges}</p>
-                            </div>
-                          )}
-                          {selectedProject.story.approach && (
-                            <div>
-                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Approach & Decisions</h4>
-                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.approach}</p>
-                            </div>
-                          )}
-                          {selectedProject.story.learnings && (
-                            <div>
-                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Key Learnings</h4>
-                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.learnings}</p>
-                            </div>
-                          )}
-                          {selectedProject.story.impact && (
-                            <div>
-                              <h4 className="text-sm md:text-base font-semibold text-white/50 uppercase tracking-[1.5px] mb-2">Impact & Results</h4>
-                              <p className="text-[15px] md:text-base text-white/80 leading-relaxed">{selectedProject.story.impact}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Sidebar */}
-                    <div className="lg:col-span-5 xl:col-span-4 space-y-8">
-                      {/* Links */}
-                      <div>
-                        <div className="text-xs uppercase tracking-[2.5px] text-white/40 mb-3 font-medium">Links</div>
-                        <div className="flex flex-col gap-2.5">
-                          {selectedProject.github && (
-                            <Button 
-                              variant="outline" 
-                              className="w-full justify-start border-white/15 hover:border-cyan-400/40 h-11 text-sm" 
-                              asChild
-                            >
-                              <a href={selectedProject.github} target="_blank">
-                                <FaGithub className="mr-3 h-4 w-4" /> View Source Code
-                              </a>
-                            </Button>
-                          )}
-                          {selectedProject.live && (
-                            <Button 
-                              className="w-full justify-start bg-cyan-400 text-black hover:bg-cyan-300 h-11 text-sm" 
-                              asChild
-                            >
-                              <a href={selectedProject.live} target="_blank">
-                                <ExternalLink className="mr-3 h-4 w-4" /> Open Live Demo
-                              </a>
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Tech Stack */}
-                      <div>
-                        <div className="text-xs uppercase tracking-[2.5px] text-white/40 mb-3 font-medium">Technologies</div>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedProject.technologies.map((tech) => (
-                            <Badge 
-                              key={tech} 
-                              className="px-3 py-1 bg-white/5 border border-white/10 text-cyan-300 hover:bg-white/10 hover:border-cyan-400/30 transition-all text-sm"
-                            >
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Project Navigation - Mobile optimized */}
-                  {(previousProject || nextProject) && (
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t border-white/10">
-                      <div className="sm:flex-1">
-                        {previousProject && (
-                          <button
-                            onClick={() => goToProject(previousProject)}
-                            className="flex w-full sm:w-auto items-center gap-3 text-sm text-white/70 active:text-white active:bg-white/5 transition-all group rounded-xl p-3 -m-3 sm:p-0 sm:m-0 touch-manipulation"
-                          >
-                            <div className="p-2 rounded-full bg-white/5 active:bg-white/10 border border-white/10 flex-shrink-0">
-                              <ChevronLeft size={16} />
-                            </div>
-                            <div className="text-left min-w-0">
-                              <div className="text-[10px] uppercase tracking-widest text-white/40">Previous</div>
-                              <div className="text-white/90 truncate text-sm">{previousProject.title}</div>
-                            </div>
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="sm:flex-1 sm:text-right">
-                        {nextProject && (
-                          <button
-                            onClick={() => goToProject(nextProject)}
-                            className="flex w-full sm:w-auto sm:justify-end items-center gap-3 text-sm text-white/70 active:text-white active:bg-white/5 transition-all group rounded-xl p-3 -m-3 sm:p-0 sm:m-0 touch-manipulation"
-                          >
-                            <div className="text-right min-w-0 order-1 sm:order-none">
-                              <div className="text-[10px] uppercase tracking-widest text-white/40">Next</div>
-                              <div className="text-white/90 truncate text-sm">{nextProject.title}</div>
-                            </div>
-                            <div className="p-2 rounded-full bg-white/5 active:bg-white/10 border border-white/10 flex-shrink-0 order-2 sm:order-none">
-                              <ChevronRight size={16} />
-                            </div>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-            {/* Close Button — placed on the backdrop layer so images/content can never cover it */}
-            <button
-              onClick={(e) => { e.stopPropagation(); setSelectedProject(null); }}
-              className="group absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 hover:text-white active:scale-95 z-[60] touch-manipulation"
-              style={{ top: 'calc(1.5rem + env(safe-area-inset-top))', right: '1.5rem' }}
-              aria-label="Close project details"
-            >
-              <X className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
-            </button>
-          </div>
-        )}
-      </AnimatePresence>
-      , document.body)}
+      <ProjectDetailModal
+        project={selectedProject}
+        previous={previousProject}
+        next={nextProject}
+        onNavigate={setSelectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </div>
   );
 }

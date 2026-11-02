@@ -19,6 +19,12 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        /** Technology / tool tag */
+        tech: "h-auto border-white/10 bg-white/5 px-3 py-1 text-sm text-cyan-300",
+        /** Project category (AI/ML, Web) */
+        category: "h-auto border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-cyan-400",
+        /** Secondary label (subcategory) */
+        muted: "h-auto border-white/10 bg-white/5 px-3 py-1 text-white/60",
       },
     },
     defaultVariants: {

@@ -1,3 +1,16 @@
+export const categories = ["AI/ML", "Web"] as const;
+export type Category = (typeof categories)[number];
+
+export const subCategories = [
+  "Agentic",
+  "RAG & Retrieval",
+  "Multimodal",
+  "Computer Vision/Generative AI",
+  "Research",
+  "Developer Tools",
+] as const;
+export type SubCategory = (typeof subCategories)[number];
+
 export interface Project {
   id: number;
   title: string;
@@ -11,8 +24,8 @@ export interface Project {
   github?: string;
   live?: string;
   caseStudy?: boolean; // Has a dedicated case study page at /projects/[id]
-  category: "AI/ML" | "Web";
-  subCategory?: string[];
+  category: Category;
+  subCategory?: SubCategory[];
   technologies: string[];
   tools?: { name: string; usedFor: string; notes?: string }[];
   skills?: { name: string; usedFor: string; workflow?: string }[];
