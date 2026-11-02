@@ -17,6 +17,7 @@ import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/lib/projects";
+import { Paragraphs } from "@/components/ui/paragraphs";
 import { architectures } from "@/lib/architectures";
 import { ArchitectureDiagram } from "@/components/ui/architecture-diagram";
 import { DossierReplay } from "@/components/ui/dossier-replay";
@@ -185,15 +186,10 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
         {/* Overview */}
         <section className="mt-16">
           <SectionHeading>Overview</SectionHeading>
-          <div className="space-y-4 text-base md:text-lg leading-relaxed text-white/75 max-w-3xl">
-            {project.longDescription
-              .split(/\n{2,}/)
-              .map((s) => s.trim())
-              .filter(Boolean)
-              .map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-          </div>
+          <Paragraphs
+            text={project.longDescription}
+            className="text-base md:text-lg leading-relaxed text-white/75 max-w-3xl"
+          />
         </section>
 
         {/* Architecture */}

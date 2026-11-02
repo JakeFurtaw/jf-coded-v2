@@ -7,6 +7,7 @@ import CursorGlow from "@/components/ui/cursor-glow";
 import PageTransition from "@/components/PageTransition";
 import MotionProvider from "@/components/MotionProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { AUTHOR, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_TITLE, SITE_URL, X_HANDLE } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,29 +21,24 @@ const geistMono = Geist_Mono({
   weight: ["400", "500", "700"],
 });
 
-const SITE_URL = "https://www.jfcoded.com";
-const SITE_TITLE = "Jacob Furtaw | Agentic AI Engineer";
-const SITE_TAGLINE =
-  "I build privacy-first AI agents — transparent, local, and reliable enough to use every day.";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: SITE_TITLE,
-  description: "Agentic AI Engineer | Building intelligent systems that explore the unknown",
+  title: { default: SITE_TITLE, template: `%s | ${AUTHOR}` },
+  description: SITE_DESCRIPTION,
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
     type: "website",
     url: SITE_URL,
-    siteName: "JFCoded",
+    siteName: SITE_NAME,
     title: SITE_TITLE,
     description: SITE_TAGLINE,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@JFurtaw97",
+    creator: X_HANDLE,
     title: SITE_TITLE,
     description: SITE_TAGLINE,
   },

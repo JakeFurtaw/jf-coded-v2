@@ -1,9 +1,13 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Mail, MapPin, Calendar, PhoneCall } from "lucide-react";
 import { FaGithub, FaLinkedin, FaDiscord, FaXTwitter } from 'react-icons/fa6';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Get in touch with Jacob Furtaw about Agentic AI and Generative AI engineering roles and collaborations.",
+};
 
 export default function ContactPage() {
   return (

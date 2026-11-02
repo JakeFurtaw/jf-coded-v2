@@ -27,7 +27,7 @@ export default function CursorGlow() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed -inset-[350px] z-0"
+      className="pointer-events-none fixed left-0 top-0 z-0 h-[700px] w-[700px]"
       style={{
         x: glowX,
         y: glowY,

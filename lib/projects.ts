@@ -544,8 +544,20 @@ export const allProjects: Project[] = [
 // Curated featured projects for the homepage (order matters)
 export const featuredProjectIds = [1, 12, 2] as const;
 
-export function getFeaturedProjects() {
+export function getProjectById(id: number | string): Project | undefined {
+  return allProjects.find((p) => p.id === Number(id));
+}
+
+/** Projects with a dedicated page at /projects/[id]. */
+export const caseStudyProjects: Project[] = allProjects.filter((p) => p.caseStudy);
+
+export function getCaseStudyProject(id: number | string): Project | undefined {
+  const project = getProjectById(id);
+  return project?.caseStudy ? project : undefined;
+}
+
+export function getFeaturedProjects(): Project[] {
   return featuredProjectIds
-    .map((id) => allProjects.find((p) => p.id === id))
-    .filter(Boolean) as Project[];
+    .map((id) => getProjectById(id))
+    .filter((p): p is Project => p !== undefined);
 }
