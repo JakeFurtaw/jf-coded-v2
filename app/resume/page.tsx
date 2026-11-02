@@ -13,8 +13,8 @@ export default function ResumePage() {
       company: "Integral Federal",
       location: "McLean, VA",
       period: "Sept 2026 – Present",
-      description: "Designing, building, and deploying production autonomous AI agents and LLM-powered applications across AWS, Google Cloud, and Microsoft Azure. ",
-      technologies: [],
+      description: "Engineering production agentic AI systems for federal clients, including an automated deep research agent that combines multi-source web scraping, LLM relevance validation, deterministic verification guards, and structured data extraction. Architecting the supporting Azure infrastructure: containerized services, Azure DevOps CI/CD pipelines, Azure Container Apps, and Azure AI Foundry model deployments.",
+      technologies: ["Python", "Agentic AI", "Azure AI Foundry", "Azure Container Apps", "Azure DevOps", "Docker", "FastAPI", "Ollama", "vLLM", "React + TypeScript"],
     },
     {
       title: "Gen AI Engineer",
@@ -121,7 +121,7 @@ const skills = {
         {/* Header */}
         <div className="text-center mb-14">
           <h1 className="text-6xl font-bold tracking-tighter mb-3">Virtual Resume</h1>
-          <p className="text-lg md:text-xl text-white/70">Jacob Furtaw — Machine Learning Engineer</p>
+          <p className="text-lg md:text-xl text-white/70">Jacob Furtaw — Agentic AI Engineer</p>
           
           <Button asChild size="lg" className="mt-6 bg-cyan-400 hover:bg-cyan-300 text-black font-medium tracking-tight active:scale-[0.985] touch-manipulation group">
           <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf" className="flex items-center gap-2">

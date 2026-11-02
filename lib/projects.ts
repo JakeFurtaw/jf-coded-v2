@@ -1,6 +1,7 @@
 export interface Project {
   id: number;
   title: string;
+  shortTitle?: string; // Compact label for the project timeline
   description: string; // Short description for cards
   longDescription: string;
   images?: Array<{
@@ -118,6 +119,7 @@ export const allProjects: Project[] = [
   {
     id: 11,
     title: "Cloak AI Image Segmentation",
+    shortTitle: "Cloak Image Seg.",
     description: "Standalone React + FastAPI interface for prompt-based local image segmentation with a fine-tuned SAM3 model, plus satellite imagery segmentation powered by Google Earth Engine (Sentinel-2) and voice input.",
     longDescription:
       "This is the extracted standalone version of the image segmentation capabilities from Cloak AI. It provides a dedicated, full-featured interface for both general photo segmentation and satellite image analysis.\n\n" +
@@ -183,7 +185,7 @@ export const allProjects: Project[] = [
       "Transformers",
       "Hugging Face",
     ],
-    github: "https://github.com/JakeFurtaw/Agent-Qwen",
+    github: "https://github.com/JakeFurtaw/AgentQwen",
     live: "https://www.youtube.com/watch?v=dCSDCVwJvcA",
     dateInfo: {
       label: "Built from ",
@@ -337,10 +339,13 @@ export const allProjects: Project[] = [
   {
     id: 5,
     title: "Auto Mutant Classifier",
+    shortTitle: "Mutant Classifier",
     description:
       "An Abstract Syntax Tree Neural Network trained to detect equivalent mutants in Java and C++ code.",
     longDescription:
-      "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. We built a custom parser to sort the unlabled train dataset into a fully labeled dataset. The model then classifies the mutant test set as equivalent or non-equivalent mutants. This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
+      "Built and trained an Abstract Syntax Tree Neural Network (ASTNN) to identify equivalent vs. non-equivalent mutants in Java and C++ source code. We built a custom parser to sort the unlabeled train dataset into a fully labeled dataset. The model then classifies the mutant test set as equivalent or non-equivalent mutants.\n\n" +
+      "Alongside the ASTNN, we evaluated code2vec and a transformer-based CodeBERT binary classifier. Through hyperparameter optimization (grid and random search) and over/undersampling to correct class imbalance, we improved the CodeBERT model's F1 score and accuracy from 79% to 92%.\n\n" +
+      "This work aims to significantly reduce the manual effort required in mutation testing by automating equivalence detection.",
     images: [
       { src: "/projectImages/AEMI/ASTNN_Flow_Chart.png", caption: "High-level architecture diagram of the Abstract Syntax Tree Neural Network (ASTNN) for mutant classification." },
       { src: "/projectImages/AEMI/ASTNN_Flow_Chart_2.png", caption: "Detailed flow of the ASTNN pipeline for detecting equivalent mutants in source code." },
@@ -354,6 +359,8 @@ export const allProjects: Project[] = [
       "Python",
       "PyTorch",
       "Neural Networks",
+      "CodeBERT",
+      "Hyperparameter Tuning",
       "Java",
       "C++",
       "Over/Undersampling",
@@ -476,22 +483,24 @@ export const allProjects: Project[] = [
   {
     id: 10,
     title: "Frontier Signal Partners Website",
+    shortTitle: "FSP Website",
     description: "Modern single page website for Frontier Signal Partners.",
     longDescription:
-      "Built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and shadcn/ui.",
-    images: [{ src: "/projectImages/FSPSite/FSPHomePage.png", caption: "Homepage of the Frontier Signal Partners professional website built with Next.js 15." }],
+      "Built with Vite, React 19, TypeScript, Tailwind CSS, and Framer Motion.",
+    images: [{ src: "/projectImages/FSPSite/FSPHomePage.png", caption: "Homepage of the Frontier Signal Partners professional website built with Vite and React 19." }],
     category: "Web",
-    technologies: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
+    technologies: ["Vite", "React", "TypeScript", "Tailwind", "Framer Motion"],
     github: "https://github.com/JakeFurtaw",
     live: "https://www.fspx.ai",
         dateInfo: {
-      label: "Built from",
-      value: "Apr 2026 - May 2026",
+      label: "Built in ",
+      value: "April 2026",
     },
   },
   {
     id: 13,
     title: "My Campus Hubs AI Assistant",
+    shortTitle: "Campus Hubs AI",
     description:
       "Campus RAG assistant for Towson students — answers questions about events, classes, and campus resources from a large scraped university knowledge base.",
     longDescription:

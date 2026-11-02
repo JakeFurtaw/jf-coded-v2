@@ -5,6 +5,7 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import CursorGlow from "@/components/ui/cursor-glow";
 import PageTransition from "@/components/PageTransition";
+import MotionProvider from "@/components/MotionProvider";
 import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
@@ -21,7 +22,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Jacob Furtaw | ML Engineer",
-  description: "Machine Learning Engineer | Building intelligent systems that explore the unknown",
+  description: "Agentic AI Engineer | Building intelligent systems that explore the unknown",
   icons: {
     icon: "/favicon.ico",
   },
@@ -37,14 +38,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CursorGlow />
-        <Navbar />
-        <main className="pt-20 min-h-[calc(100vh-5rem)]"> {/* padding to account for fixed navbar */}
-          <PageTransition>
-            {children}
-          </PageTransition>
-        </main>
-        <Footer />
+        <MotionProvider>
+          <CursorGlow />
+          <Navbar />
+          <main className="pt-20 min-h-[calc(100vh-5rem)]"> {/* padding to account for fixed navbar */}
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </main>
+          <Footer />
+        </MotionProvider>
         <Analytics />
       </body>
     </html>

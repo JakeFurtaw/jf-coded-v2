@@ -31,7 +31,7 @@ export default function Navbar() {
             <span className="text-2xl font-bold tracking-tighter bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
               JFCoded
             </span>
-            <p className="text-[10px] text-cyan-400/70 -mt-1 tracking-[3px]">EXPLORING THE UNKNOWN OF AI</p>
+            <p className="mt-0.5 text-[11px] font-medium leading-none tracking-[0.16em] text-cyan-300/85 sm:text-xs">EXPLORING THE UNKNOWN OF AI</p>
           </div>
         </Link>
 

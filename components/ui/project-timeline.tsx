@@ -6,35 +6,51 @@ import { motion } from "framer-motion";
 import type { Project } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
-const PAD_PCT = 8;
-const BAR_PX = 8;
-const LANE_STEP = 22;
-const SPINE_INSET = 14;
-const HIT_WIDTH = 26;
 const MONTH = 1 / 12;
+/** Narrow bars (1–2 month projects) never render thinner than this. */
+const MIN_BAR = "6px";
 
 const MONTH_ABBR = [
-  "jan",
-  "feb",
-  "mar",
-  "apr",
-  "may",
-  "jun",
-  "jul",
-  "aug",
-  "sep",
-  "oct",
-  "nov",
-  "dec",
+  "jan", "feb", "mar", "apr", "may", "jun",
+  "jul", "aug", "sep", "oct", "nov", "dec",
 ] as const;
+
+/**
+ * Category hues, validated (dataviz validate_palette.js, dark mode, surface #0a0a0f):
+ * lightness band, chroma, CVD separation (deutan ΔE 12.6), and contrast all pass.
+ * `strong` is the brighter emphasis step used for the highlighted row only.
+ */
+const TONE = {
+  "AI/ML": {
+    base: "bg-[#0aa5c4]",
+    strong: "bg-[#22d3ee]",
+    glow: "shadow-[0_0_10px_rgba(34,211,238,0.55)]",
+  },
+  Web: {
+    base: "bg-[#a855f7]",
+    strong: "bg-[#c084fc]",
+    glow: "shadow-[0_0_10px_rgba(192,132,252,0.55)]",
+  },
+} as const;
+
+const LAYOUT = {
+  rail: {
+    cols: "grid-cols-[6rem_minmax(0,1fr)] xl:grid-cols-[7rem_minmax(0,1fr)]",
+    row: "h-7",
+    label: "text-[11px] xl:text-xs",
+  },
+  inline: {
+    cols: "grid-cols-[7.5rem_minmax(0,1fr)] sm:grid-cols-[10rem_minmax(0,1fr)]",
+    row: "h-9",
+    label: "text-xs sm:text-[13px]",
+  },
+} as const;
 
 interface Span {
   project: Project;
   start: number;
   end: number;
   ongoing: boolean;
-  point: boolean;
-  lane: number;
 }
 
 function monthFromName(name: string): number | null {
@@ -51,390 +67,208 @@ function nowFraction(): number {
   return toFraction(n.getFullYear(), n.getMonth(), n.getDate());
 }
 
+/** Parses dateInfo values like "Aug 2024 - May 2025", "May 2026 - Present", "April 2026". */
 function parseProjectDates(
   value: string,
   nowT: number,
-): { start: number; end: number; ongoing: boolean; point: boolean } | null {
+): { start: number; end: number; ongoing: boolean } | null {
   const text = value.trim();
   if (!text) return null;
 
   const ongoing = /\bpresent\b/i.test(text);
   const pairs: { month: number; year: number }[] = [];
-  const re = /\b([A-Za-z]+)\s+((?:19|20)\d{2})\b/g;
-  for (const match of text.matchAll(re)) {
+  for (const match of text.matchAll(/\b([A-Za-z]+)\s+((?:19|20)\d{2})\b/g)) {
     const month = monthFromName(match[1]);
     if (month !== null) pairs.push({ month, year: Number(match[2]) });
   }
 
-  const tOf = (p: { month: number; year: number }) => toFraction(p.year, p.month);
-
   if (pairs.length >= 1) {
-    const start = tOf(pairs[0]);
-    const point = pairs.length === 1 && !ongoing;
+    const start = toFraction(pairs[0].year, pairs[0].month);
     let end: number;
     if (ongoing) end = Math.max(nowT, start + MONTH);
-    else if (pairs.length >= 2) end = tOf(pairs[1]) + MONTH;
+    else if (pairs.length >= 2) end = toFraction(pairs[1].year, pairs[1].month) + MONTH;
     else end = start + MONTH;
-    if (end <= start) end = start + MONTH;
-    return { start, end, ongoing, point };
+    return { start, end: Math.max(end, start + MONTH), ongoing };
   }
 
   const years = [...text.matchAll(/\b((?:19|20)\d{2})\b/g)].map((x) => Number(x[1]));
-  if (years.length === 1) {
-    return { start: years[0], end: years[0] + 1, ongoing, point: false };
-  }
-  if (years.length >= 2) {
-    const lo = Math.min(years[0], years[1]);
-    const hi = Math.max(years[0], years[1]);
-    return { start: lo, end: hi + 1, ongoing, point: false };
-  }
-  return null;
-}
-
-function assignLanes(items: Omit<Span, "lane">[]): Span[] {
-  const sorted = [...items].sort(
-    (a, b) => a.start - b.start || b.end - b.start - (a.end - a.start),
-  );
-  const laneEnds: number[] = [];
-  return sorted.map((item) => {
-    let lane = laneEnds.findIndex((end) => item.start >= end);
-    if (lane === -1) {
-      lane = laneEnds.length;
-      laneEnds.push(item.end);
-    } else {
-      laneEnds[lane] = item.end;
-    }
-    return { ...item, lane };
-  });
-}
-
-function formatShort(t: number): string {
-  const year = Math.floor(t);
-  const month = Math.min(11, Math.round((t - year) * 12));
-  return `${MONTH_ABBR[month]} '${String(year).slice(2)}`;
-}
-
-function endLabel(span: Span): string {
-  if (span.ongoing) return "now";
-  return formatShort(span.end - MONTH);
-}
-
-/** Map time to vertical %; empty stretches compress so busy years get more room. */
-function makeScale(
-  spans: { start: number; end: number }[],
-  startT: number,
-  endT: number,
-): (t: number) => number {
-  const linear = (t: number) =>
-    PAD_PCT + ((t - startT) / Math.max(endT - startT, 0.01)) * (100 - PAD_PCT * 2);
-
-  const step = MONTH / 2;
-  const samples: { t: number; w: number }[] = [];
-  for (let t = startT; t <= endT + 1e-9; t += step) {
-    let hits = 0;
-    for (const s of spans) {
-      if (t >= s.start && t < s.end) hits += 1;
-    }
-    samples.push({ t, w: hits > 0 ? 1 + (hits - 1) * 0.22 : 0.34 });
-  }
-  if (samples.length < 2) return linear;
-
-  const cum = new Array<number>(samples.length);
-  cum[0] = 0;
-  for (let i = 1; i < samples.length; i++) {
-    cum[i] = cum[i - 1] + (samples[i - 1].w + samples[i].w) / 2;
-  }
-  const total = cum[cum.length - 1] || 1;
-
-  return (t: number) => {
-    const clamped = Math.min(endT, Math.max(startT, t));
-    let lo = 0;
-    let hi = samples.length - 1;
-    while (lo < hi) {
-      const mid = (lo + hi + 1) >> 1;
-      if (samples[mid].t <= clamped) lo = mid;
-      else hi = mid - 1;
-    }
-    const i = Math.min(lo, samples.length - 2);
-    const t0 = samples[i].t;
-    const t1 = samples[i + 1].t;
-    const u = t1 === t0 ? 0 : (clamped - t0) / (t1 - t0);
-    const c = cum[i] + u * (cum[i + 1] - cum[i]);
-    return PAD_PCT + (c / total) * (100 - PAD_PCT * 2);
-  };
+  if (years.length === 0) return null;
+  const lo = Math.min(...years);
+  const hi = Math.max(...years);
+  return { start: lo, end: hi + 1, ongoing };
 }
 
 export function ProjectTimeline({
   projects,
-  selectedId,
+  selectedId = null,
+  highlightedId = null,
   activeIds,
+  onHighlight,
   onSelect,
+  variant = "rail",
+  className,
 }: {
   projects: Project[];
-  selectedId: number | null;
+  selectedId?: number | null;
+  /** Project highlighted elsewhere on the page (e.g. its card is hovered). */
+  highlightedId?: number | null;
+  /** Projects matching the current filter; others are muted. */
   activeIds?: number[];
+  onHighlight?: (id: number | null) => void;
   onSelect: (project: Project) => void;
+  variant?: "rail" | "inline";
+  className?: string;
 }) {
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
-  const [tooltipAnchor, setTooltipAnchor] = useState<{
-    top: number;
-    left: number;
-    height: number;
-  } | null>(null);
+  const [tip, setTip] = useState<{ span: Span; rect: DOMRect } | null>(null);
+  const L = LAYOUT[variant];
 
-  const model = useMemo(() => {
+  const { spans, years, x } = useMemo(() => {
     const nowT = nowFraction();
-    const raw: Omit<Span, "lane">[] = [];
+    const parsed: Span[] = [];
     for (const project of projects) {
-      const parsed = parseProjectDates(project.dateInfo?.value ?? "", nowT);
-      if (parsed) raw.push({ project, ...parsed });
+      const d = parseProjectDates(project.dateInfo?.value ?? "", nowT);
+      if (d) parsed.push({ project, ...d });
     }
-    if (raw.length === 0) {
-      return {
-        spans: [] as Span[],
-        nowT,
-        years: [] as number[],
-        posPct: (t: number) => t,
-      };
-    }
+    // Newest first: ongoing work, then by most recent end date.
+    parsed.sort(
+      (a, b) => Number(b.ongoing) - Number(a.ongoing) || b.end - a.end || b.start - a.start,
+    );
 
-    const minStart = raw.reduce((m, s) => Math.min(m, s.start), Infinity);
-    const maxEnd = raw.reduce((m, s) => Math.max(m, s.end), -Infinity);
-    const startT = Math.floor(minStart);
-    const endT = Math.max(nowT, maxEnd) + 0.22;
-    const spans = assignLanes(raw);
-    const lastYear = Math.floor(Math.max(nowT, maxEnd));
-    const years: number[] = [];
-    for (let y = startT; y <= lastYear; y += 1) years.push(y);
-    const posPct = makeScale(spans, startT, endT);
+    const startT = parsed.length ? Math.floor(Math.min(...parsed.map((s) => s.start))) : 0;
+    const endT = Math.max(nowT, ...parsed.map((s) => s.end)) + 0.1;
+    const yearList: number[] = [];
+    for (let y = startT; y <= Math.floor(endT); y += 1) yearList.push(y);
+    const scale = (t: number) =>
+      ((Math.min(endT, Math.max(startT, t)) - startT) / Math.max(endT - startT, 0.01)) * 100;
 
-    return { spans, nowT, years, posPct };
+    return { spans: parsed, years: yearList, x: scale };
   }, [projects]);
 
-  const { spans, nowT, years, posPct } = model;
-  const activeSet = activeIds && activeIds.length > 0 ? new Set(activeIds) : null;
-  const focusId = hoveredId ?? selectedId;
-  const hovered = spans.find((s) => s.project.id === hoveredId) ?? null;
+  const activeSet = activeIds ? new Set(activeIds) : null;
+
+  const showTip = (span: Span, el: HTMLElement) =>
+    setTip({ span, rect: el.getBoundingClientRect() });
+  const clear = () => {
+    onHighlight?.(null);
+    setTip(null);
+  };
+
+  if (spans.length === 0) return null;
 
   return (
-    <div
-      className="relative h-[72vh] w-full select-none overflow-visible"
-      style={{ minHeight: 440 }}
-      aria-label="Project timeline by duration"
-    >
-      <div className="pointer-events-none absolute top-0 left-0 right-1 flex items-center justify-end gap-3 pr-1 font-mono text-[8px] uppercase tracking-[0.16em] text-white/30">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-3 w-[3px] rounded-full bg-cyan-400/55" />
-          duration
+    <div className={cn("w-full select-none", className)} role="group" aria-label="Project timeline">
+      {/* Header + legend */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-1.5">
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/55">
+          Timeline
         </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rotate-45 bg-white/40" />
-          month
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
-          live
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/55">
+          <LegendBar className={TONE["AI/ML"].base} label="AI/ML" />
+          <LegendBar className={TONE.Web.base} label="Web" />
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-[#22d3ee]" />
+            Ongoing
+          </span>
+        </div>
+      </div>
+
+      {/* Year axis */}
+      <div className={cn("grid gap-x-3 px-1.5 pb-1", L.cols)} aria-hidden>
+        <span />
+        <span className="relative h-4">
+          {years.map((y) => (
+            <span
+              key={y}
+              className="absolute top-0 pl-1 font-mono text-[10px] leading-4 text-white/40"
+              style={{ left: `${x(y)}%` }}
+            >
+              &apos;{String(y).slice(2)}
+            </span>
+          ))}
         </span>
       </div>
 
-      {years.map((year) => (
-        <div
-          key={`year-${year}`}
-          className="pointer-events-none absolute left-0 right-0"
-          style={{ top: `${posPct(year)}%` }}
-        >
-          <div className="flex items-center gap-2">
-            <span
+      {/* Rows */}
+      <div className="flex flex-col">
+        {spans.map((span) => {
+          const { project, start, end, ongoing } = span;
+          const tone = TONE[project.category];
+          const isHi = highlightedId === project.id || selectedId === project.id;
+          const isMuted = activeSet !== null && !activeSet.has(project.id) && !isHi;
+          const left = x(start);
+          const width = x(end) - left;
+
+          return (
+            <button
+              key={project.id}
+              type="button"
+              onClick={() => onSelect(project)}
+              onPointerEnter={(e) => {
+                onHighlight?.(project.id);
+                if (e.pointerType === "mouse") showTip(span, e.currentTarget);
+              }}
+              onPointerLeave={clear}
+              onFocus={(e) => {
+                onHighlight?.(project.id);
+                // Keyboard focus only; a tap also focuses the button and would strand the tooltip.
+                if (e.currentTarget.matches(":focus-visible")) showTip(span, e.currentTarget);
+              }}
+              onBlur={clear}
+              aria-label={`${project.title}, ${project.dateInfo?.value ?? "date unknown"}. Jump to project.`}
               className={cn(
-                "w-10 shrink-0 font-mono text-[10px] tracking-widest",
-                year === Math.floor(nowT) ? "text-cyan-400/90" : "text-white/35",
+                "grid w-full items-center gap-x-3 rounded-md px-1.5 text-left outline-none transition-[background-color,opacity] duration-200 touch-manipulation focus-visible:ring-1 focus-visible:ring-cyan-400/60",
+                L.cols,
+                L.row,
+                isHi ? "bg-white/[0.07]" : "hover:bg-white/[0.04]",
+                isMuted && "opacity-35",
               )}
             >
-              {year}
-            </span>
-            <div className="h-px flex-1 bg-white/[0.07]" />
-          </div>
-        </div>
-      ))}
-
-      <div
-        className="pointer-events-none absolute left-0 right-0 z-20"
-        style={{ top: `${posPct(nowT)}%` }}
-      >
-        <div className="flex items-center gap-2 pl-10">
-          <span className="rounded-sm bg-[#0a0a0f]/90 px-1 font-mono text-[9px] font-medium uppercase tracking-[0.18em] text-cyan-400">
-            now
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/70 to-cyan-400/15" />
-        </div>
-      </div>
-
-      {hovered && (
-        <>
-          <RangeGuide top={posPct(hovered.start)} label={formatShort(hovered.start)} />
-          {!hovered.point && (
-            <RangeGuide top={posPct(hovered.end)} label={endLabel(hovered)} accent={hovered.ongoing} />
-          )}
-        </>
-      )}
-
-      <div className="pointer-events-none absolute inset-y-0 right-1 w-px bg-gradient-to-b from-transparent via-cyan-400/30 to-cyan-400/55" />
-
-      {spans.map((span) => {
-        const { project, start, end, ongoing, point, lane } = span;
-        const isSelected = selectedId === project.id;
-        const isFocus = focusId === project.id;
-        const isDimmed =
-          (focusId !== null && !isFocus) ||
-          (activeSet !== null && !activeSet.has(project.id) && !isFocus);
-        const isWeb = project.category === "Web";
-        const top = posPct(start);
-        const height = Math.max(posPct(end) - posPct(start), 1.8);
-        const right = SPINE_INSET + lane * LANE_STEP;
-
-        const tone = isWeb
-          ? {
-              bar: "from-violet-300/90 via-fuchsia-400/55 to-violet-400/30",
-              fill: "bg-violet-300",
-              border: "border-violet-200/80",
-              glow: "shadow-[0_0_12px_rgba(192,132,252,0.55)]",
-            }
-          : {
-              bar: "from-cyan-200/95 via-cyan-400/60 to-cyan-400/25",
-              fill: "bg-cyan-300",
-              border: "border-cyan-200/80",
-              glow: "shadow-[0_0_12px_rgba(34,211,238,0.55)]",
-            };
-
-        return (
-          <button
-            key={project.id}
-            type="button"
-            onClick={() => onSelect(project)}
-            onMouseEnter={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setHoveredId(project.id);
-              setTooltipAnchor({ top: rect.top, left: rect.right, height: rect.height });
-            }}
-            onMouseLeave={() => {
-              setHoveredId(null);
-              setTooltipAnchor(null);
-            }}
-            onFocus={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setHoveredId(project.id);
-              setTooltipAnchor({ top: rect.top, left: rect.right, height: rect.height });
-            }}
-            onBlur={() => {
-              setHoveredId(null);
-              setTooltipAnchor(null);
-            }}
-            aria-label={`${project.title}, ${project.dateInfo?.value ?? "date unknown"}`}
-            aria-current={isSelected ? "true" : undefined}
-            className={cn(
-              "group absolute z-10 touch-manipulation outline-none transition-opacity duration-200 focus-visible:z-30",
-              isDimmed && "opacity-20",
-            )}
-            style={{
-              top: `${top}%`,
-              height: point ? HIT_WIDTH : `${height}%`,
-              right: right - (HIT_WIDTH - BAR_PX) / 2,
-              width: HIT_WIDTH,
-              marginTop: point ? -HIT_WIDTH / 2 : 0,
-            }}
-          >
-            {point ? (
               <span
                 className={cn(
-                  "absolute left-1/2 top-1/2 block h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[2px] border transition-all duration-200",
-                  isFocus || isSelected
-                    ? cn(tone.fill, tone.border, tone.glow, "scale-125")
-                    : cn(
-                        "group-hover:scale-110",
-                        isWeb
-                          ? "border-violet-300/55 bg-violet-300/45 group-hover:border-violet-200 group-hover:bg-violet-300"
-                          : "border-white/40 bg-white/35 group-hover:border-cyan-200 group-hover:bg-cyan-400",
-                      ),
+                  "truncate transition-colors duration-200",
+                  L.label,
+                  isHi ? "text-white" : "text-white/65",
                 )}
-              />
-            ) : (
-              <span className="absolute inset-y-0 left-1/2 w-2 -translate-x-1/2">
+              >
+                {project.shortTitle ?? project.title}
+              </span>
+
+              <span className="relative h-full" aria-hidden>
+                {/* Year gridlines (rows stack flush, so these read as continuous lines) */}
+                {years.map((y) => (
+                  <span
+                    key={y}
+                    className="absolute inset-y-0 w-px bg-white/[0.06]"
+                    style={{ left: `${x(y)}%` }}
+                  />
+                ))}
                 <span
                   className={cn(
-                    "absolute inset-0 rounded-full bg-gradient-to-b transition-all duration-200",
-                    tone.bar,
-                    isFocus || isSelected ? cn("opacity-100", tone.glow) : "opacity-85",
+                    "absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full transition-[background-color,box-shadow] duration-200",
+                    isHi ? cn(tone.strong, tone.glow) : tone.base,
                   )}
+                  style={{ left: `${left}%`, width: `max(${MIN_BAR}, ${width}%)` }}
                 />
-                <span
-                  className={cn(
-                    "absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border",
-                    isFocus || isSelected
-                      ? cn(tone.fill, tone.border)
-                      : "border-white/50 bg-white",
-                  )}
-                />
-                {ongoing ? (
+                {ongoing && (
                   <motion.span
                     className={cn(
-                      "absolute bottom-0 left-1/2 h-2 w-2 -translate-x-1/2 translate-y-1/2 rounded-full",
-                      tone.fill,
+                      "absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-[#0a0a0f]",
+                      tone.strong,
                     )}
-                    animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+                    style={{ left: `${x(end)}%` }}
+                    animate={{ scale: [1, 1.35, 1], opacity: [1, 0.6, 1] }}
                     transition={{ duration: 2.1, repeat: Infinity, ease: "easeInOut" }}
                   />
-                ) : (
-                  <span
-                    className={cn(
-                      "absolute bottom-0 left-1/2 h-[5px] w-[5px] -translate-x-1/2 translate-y-1/2 rounded-full",
-                      isFocus || isSelected ? tone.fill : "bg-white/60",
-                    )}
-                  />
                 )}
               </span>
-            )}
+            </button>
+          );
+        })}
+      </div>
 
-          </button>
-        );
-      })}
-
-      {hovered && tooltipAnchor && typeof document !== "undefined"
+      {tip && typeof document !== "undefined"
         ? createPortal(
-            <div
-              className="pointer-events-none fixed z-[80] w-max max-w-[18rem] rounded-md border border-white/10 bg-[#16161c]/95 px-2.5 py-1.5 text-left shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-md"
-              style={{
-                top:
-                  tooltipAnchor.top > window.innerHeight * 0.72
-                    ? tooltipAnchor.top - 8
-                    : tooltipAnchor.top + tooltipAnchor.height / 2,
-                left: tooltipAnchor.left + 12,
-                transform:
-                  tooltipAnchor.top > window.innerHeight * 0.72
-                    ? "translateY(-100%)"
-                    : "translateY(-50%)",
-              }}
-            >
-              <span className="block text-xs font-medium text-white/90">
-                {hovered.project.title}
-              </span>
-              <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[11px] text-white/45">
-                {hovered.ongoing && (
-                  <span className="inline-flex items-center gap-1 text-cyan-400/90">
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
-                    live
-                  </span>
-                )}
-                {hovered.point && !hovered.ongoing && (
-                  <span className="text-white/35">month</span>
-                )}
-                {!hovered.point && !hovered.ongoing && (
-                  <span className="text-white/35">duration</span>
-                )}
-                {hovered.project.dateInfo?.value ? (
-                  <span>{hovered.project.dateInfo.value}</span>
-                ) : null}
-              </span>
-            </div>,
+            <TimelineTooltip span={tip.span} rect={tip.rect} placement={variant === "rail" ? "right" : "above"} />,
             document.body,
           )
         : null}
@@ -442,36 +276,47 @@ export function ProjectTimeline({
   );
 }
 
-function RangeGuide({
-  top,
-  label,
-  accent = false,
+function LegendBar({ className, label }: { className: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className={cn("h-1.5 w-3.5 rounded-full", className)} />
+      {label}
+    </span>
+  );
+}
+
+function TimelineTooltip({
+  span,
+  rect,
+  placement,
 }: {
-  top: number;
-  label: string;
-  accent?: boolean;
+  span: Span;
+  rect: DOMRect;
+  placement: "right" | "above";
 }) {
+  const { project, ongoing } = span;
+  const style =
+    placement === "right"
+      ? { top: rect.top + rect.height / 2, left: rect.right + 12, transform: "translateY(-50%)" }
+      : { top: rect.top - 8, left: rect.left + rect.width / 2, transform: "translate(-50%, -100%)" };
+
   return (
     <div
-      className="pointer-events-none absolute right-3 left-10 z-30"
-      style={{ top: `${top}%` }}
+      className="pointer-events-none fixed z-[80] w-max max-w-[18rem] rounded-md border border-white/10 bg-[#16161c]/95 px-3 py-2 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-md"
+      style={style}
     >
-      <div className="flex -translate-y-1/2 items-center gap-2">
-        <span
-          className={cn(
-            "rounded-sm bg-[#0a0a0f]/85 px-1 font-mono text-[9px] uppercase tracking-wider",
-            accent ? "text-cyan-400" : "text-white/75",
-          )}
-        >
-          {label}
-        </span>
-        <div
-          className={cn(
-            "h-px flex-1 border-t border-dashed",
-            accent ? "border-cyan-400/50" : "border-white/30",
-          )}
-        />
-      </div>
+      <span className="block text-xs font-medium text-white/90">{project.title}</span>
+      <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-white/55">
+        <span>{project.category}</span>
+        <span className="text-white/25">·</span>
+        <span>{project.dateInfo?.value.trim()}</span>
+        {ongoing && (
+          <span className="inline-flex items-center gap-1 text-cyan-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+            ongoing
+          </span>
+        )}
+      </span>
     </div>
   );
 }

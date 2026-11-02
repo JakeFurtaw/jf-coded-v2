@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ExternalLink, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { ExternalLink, X, ChevronLeft, ChevronRight, ChevronDown, Maximize2 } from "lucide-react";
 import { FaGithub } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +32,15 @@ export default function ProjectsPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  // Timeline <-> card linking
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [flashId, setFlashId] = useState<number | null>(null);
+  const [isTimelineOpen, setIsTimelineOpen] = useState(false);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+  }, []);
+
   // Track recent drag to prevent lightbox from opening after swipe
   const dragJustEndedRef = useRef(false);
 
@@ -53,6 +62,20 @@ export default function ProjectsPage() {
 
   const previousProject = currentIndexInFiltered > 0 ? filteredProjects[currentIndexInFiltered - 1] : null;
   const nextProject = currentIndexInFiltered < filteredProjects.length - 1 ? filteredProjects[currentIndexInFiltered + 1] : null;
+
+  // Timeline row click: scroll to the card and flash it; open the modal if the card is filtered out.
+  const handleTimelineSelect = (project: Project) => {
+    const card = document.getElementById(`project-card-${project.id}`);
+    if (!card || !filteredProjects.some((p) => p.id === project.id)) {
+      setSelectedProject(project);
+      setCurrentImageIndex(0);
+      return;
+    }
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    setFlashId(project.id);
+    if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    flashTimerRef.current = setTimeout(() => setFlashId(null), 1600);
+  };
 
   const goToProject = (project: Project) => {
     setSelectedProject(project);
@@ -114,16 +137,17 @@ export default function ProjectsPage() {
     <div className="min-h-screen pb-24 bg-space-bg">
       <div className="mx-auto flex max-w-[80rem] gap-8 px-6 pt-16 xl:max-w-[96rem]">
         {/* Left timeline rail */}
-        <aside className="relative z-20 hidden w-56 flex-shrink-0 overflow-visible lg:block">
+        <aside className="relative z-20 hidden w-60 flex-shrink-0 overflow-visible lg:block xl:w-72 2xl:w-80">
           <div className="sticky top-0 flex h-screen items-center overflow-visible">
             <ProjectTimeline
+              variant="rail"
+              className="glass rounded-2xl border border-white/10 p-3"
               projects={projects}
               selectedId={selectedProject?.id ?? null}
+              highlightedId={hoveredId ?? flashId}
               activeIds={filteredProjects.map((p) => p.id)}
-              onSelect={(p) => {
-                setSelectedProject(p);
-                setCurrentImageIndex(0);
-              }}
+              onHighlight={setHoveredId}
+              onSelect={handleTimelineSelect}
             />
           </div>
         </aside>
@@ -188,10 +212,52 @@ export default function ProjectsPage() {
           </AnimatePresence>
         </div>
 
+        {/* Timeline (below lg; the sticky rail takes over on large screens) */}
+        <div className="mx-auto mb-10 max-w-2xl lg:hidden">
+          <button
+            type="button"
+            onClick={() => setIsTimelineOpen((open) => !open)}
+            aria-expanded={isTimelineOpen}
+            aria-controls="mobile-project-timeline"
+            className="glass flex w-full items-center justify-between rounded-2xl border border-white/10 px-5 py-3.5 text-left transition-colors active:border-cyan-400/40 touch-manipulation"
+          >
+            <span className="font-medium tracking-tight">
+              Project timeline
+              <span className="ml-2 text-sm text-white/45">{projects.length} projects</span>
+            </span>
+            <ChevronDown
+              size={18}
+              className={`text-cyan-400 transition-transform duration-200 ${isTimelineOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+          <AnimatePresence initial={false}>
+            {isTimelineOpen && (
+              <motion.div
+                id="mobile-project-timeline"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="overflow-hidden"
+              >
+                <ProjectTimeline
+                  variant="inline"
+                  className="glass mt-3 rounded-2xl border border-white/10 p-3 sm:p-4"
+                  projects={projects}
+                  highlightedId={hoveredId ?? flashId}
+                  activeIds={filteredProjects.map((p) => p.id)}
+                  onHighlight={setHoveredId}
+                  onSelect={handleTimelineSelect}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
         {/* Projects Grid - unchanged except for image placeholder */}
         <motion.div 
           layout 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
         >
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => (
@@ -207,10 +273,19 @@ export default function ProjectsPage() {
                   scale: 1.01,
                   transition: { duration: 0.2, ease: "easeOut" }
                 }}
-                className="group"
+                id={`project-card-${project.id}`}
+                onMouseEnter={() => setHoveredId(project.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                className="group scroll-mt-24"
               >
-              <Card 
-                className="glass h-full overflow-hidden border border-white/10 cursor-pointer transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 touch-manipulation"
+              <Card
+                className={`glass h-full overflow-hidden border cursor-pointer transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 touch-manipulation ${
+                  flashId === project.id
+                    ? "border-cyan-400/70 ring-2 ring-cyan-400/40"
+                    : hoveredId === project.id
+                      ? "border-cyan-400/40"
+                      : "border-white/10"
+                }`}
                 onClick={() => {
                   setSelectedProject(project);
                   setCurrentImageIndex(0);

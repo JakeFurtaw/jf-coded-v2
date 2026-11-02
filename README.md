@@ -1,6 +1,6 @@
 # JFCoded
 
-Personal portfolio and virtual resume — **Jacob Furtaw**, Machine Learning Engineer.
+Personal portfolio and virtual resume — **Jacob Furtaw**, Agentic AI Engineer.
 
 ![JFCoded homepage](assets/home.png)
 

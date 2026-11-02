@@ -24,7 +24,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-1 text-sm text-white/50 max-w-[240px]">
-              Machine Learning Engineer exploring the unknown of AI.
+              Agentic AI Engineer exploring the unknown of AI.
             </p>
           </div>
 

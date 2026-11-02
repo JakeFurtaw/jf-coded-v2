@@ -27,7 +27,7 @@ export default function Home() {
           className="mb-6"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/5 text-cyan-400 text-sm tracking-[2px]">
-            🚀 MACHINE LEARNING ENGINEER
+            🚀 AGENTIC AI ENGINEER
           </div>
         </motion.div>
 
@@ -117,7 +117,7 @@ export default function Home() {
             const isLarge = index === 0;
             const project = {
               title: p.title,
-              desc: isLarge ? p.longDescription : p.description,
+              desc: p.description,
               tech: p.technologies,
               image: p.images?.[0]?.src ?? null,
               link: p.caseStudy ? `/projects/${p.id}` : "/projects",
@@ -135,7 +135,7 @@ export default function Home() {
                 className={`group ${project.size === 'large' ? 'md:col-span-2 md:row-span-2' : 'md:col-span-1'}`}
               >
                 <Card className="glass h-full overflow-hidden border border-white/10 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 rounded-3xl flex flex-col touch-manipulation">
-                  <div className={`relative ${project.size === 'large' ? 'h-64 md:h-80 lg:h-[400px]' : 'h-52'} bg-gradient-to-br from-cyan-900/50 to-purple-900/40 flex items-center justify-center border-b border-white/10 overflow-hidden`}>
+                  <div className={`relative ${project.size === 'large' ? 'h-64 md:h-auto md:min-h-[400px] md:flex-1' : 'h-52'} bg-gradient-to-br from-cyan-900/50 to-purple-900/40 flex items-center justify-center border-b border-white/10 overflow-hidden`}>
                     {project.image ? (
                       <>
                         <Image
@@ -152,7 +152,7 @@ export default function Home() {
                       <span className="text-6xl opacity-40 transition-transform duration-300 group-hover:scale-110">🧠</span>
                     )}
                   </div>
-                  <div className="p-6 flex flex-col flex-grow">
+                  <div className={`p-6 flex flex-col ${project.size === 'large' ? '' : 'flex-grow'}`}>
                     <h3 className={`font-semibold mb-3 text-white transition-all duration-200 group-hover:text-cyan-400 group-hover:tracking-[-0.02em] ${project.size === 'large' ? 'text-3xl' : 'text-2xl'}`}>
                       {project.title}
                     </h3>
@@ -162,15 +162,12 @@ export default function Home() {
                       {project.desc}
                     </p>
                     <div className="mt-auto">
-                      <div className={`flex flex-wrap mb-8 ${project.size === 'large' ? 'gap-4' : 'gap-2'}`}>
-                        {project.tech.slice(0, project.size === 'large' ? 15 : 6).map((t) => (
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {project.tech.slice(0, project.size === 'large' ? 8 : 6).map((t) => (
                           <Badge
                             key={t}
-                            className={`bg-white/10 text-cyan-300 border border-white/10 transition-all duration-200 group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200
-                              ${project.size === 'large'
-                                ? 'text-sm md:text-base px-4 md:px-6 py-1.5 md:py-2.5 font-bold tracking-wider shadow-lg shadow-cyan-500/10'
-                                : 'text-xs px-3 py-1 font-medium'
-                              }`}
+                            className={`bg-white/10 text-cyan-300 border border-white/10 font-medium transition-all duration-200 group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200
+                              ${project.size === 'large' ? 'text-sm px-3.5 py-1' : 'text-xs px-3 py-1'}`}
                           >
                             {t}
                           </Badge>
@@ -180,7 +177,7 @@ export default function Home() {
                         variant="outline"
                         size={project.size === 'large' ? "lg" : "sm"}
                         className={`w-full border-white/20 group-hover:border-cyan-400 group-hover:text-cyan-400 transition-all 
-                          ${project.size === 'large' ? 'py-5 md:py-7 text-lg md:text-xl font-bold' : ''}`}
+                          ${project.size === 'large' ? 'text-base font-semibold' : ''}`}
                         asChild
                       >
                         <a href={project.link}>{project.label}</a>
