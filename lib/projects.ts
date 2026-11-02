@@ -279,6 +279,7 @@ export const allProjects: Project[] = [
       "pytest",
     ],
     github: "https://github.com/JakeFurtaw/Dossier",
+    caseStudy: true,
     dateInfo: {
       label: "In active development since ",
       value: "August 2026 - Present",
@@ -541,7 +542,7 @@ export const allProjects: Project[] = [
 ];
 
 // Curated featured projects for the homepage (order matters)
-export const featuredProjectIds = [1, 2, 3] as const;
+export const featuredProjectIds = [1, 12, 2] as const;
 
 export function getFeaturedProjects() {
   return featuredProjectIds

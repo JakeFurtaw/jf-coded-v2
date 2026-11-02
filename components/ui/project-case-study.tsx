@@ -17,6 +17,11 @@ import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/lib/projects";
+import { architectures } from "@/lib/architectures";
+import { ArchitectureDiagram } from "@/components/ui/architecture-diagram";
+import { DossierReplay } from "@/components/ui/dossier-replay";
+
+const DOSSIER_ID = 12;
 
 const storyBlocks: Array<{
   key: "role" | "context" | "challenges" | "approach" | "learnings" | "impact";
@@ -190,6 +195,27 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
               ))}
           </div>
         </section>
+
+        {/* Architecture */}
+        {architectures[project.id] && (
+          <section className="mt-16">
+            <SectionHeading>Architecture</SectionHeading>
+            <ArchitectureDiagram spec={architectures[project.id]} />
+          </section>
+        )}
+
+        {/* Live replay of a recorded run (Dossier) */}
+        {project.id === DOSSIER_ID && (
+          <section className="mt-16">
+            <SectionHeading>Watch It Run</SectionHeading>
+            <p className="text-base md:text-lg leading-relaxed text-white/55 max-w-3xl mb-8">
+              A replay of a real local run, rebuilt from its saved trace: the planner fans out three researchers, an
+              evaluator fails one and it is retried, a follow-up researcher closes the gap, and the citation audit
+              checks every source in the final answer.
+            </p>
+            <DossierReplay />
+          </section>
+        )}
 
         {/* The Build */}
         {project.story && (
