@@ -14,13 +14,11 @@ const socialIconClass =
 
 /**
  * Homepage credibility strip. Every figure is backed by a source; update them here.
- * - 15K+: SurgePoint / My Campus Hubs assistant (resume, lib/projects.ts)
  * - 460+: Cloak AI test suite (204 Python + ~260 TypeScript tests)
  * - 25+: Chat RAG GitHub stars (26 as of Nov 2026)
  * - 3+ yrs: building with LLMs since Aug 2023
  */
 const credibility = [
-  { value: "15K+", label: "Students served by a production RAG assistant" },
   { value: "460+", label: "Automated tests on Cloak AI" },
   { value: "25+", label: "GitHub stars on Chat RAG" },
   { value: "3+ yrs", label: "Shipping LLM systems" },
@@ -110,19 +108,17 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.45 }}
-          className="glass mt-12 grid w-full max-w-4xl grid-cols-2 overflow-hidden rounded-2xl border border-white/10 md:grid-cols-4"
+          className="glass mt-12 grid w-full max-w-3xl grid-cols-3 overflow-hidden rounded-2xl border border-white/10"
         >
           {credibility.map((stat, i) => (
             <div
               key={stat.label}
-              className={`flex flex-col-reverse items-center justify-end gap-1 px-4 py-5 text-center md:py-6 ${
-                i % 2 === 1 ? "border-l border-white/10" : ""
-              } ${i >= 2 ? "border-t border-white/10 md:border-t-0" : ""} ${
-                i === 2 ? "md:border-l md:border-white/10" : ""
+              className={`flex flex-col-reverse items-center justify-end gap-1 px-2 py-5 text-center sm:px-4 md:py-6 ${
+                i > 0 ? "border-l border-white/10" : ""
               }`}
             >
               <dt className="text-xs leading-snug text-white/55 md:text-sm">{stat.label}</dt>
-              <dd className="text-3xl font-semibold tracking-tight text-white md:text-4xl">{stat.value}</dd>
+              <dd className="text-2xl font-semibold tracking-tight text-white sm:text-3xl md:text-4xl">{stat.value}</dd>
             </div>
           ))}
         </motion.dl>
