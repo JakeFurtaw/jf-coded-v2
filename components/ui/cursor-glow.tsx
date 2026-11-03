@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 /** Diameter of the glow in px. The gradient fades to transparent inside this box, so no edges show. */
-const GLOW_SIZE = 480;
+const GLOW_SIZE = 300;
 
 export default function CursorGlow() {
   const mouseX = useMotionValue(0);
