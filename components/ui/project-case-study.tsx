@@ -17,8 +17,6 @@ import { architectures } from "@/lib/architectures";
 import { ArchitectureDiagram } from "@/components/ui/architecture-diagram";
 import { DossierReplay } from "@/components/ui/dossier-replay";
 
-const DOSSIER_ID = 12;
-
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-center gap-4 mb-8">
@@ -34,6 +32,7 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
   const images = project.images ?? [];
   const { index: imageIndex, setIndex: setImageIndex, next: nextImage, prev: prevImage } = useImageCarousel(images.length);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const architecture = architectures[project.id];
 
   const openLightbox = (index: number) => {
     setImageIndex(index);
@@ -60,11 +59,11 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
           className="mt-8"
         >
           <div className="flex flex-wrap items-center gap-2 mb-6">
-            <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-3 py-1 text-sm">
+            <Badge variant="category" className="text-sm">
               {project.category}
             </Badge>
             {project.subCategory?.map((s) => (
-              <Badge key={s} className="bg-white/5 text-white/60 border-white/10 px-3 py-1 text-sm">
+              <Badge key={s} variant="muted" className="text-sm">
                 {s}
               </Badge>
             ))}
@@ -95,7 +94,7 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
                 </Button>
               )}
               {project.live && (
-                <Button className="bg-cyan-400 text-black hover:bg-cyan-300" asChild>
+                <Button asChild>
                   <a href={project.live} target="_blank" rel="noreferrer">
                     <ExternalLink className="w-4 h-4 mr-2" /> Live Demo
                   </a>
@@ -150,21 +149,19 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
         </section>
 
         {/* Architecture */}
-        {architectures[project.id] && (
+        {architecture && (
           <section className="mt-16">
             <SectionHeading>Architecture</SectionHeading>
-            <ArchitectureDiagram spec={architectures[project.id]} />
+            <ArchitectureDiagram spec={architecture} />
           </section>
         )}
 
         {/* Live replay of a recorded run (Dossier) */}
-        {project.id === DOSSIER_ID && (
+        {project.replayIntro && (
           <section className="mt-16">
             <SectionHeading>Watch It Run</SectionHeading>
             <p className="text-base md:text-lg leading-relaxed text-white/55 max-w-3xl mb-8">
-              A replay of a real local run, rebuilt from its saved trace: the planner fans out three researchers, an
-              evaluator fails one and it is retried, a follow-up researcher closes the gap, and the citation audit
-              checks every source in the final answer.
+              {project.replayIntro}
             </p>
             <DossierReplay />
           </section>
@@ -179,7 +176,7 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
         )}
 
         {/* Capabilities — agent tools + bundled skills */}
-        {(project.tools?.length || project.skills?.length) && (
+        {((project.tools?.length ?? 0) > 0 || (project.skills?.length ?? 0) > 0) && (
           <section className="mt-16">
             <SectionHeading>Capabilities</SectionHeading>
             <p className="text-base md:text-lg leading-relaxed text-white/55 max-w-3xl mb-10">
@@ -190,7 +187,7 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
               <div className="mb-12">
                 <div className="flex items-center gap-3 mb-5">
                   <h3 className="text-lg font-semibold text-white whitespace-nowrap">Agent Tools</h3>
-                  <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-2.5 py-0.5 text-xs">
+                  <Badge variant="category" className="px-2.5 py-0.5 text-xs">
                     {project.tools.length}
                   </Badge>
                   <div className="h-px flex-1 bg-white/10" />
@@ -211,7 +208,7 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
               <div>
                 <div className="flex items-center gap-3 mb-5">
                   <h3 className="text-lg font-semibold text-white whitespace-nowrap">Bundled Skills</h3>
-                  <Badge className="bg-cyan-400/10 text-cyan-400 border-cyan-400/30 px-2.5 py-0.5 text-xs">
+                  <Badge variant="category" className="px-2.5 py-0.5 text-xs">
                     {project.skills.length}
                   </Badge>
                   <div className="h-px flex-1 bg-white/10" />
@@ -266,7 +263,8 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
             {project.technologies.map((t) => (
               <Badge
                 key={t}
-                className="px-3 py-1.5 bg-white/5 border border-white/10 text-cyan-300 text-sm hover:bg-white/10 hover:border-cyan-400/30 transition-all"
+                variant="tech"
+                className="py-1.5 transition-all hover:border-cyan-400/30 hover:bg-white/10"
               >
                 {t}
               </Badge>
@@ -279,8 +277,8 @@ export default function ProjectCaseStudy({ project }: { project: Project }) {
           <p className="text-white/50 text-base md:text-lg">
             Want to talk about building something like this?
           </p>
-          <Button asChild className="bg-cyan-400 text-black hover:bg-cyan-300">
-            <a href="/contact">Get in Touch</a>
+          <Button asChild>
+            <Link href="/contact">Get in Touch</Link>
           </Button>
         </div>
       </div>

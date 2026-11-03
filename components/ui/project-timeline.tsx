@@ -252,7 +252,7 @@ export function ProjectTimeline({
                 {ongoing && (
                   <motion.span
                     className={cn(
-                      "absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-[#0a0a0f]",
+                      "absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-space-bg",
                       tone.strong,
                     )}
                     style={{ left: `${x(end)}%` }}
@@ -302,7 +302,7 @@ function TimelineTooltip({
 
   return (
     <div
-      className="pointer-events-none fixed z-[80] w-max max-w-[18rem] rounded-md border border-white/10 bg-[#16161c]/95 px-3 py-2 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-md"
+      className="pointer-events-none fixed z-[80] w-max max-w-[18rem] rounded-md border border-white/10 bg-space-card/95 px-3 py-2 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] backdrop-blur-md"
       style={style}
     >
       <span className="block text-xs font-medium text-white/90">{project.title}</span>

@@ -29,7 +29,7 @@ export interface ArchSpec {
   loops?: string[];
 }
 
-export const architectures: Record<number, ArchSpec> = {
+export const architectures: Partial<Record<number, ArchSpec>> = {
   // Cloak AI 2.0
   1: {
     intro:

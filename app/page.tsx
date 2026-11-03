@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import MagneticButton from "@/components/ui/magnetic-button";
+import { FeaturedProjectCard } from "@/components/projects/featured-project-card";
 import { getFeaturedProjects } from "@/lib/projects";
+import { SITE_TAGLINE, SOCIALS } from "@/lib/site";
+
+const socialIconClass =
+  "p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation";
 
 /**
  * Homepage credibility strip. Every figure is backed by a source; update them here.
@@ -60,14 +61,14 @@ export default function Home() {
           transition={{ duration: 0.9, delay: 0.3 }}
           className="max-w-2xl text-2xl md:text-3xl text-white/80 mb-12"
         >
-          I build privacy-first AI agents — transparent, local, and reliable enough to use every day.
+          {SITE_TAGLINE}
         </motion.p>
 
         <div className="flex flex-col sm:flex-row gap-4">
           <MagneticButton
             size="lg"
             asChild
-            className="group bg-cyan-400 hover:bg-cyan-300 text-black text-lg px-10 py-7 rounded-xl font-medium tracking-tight"
+            className="group text-lg px-10 py-7 rounded-xl font-medium tracking-tight"
           >
             <Link href="/projects">
               View My Projects
@@ -81,37 +82,27 @@ export default function Home() {
             className="text-lg px-10 py-7 border-cyan-400/50 hover:bg-white/5 font-medium tracking-tight"
             asChild
           >
-            <a href="/contact">Connect With Me</a>
+            <Link href="/contact">Connect With Me</Link>
           </MagneticButton>
         </div>
 
-        {/* Social Links - Refined */}
+        {/* Social links */}
         <div className="flex gap-6 mt-12 md:mt-16 text-cyan-400/60">
-          <a 
-            href="https://github.com/JakeFurtaw" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
-          >
-            <FaGithub size={26} />
-          </a>
-          <a 
-            href="https://linkedin.com/in/jacob-furtaw" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
-          >
-            <FaLinkedin size={26} />
-          </a>
-          <a 
-            href="/contact" 
-            aria-label="Contact me"
-            className="p-3 rounded-full hover:bg-white/5 hover:text-cyan-400 active:bg-white/10 active:scale-95 transition-all touch-manipulation"
-          >
+          {[SOCIALS.github, SOCIALS.linkedin].map(({ label, href, icon: Icon }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className={socialIconClass}
+            >
+              <Icon size={26} />
+            </a>
+          ))}
+          <Link href="/contact" aria-label="Contact me" className={socialIconClass}>
             <Mail size={26} />
-          </a>
+          </Link>
         </div>
 
         {/* Credibility strip */}
@@ -154,81 +145,9 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {getFeaturedProjects().map((p, index) => {
-            const isLarge = index === 0;
-            const project = {
-              title: p.title,
-              desc: p.description,
-              tech: p.technologies,
-              image: p.images?.[0]?.src ?? null,
-              link: p.caseStudy ? `/projects/${p.id}` : "/projects",
-              label: p.caseStudy ? "Read Case Study" : "View Project",
-              size: isLarge ? "large" : "small",
-            } as const;
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30, scale: 0.98 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08, ease: "easeOut" }}
-                className={`group ${project.size === 'large' ? 'md:col-span-2 md:row-span-2' : 'md:col-span-1'}`}
-              >
-                <Card className="glass h-full overflow-hidden border border-white/10 transition-all duration-300 group-hover:border-cyan-400/40 group-hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] active:scale-[0.985] active:border-cyan-400/30 rounded-3xl flex flex-col touch-manipulation">
-                  <div className={`relative ${project.size === 'large' ? 'h-64 md:h-auto md:min-h-[400px] md:flex-1' : 'h-52'} bg-gradient-to-br from-cyan-900/50 to-purple-900/40 flex items-center justify-center border-b border-white/10 overflow-hidden`}>
-                    {project.image ? (
-                      <>
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          sizes={project.size === 'large' ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
-                          preload={index === 0}
-                          className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </>
-                    ) : (
-                      <span className="text-6xl opacity-40 transition-transform duration-300 group-hover:scale-110">🧠</span>
-                    )}
-                  </div>
-                  <div className={`p-6 flex flex-col ${project.size === 'large' ? '' : 'flex-grow'}`}>
-                    <h3 className={`font-semibold mb-3 text-white transition-all duration-200 group-hover:text-cyan-400 group-hover:tracking-[-0.02em] ${project.size === 'large' ? 'text-3xl' : 'text-2xl'}`}>
-                      {project.title}
-                    </h3>
-                    <p className={`text-white/70 mb-6 leading-relaxed transition-colors duration-200 group-hover:text-white/80 ${
-                      project.size === 'large' ? 'text-lg md:text-xl lg:text-[21px]' : 'text-base md:text-lg'
-                    }`}>
-                      {project.desc}
-                    </p>
-                    <div className="mt-auto">
-                      <div className="flex flex-wrap gap-2 mb-8">
-                        {project.tech.slice(0, project.size === 'large' ? 8 : 6).map((t) => (
-                          <Badge
-                            key={t}
-                            className={`bg-white/10 text-cyan-300 border border-white/10 font-medium transition-all duration-200 group-hover:border-cyan-400/40 group-hover:bg-white/10 group-hover:text-cyan-200
-                              ${project.size === 'large' ? 'text-sm px-3.5 py-1' : 'text-xs px-3 py-1'}`}
-                          >
-                            {t}
-                          </Badge>
-                        ))}
-                      </div>
-                      <Button
-                        variant="outline"
-                        size={project.size === 'large' ? "lg" : "sm"}
-                        className={`w-full border-white/20 group-hover:border-cyan-400 group-hover:text-cyan-400 transition-all 
-                          ${project.size === 'large' ? 'text-base font-semibold' : ''}`}
-                        asChild
-                      >
-                        <a href={project.link}>{project.label}</a>
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            );
-          })}
+          {getFeaturedProjects().map((project, index) => (
+            <FeaturedProjectCard key={project.id} project={project} index={index} />
+          ))}
         </div>
       </div>
     </div>

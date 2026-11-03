@@ -24,6 +24,8 @@ export interface Project {
   github?: string;
   live?: string;
   caseStudy?: boolean; // Has a dedicated case study page at /projects/[id]
+  /** Intro for the recorded-run replay on the case study page (only Dossier has replay data). */
+  replayIntro?: string;
   category: Category;
   subCategory?: SubCategory[];
   technologies: string[];
@@ -293,6 +295,8 @@ export const allProjects: Project[] = [
     ],
     github: "https://github.com/JakeFurtaw/Dossier",
     caseStudy: true,
+    replayIntro:
+      "A replay of a real local run, rebuilt from its saved trace: the planner fans out three researchers, an evaluator fails one and it is retried, a follow-up researcher closes the gap, and the citation audit checks every source in the final answer.",
     dateInfo: {
       label: "In active development since ",
       value: "August 2026 - Present",

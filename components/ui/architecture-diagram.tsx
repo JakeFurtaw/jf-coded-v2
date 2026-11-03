@@ -1,5 +1,3 @@
-"use client";
-
 import { Fragment } from "react";
 import { RotateCcw } from "lucide-react";
 import type { ArchNode, ArchNodeKind, ArchSpec } from "@/lib/architectures";
@@ -93,7 +91,7 @@ function NodeCard({ node, stacked }: { node: ArchNode; stacked: boolean }) {
           <span aria-hidden className={cn("absolute inset-0 translate-x-1 translate-y-1 rounded-xl border bg-white/[0.03]", k.border)} />
         </>
       )}
-      <div className={cn("relative h-full rounded-xl border bg-[#101018] p-3", k.border)}>
+      <div className={cn("relative h-full rounded-xl border bg-space-card p-3", k.border)}>
         <div className="flex items-center gap-2">
           <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", k.dot)} aria-hidden />
           <span className="text-sm font-semibold tracking-tight text-white">{node.title}</span>

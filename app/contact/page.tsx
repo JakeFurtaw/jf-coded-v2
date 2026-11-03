@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, Calendar, PhoneCall } from "lucide-react";
-import { FaGithub, FaLinkedin, FaDiscord, FaXTwitter } from 'react-icons/fa6';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { EMAIL, LOCATION, PHONE_DISPLAY, SOCIALS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -26,45 +26,18 @@ export default function ContactPage() {
             <h3 className="text-xl font-semibold tracking-tight mb-6">Socials</h3>
             
             <div className="space-y-3">
-              <Button 
-                variant="outline" 
-                className="w-full h-14 justify-start text-base border-white/15 hover:border-cyan-400/40 hover:text-cyan-400 active:scale-[0.985] transition-all touch-manipulation group" 
-                asChild
-              >
-                <a href="https://github.com/JakeFurtaw" target="_blank" rel="noopener noreferrer">
-                  <FaGithub className="mr-5 w-6 h-6 transition-transform group-hover:-translate-y-px group-hover:scale-110" /> GitHub
-                </a>
-              </Button>
-
-              <Button 
-                variant="outline" 
-                className="w-full h-14 justify-start text-base border-white/15 hover:border-cyan-400/40 hover:text-cyan-400 active:scale-[0.985] transition-all touch-manipulation group" 
-                asChild
-              >
-                <a href="https://linkedin.com/in/jacob-furtaw" target="_blank" rel="noopener noreferrer">
-                  <FaLinkedin className="mr-5 w-6 h-6 transition-transform group-hover:-translate-y-px group-hover:scale-110" /> LinkedIn
-                </a>
-              </Button>
-
-              <Button 
-                variant="outline" 
-                className="w-full h-14 justify-start text-base border-white/15 hover:border-cyan-400/40 hover:text-cyan-400 active:scale-[0.985] transition-all touch-manipulation group" 
-                asChild
-              >
-                <a href="https://x.com/JFurtaw97" target="_blank" rel="noopener noreferrer">
-                  <FaXTwitter className="mr-5 w-6 h-6 transition-transform group-hover:-translate-y-px group-hover:scale-110" /> X
-                </a>
-              </Button>
-
-              <Button 
-                variant="outline" 
-                className="w-full h-14 justify-start text-base border-white/15 hover:border-cyan-400/40 hover:text-cyan-400 active:scale-[0.985] transition-all touch-manipulation group" 
-                asChild
-              >
-                <a href="https://discord.com/users/jfurtaw" target="_blank" rel="noopener noreferrer">
-                  <FaDiscord className="mr-5 w-6 h-6 transition-transform group-hover:-translate-y-px group-hover:scale-110" /> Discord
-                </a>
-              </Button>
+              {Object.values(SOCIALS).map(({ label, href, icon: Icon }) => (
+                <Button
+                  key={label}
+                  variant="outline"
+                  className="w-full h-14 justify-start text-base border-white/15 hover:border-cyan-400/40 hover:text-cyan-400 active:scale-[0.985] transition-all touch-manipulation group"
+                  asChild
+                >
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    <Icon className="mr-5 w-6 h-6 transition-transform group-hover:-translate-y-px group-hover:scale-110" /> {label}
+                  </a>
+                </Button>
+              ))}
             </div>
           </Card>
 
@@ -81,10 +54,10 @@ export default function ContactPage() {
                 <div>
                   <p className="text-white/50 text-xs tracking-widest uppercase mb-0.5">Email</p>
                   <a 
-                    href="mailto:jfurtaw97@gmail.com" 
+                    href={`mailto:${EMAIL}`}
                     className="text-xl font-medium hover:text-cyan-400 active:text-cyan-300 transition-colors active:scale-[0.985] inline-block touch-manipulation"
                   >
-                    jfurtaw97@gmail.com
+                    {EMAIL}
                   </a>
                 </div>
               </div>
@@ -96,7 +69,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-white/50 text-xs tracking-widest uppercase mb-0.5">Phone</p>
-                  <p className="text-xl font-medium select-all">+1 (410) 533-7663</p>
+                  <p className="text-xl font-medium select-all">{PHONE_DISPLAY}</p>
                 </div>
               </div>
 
@@ -107,7 +80,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-white/50 text-xs tracking-widest uppercase mb-0.5">Location</p>
-                  <p className="text-xl font-medium">Baltimore, Maryland, USA</p>
+                  <p className="text-xl font-medium">{LOCATION}</p>
                 </div>
               </div>
             </div>

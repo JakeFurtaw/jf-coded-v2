@@ -5,7 +5,8 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, Rocket, Home, FileText, FolderOpen, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { RESUME_FILENAME, RESUME_PATH } from "@/lib/site";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -66,7 +67,7 @@ export default function Navbar() {
             variant="outline" 
             className="ml-3 border-cyan-400/50 hover:border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all"
           >
-            <a href="/Jacob_Furtaw_Resume.pdf" download="Jacob_Furtaw_Resume.pdf">
+            <a href={RESUME_PATH} download={RESUME_FILENAME}>
               Download CV
             </a>
           </Button>
@@ -75,11 +76,12 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" className="text-cyan-400">
+            <Button variant="ghost" size="icon" className="text-cyan-400" aria-label="Open menu">
               <Menu className="w-6 h-6" />
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="glass border-white/10 w-80 p-0">
+            <SheetTitle className="sr-only">Site navigation</SheetTitle>
             <div className="flex flex-col h-full pt-16 pb-8 px-6">
               {/* Navigation Links */}
               <div className="flex flex-col gap-1">
@@ -120,11 +122,11 @@ export default function Navbar() {
               <div className="mt-auto pt-8 border-t border-white/10">
                 <Button 
                   asChild 
-                  className="w-full bg-cyan-400 text-black hover:bg-cyan-300 font-medium h-12 text-base"
+                  className="w-full font-medium h-12 text-base"
                 >
                   <a 
-                    href="/Jacob_Furtaw_Resume.pdf" 
-                    download="Jacob_Furtaw_Resume.pdf"
+                    href={RESUME_PATH}
+                    download={RESUME_FILENAME}
                     onClick={() => setIsOpen(false)}
                   >
                     Download CV
