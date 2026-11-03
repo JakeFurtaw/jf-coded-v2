@@ -3,6 +3,9 @@
 import { useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
+/** Diameter of the glow in px. The gradient fades to transparent inside this box, so no edges show. */
+const GLOW_SIZE = 480;
+
 export default function CursorGlow() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -11,9 +14,9 @@ export default function CursorGlow() {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  // Center the 700px glow on the cursor
-  const glowX = useTransform(smoothX, (x) => x - 350);
-  const glowY = useTransform(smoothY, (y) => y - 350);
+  // Center the glow on the cursor
+  const glowX = useTransform(smoothX, (x) => x - GLOW_SIZE / 2);
+  const glowY = useTransform(smoothY, (y) => y - GLOW_SIZE / 2);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -27,12 +30,15 @@ export default function CursorGlow() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-0 h-[700px] w-[700px]"
+      className="pointer-events-none fixed left-0 top-0 z-0"
       style={{
         x: glowX,
         y: glowY,
+        width: GLOW_SIZE,
+        height: GLOW_SIZE,
+        // closest-side = the radius ends at the box edge, so the glow is fully transparent before it
         background:
-          "radial-gradient(700px circle at center, rgba(34, 211, 238, 0.12), transparent 75%)",
+          "radial-gradient(circle closest-side, rgba(34, 211, 238, 0.12), rgba(34, 211, 238, 0.05) 45%, transparent 100%)",
       }}
     />
   );

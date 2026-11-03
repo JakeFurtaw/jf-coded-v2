@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
+import Navbar from "@/components/ui/navbar";
+import Footer from "@/components/ui/footer";
 import CursorGlow from "@/components/ui/cursor-glow";
-import PageTransition from "@/components/PageTransition";
-import MotionProvider from "@/components/MotionProvider";
+import PageTransition from "@/components/page-transition";
+import MotionProvider from "@/components/motion-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { AUTHOR, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_TITLE, SITE_URL, X_HANDLE } from "@/lib/site";
 
