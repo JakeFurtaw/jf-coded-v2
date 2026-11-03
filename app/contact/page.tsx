@@ -97,7 +97,7 @@ export default function ContactPage() {
               <p className="text-emerald-400 font-semibold tracking-tight text-lg mb-2">Currently Open To</p>
               <p className="text-white/80 text-[15px] leading-relaxed">
                 Full-time Machine Learning / Generative AI Engineer roles,<br />
-                Interesting collaborations, and conversations
+                interesting collaborations, and conversations
               </p>
             </div>
           </div>
